@@ -102,3 +102,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 os.makedirs(STATIC_ROOT, exist_ok=True)
 os.makedirs(MEDIA_ROOT, exist_ok=True)
 os.makedirs(BASE_DIR / 'static', exist_ok=True)
+
+# abchotels/settings.py - Add these settings
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+LOGIN_URL = '/login/'
+
+# Email configuration (for password reset, you can use console backend for development)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

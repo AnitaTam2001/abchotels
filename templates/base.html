@@ -128,12 +128,20 @@
 <!-- In templates/base.html, update the nav-links -->
 <ul class="nav-links">
     <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'about' %}">About</a></li>
     <li><a href="{% url 'room_list' %}">Rooms</a></li>
+    <li><a href="{% url 'about' %}">About</a></li>
     <li><a href="{% url 'contact' %}">Contact</a></li>
     <li><a href="{% url 'faq' %}">FAQ</a></li>
-    <li><a href="{% url 'careers' %}">Careers</a></li>  <!-- Add this line -->
+    <li><a href="{% url 'careers' %}">Careers</a></li>
+    {% if user.is_authenticated %}
+    <li><a href="{% url 'profile' %}">My Profile</a></li>
+    <li><a href="{% url 'logout' %}">Logout</a></li>
+    {% else %}
+    <li><a href="{% url 'login' %}">Login</a></li>
+    <li><a href="{% url 'register' %}" class="btn" style="padding: 0.5rem 1rem;">Sign Up</a></li>
+    {% endif %}
 </ul>
+
         </div>
     </nav>
 

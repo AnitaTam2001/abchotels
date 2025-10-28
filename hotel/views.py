@@ -1,5 +1,4 @@
 # hotel/views.py
-# hotel/views.py - Update imports at the top
 import os
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
@@ -7,12 +6,11 @@ from django.contrib import messages
 from django.utils import timezone
 from django.db.models import Q
 from decimal import Decimal
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.decorators import login_required
 from .models import RoomType, Room, Booking, FAQ, Department, JobListing, JobApplication
 from datetime import datetime, date
-
-# hotel/views.py - Add these imports
-from .models import JobListing, Department, JobApplication
-from django.core.files.storage import FileSystemStorage
 
 def home(request):
     """Home page view"""
@@ -58,7 +56,7 @@ def room_detail(request, room_type_id):
     room_type = get_object_or_404(RoomType, id=room_type_id)
     available_rooms = Room.objects.filter(room_type=room_type, is_available=True)
     
-    # Get similar rooms for recommendations - FIXED: Convert float to Decimal
+    # Get similar rooms for recommendations
     similar_rooms = RoomType.objects.exclude(id=room_type_id).filter(
         price_per_night__lte=room_type.price_per_night * Decimal('1.5'),
         price_per_night__gte=room_type.price_per_night * Decimal('0.5')
@@ -80,7 +78,6 @@ def booking_form(request, room_id):
         guest_phone = request.POST.get('guest_phone')
         check_in = request.POST.get('check_in')
         check_out = request.POST.get('check_out')
-        special_requests = request.POST.get('special_requests', '')
         
         # Validate dates
         try:
@@ -142,7 +139,6 @@ def about(request):
     """About page view"""
     return render(request, 'about.html')
 
-# hotel/views.py - Update the contact view
 def contact(request):
     """Contact page view"""
     if request.method == 'POST':
@@ -156,28 +152,7 @@ def contact(request):
         messages.success(request, f'Thank you {name}! Your message has been sent. We will contact you via {contact_method} soon.')
         return redirect('contact')
     
-    return render(request, 'contact.html')  # Remove the common_faqs context
-
-def quick_booking(request):
-    """Quick booking selection page"""
-    room_types = RoomType.objects.all()
-    
-    # Get quick booking parameters
-    check_in = request.GET.get('check_in', '')
-    check_out = request.GET.get('check_out', '')
-    guests = request.GET.get('guests', 1)
-    
-    available_rooms = RoomType.objects.all()
-    
-    if guests:
-        available_rooms = available_rooms.filter(capacity__gte=guests)
-    
-    return render(request, 'quick_booking.html', {
-        'room_types': available_rooms,
-        'check_in': check_in,
-        'check_out': check_out,
-        'guests': guests
-    })
+    return render(request, 'contact.html')
 
 def faq(request):
     """FAQ page view"""
@@ -198,7 +173,6 @@ def faq(request):
         'categories': categories
     })
 
-# Add these views after the existing views
 def careers(request):
     """Careers main page view"""
     departments = Department.objects.all()
@@ -298,3 +272,55 @@ def job_application(request, job_id):
 def why_work_with_us(request):
     """Why work with us page"""
     return render(request, 'why_work_with_us.html')
+
+def register(request):
+    """User registration view"""
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            # Log the user in after registration
+            login(request, user)
+            messages.success(request, f'Account created successfully! Welcome, {user.username}!')
+            return redirect('home')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = UserCreationForm()
+    
+    return render(request, 'register.html', {'form': form})
+
+def user_login(request):
+    """User login view"""
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.success(request, f'Welcome back, {username}!')
+                return redirect('home')
+        else:
+            messages.error(request, 'Invalid username or password.')
+    else:
+        form = AuthenticationForm()
+    
+    return render(request, 'login.html', {'form': form})
+
+def user_logout(request):
+    """User logout view"""
+    logout(request)
+    messages.success(request, 'You have been successfully logged out.')
+    return redirect('home')
+
+@login_required
+def profile(request):
+    """User profile view"""
+    # Get user's bookings
+    user_bookings = Booking.objects.filter(guest_email=request.user.email)
+    
+    return render(request, 'profile.html', {
+        'user_bookings': user_bookings
+    })
