@@ -142,11 +142,9 @@ def about(request):
     """About page view"""
     return render(request, 'about.html')
 
+# hotel/views.py - Update the contact view
 def contact(request):
     """Contact page view"""
-    # Get some common FAQs to show on contact page
-    common_faqs = FAQ.objects.filter(is_active=True)[:5]
-    
     if request.method == 'POST':
         name = request.POST.get('name')
         email = request.POST.get('email')
@@ -158,9 +156,7 @@ def contact(request):
         messages.success(request, f'Thank you {name}! Your message has been sent. We will contact you via {contact_method} soon.')
         return redirect('contact')
     
-    return render(request, 'contact.html', {
-        'common_faqs': common_faqs
-    })
+    return render(request, 'contact.html')  # Remove the common_faqs context
 
 def quick_booking(request):
     """Quick booking selection page"""

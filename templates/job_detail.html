@@ -1,0 +1,160 @@
+<!-- templates/job_detail.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<section style="padding: 4rem 0;">
+    <div class="container">
+        <div style="max-width: 1000px; margin: 0 auto;">
+            <!-- Job Header -->
+            <div style="background: white; padding: 3rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem;">
+                    <div style="flex: 1;">
+                        <h1 style="margin-bottom: 0.5rem; color: #2c3e50;">{{ job.title }}</h1>
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
+                            <span style="background: #3498db; color: white; padding: 0.3rem 1rem; border-radius: 15px; font-size: 0.9rem;">
+                                {{ job.department.name }}
+                            </span>
+                            <span style="background: #27ae60; color: white; padding: 0.3rem 1rem; border-radius: 15px; font-size: 0.9rem;">
+                                {{ job.get_job_type_display }}
+                            </span>
+                            <span style="background: #e74c3c; color: white; padding: 0.3rem 1rem; border-radius: 15px; font-size: 0.9rem;">
+                                {{ job.get_experience_level_display }}
+                            </span>
+                            <span style="background: #f39c12; color: white; padding: 0.3rem 1rem; border-radius: 15px; font-size: 0.9rem;">
+                                {{ job.location }}
+                            </span>
+                        </div>
+                        {% if job.salary_range %}
+                        <p style="font-size: 1.2rem; color: #2c3e50; margin-bottom: 0.5rem;">
+                            <strong>Salary:</strong> {{ job.salary_range }}
+                        </p>
+                        {% endif %}
+                    </div>
+                    <div style="flex-shrink: 0;">
+                        <a href="{% url 'job_application' job.id %}" class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 2rem;">Apply Now</a>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; background: #f8f9fa; padding: 1.5rem; border-radius: 10px;">
+                    <div>
+                        <strong>Posted:</strong> {{ job.posted_date|date:"M d, Y" }}
+                    </div>
+                    {% if job.application_deadline %}
+                    <div>
+                        <strong>Apply by:</strong> {{ job.application_deadline|date:"M d, Y" }}
+                    </div>
+                    {% endif %}
+                    <div>
+                        <strong>Job Type:</strong> {{ job.get_job_type_display }}
+                    </div>
+                    <div>
+                        <strong>Experience:</strong> {{ job.get_experience_level_display }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Job Details -->
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 3rem;">
+                <div>
+                    <!-- Job Description -->
+                    <div style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+                        <h2 style="margin-bottom: 1rem; color: #2c3e50;">Job Description</h2>
+                        <div style="line-height: 1.8; color: #666;">
+                            {{ job.description|linebreaks }}
+                        </div>
+                    </div>
+
+                    <!-- Responsibilities -->
+                    <div style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+                        <h2 style="margin-bottom: 1rem; color: #2c3e50;">Key Responsibilities</h2>
+                        <div style="line-height: 1.8; color: #666;">
+                            {{ job.responsibilities|linebreaks }}
+                        </div>
+                    </div>
+
+                    <!-- Requirements -->
+                    <div style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+                        <h2 style="margin-bottom: 1rem; color: #2c3e50;">Requirements</h2>
+                        <div style="line-height: 1.8; color: #666;">
+                            {{ job.requirements|linebreaks }}
+                        </div>
+                    </div>
+
+                    {% if job.benefits %}
+                    <!-- Benefits -->
+                    <div style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                        <h2 style="margin-bottom: 1rem; color: #2c3e50;">What We Offer</h2>
+                        <div style="line-height: 1.8; color: #666;">
+                            {{ job.benefits|linebreaks }}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Sidebar -->
+                <div>
+                    <!-- Quick Apply -->
+                    <div style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 2rem; text-align: center;">
+                        <h3 style="margin-bottom: 1rem; color: #2c3e50;">Ready to Apply?</h3>
+                        <p style="color: #666; margin-bottom: 1.5rem;">
+                            Start your application process today and join our team of hospitality professionals.
+                        </p>
+                        <a href="{% url 'job_application' job.id %}" class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;">Apply for This Job</a>
+                        <a href="{% url 'careers' %}" class="btn" style="width: 100%;">View All Jobs</a>
+                    </div>
+
+                    <!-- Share Job -->
+                    <div style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+                        <h3 style="margin-bottom: 1rem; color: #2c3e50;">Share This Job</h3>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <button onclick="shareOnLinkedIn()" class="btn" style="background: #0077b5; color: white; flex: 1;">LinkedIn</button>
+                            <button onclick="shareOnTwitter()" class="btn" style="background: #1da1f2; color: white; flex: 1;">Twitter</button>
+                            <button onclick="shareOnFacebook()" class="btn" style="background: #4267B2; color: white; flex: 1;">Facebook</button>
+                        </div>
+                    </div>
+
+                    <!-- Related Jobs -->
+                    {% if related_jobs %}
+                    <div style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                        <h3 style="margin-bottom: 1rem; color: #2c3e50;">Related Jobs</h3>
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            {% for related_job in related_jobs %}
+                            <div style="border: 1px solid #e0e0e0; padding: 1rem; border-radius: 8px;">
+                                <h4 style="margin: 0 0 0.5rem 0; font-size: 1rem;">
+                                    <a href="{% url 'job_detail' related_job.id %}" style="color: #2c3e50; text-decoration: none;">
+                                        {{ related_job.title }}
+                                    </a>
+                                </h4>
+                                <div style="font-size: 0.9rem; color: #666;">
+                                    {{ related_job.department.name }} • {{ related_job.get_job_type_display }}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+function shareOnLinkedIn() {
+    const url = encodeURIComponent(window.location.href);
+    const title = encodeURIComponent('{{ job.title }}');
+    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
+}
+
+function shareOnTwitter() {
+    const url = encodeURIComponent(window.location.href);
+    const text = encodeURIComponent('Check out this job opportunity: {{ job.title }}');
+    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+}
+
+function shareOnFacebook() {
+    const url = encodeURIComponent(window.location.href);
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+}
+</script>
+{% endblock %}
