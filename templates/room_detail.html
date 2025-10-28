@@ -23,7 +23,6 @@
                         <strong>${{ room_type.price_per_night }}</strong> / night
                     </p>
                     <p style="line-height: 1.8; color: #666; margin-bottom: 2rem;">{{ room_type.description }}</p>
-                    
                     <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
                         <h3 style="margin-bottom: 1rem;">Room Features</h3>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
@@ -31,21 +30,21 @@
                                 <strong>Capacity:</strong> {{ room_type.capacity }} person{{ room_type.capacity|pluralize }}
                             </div>
                             <div>
-                                <strong>Bed Type:</strong> 
+                                <strong>Bed Type:</strong>
                                 {% if room_type.name == 'Standard Room' %}Queen Bed
                                 {% elif room_type.name == 'Deluxe Room' %}King Bed
                                 {% elif room_type.name == 'Executive Suite' %}King Bed + Sofa
                                 {% else %}Super King Bed{% endif %}
                             </div>
                             <div>
-                                <strong>Size:</strong> 
+                                <strong>Size:</strong>
                                 {% if room_type.name == 'Standard Room' %}300 sq ft
                                 {% elif room_type.name == 'Deluxe Room' %}450 sq ft
                                 {% elif room_type.name == 'Executive Suite' %}650 sq ft
                                 {% else %}1000 sq ft{% endif %}
                             </div>
                             <div>
-                                <strong>View:</strong> 
+                                <strong>View:</strong>
                                 {% if room_type.name == 'Presidential Suite' %}Panoramic City View
                                 {% else %}City View{% endif %}
                             </div>
@@ -76,7 +75,7 @@
             <!-- Similar Rooms Section -->
             {% if similar_rooms %}
             <div style="border-top: 2px solid #f0f0f0; padding-top: 3rem;">
-                <h2 style="text-align: center; margin-bottom: 2rem;">You Might Also Like</h2>
+                <h2 style="margin-bottom: 2rem;">You Might Also Like</h2>
                 <div class="room-grid">
                     {% for similar_room in similar_rooms %}
                     <div class="room-card">

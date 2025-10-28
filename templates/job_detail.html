@@ -17,7 +17,7 @@
                             <span style="background: #27ae60; color: white; padding: 0.3rem 1rem; border-radius: 15px; font-size: 0.9rem;">
                                 {{ job.get_job_type_display }}
                             </span>
-                            <span style="background: #e74c3c; color: white; padding: 0.3rem 1rem; border-radius: 15px; font-size: 0.9rem;">
+                            <span style="background: #674c3c; color: white; padding: 0.3rem 1rem; border-radius: 15px; font-size: 0.9rem;">
                                 {{ job.get_experience_level_display }}
                             </span>
                             <span style="background: #f39c12; color: white; padding: 0.3rem 1rem; border-radius: 15px; font-size: 0.9rem;">
@@ -34,7 +34,6 @@
                         <a href="{% url 'job_application' job.id %}" class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 2rem;">Apply Now</a>
                     </div>
                 </div>
-                
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; background: #f8f9fa; padding: 1.5rem; border-radius: 10px;">
                     <div>
                         <strong>Posted:</strong> {{ job.posted_date|date:"M d, Y" }}

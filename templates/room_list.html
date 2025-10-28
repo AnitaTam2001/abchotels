@@ -27,17 +27,17 @@
                             {% endfor %}
                         </select>
                     </div>
-                    
+
                     <div class="filter-group">
                         <label class="filter-label">Min Price</label>
                         <input type="number" name="price_min" class="filter-input" placeholder="$0" value="{{ price_min }}">
                     </div>
-                    
+
                     <div class="filter-group">
                         <label class="filter-label">Max Price</label>
                         <input type="number" name="price_max" class="filter-input" placeholder="$1000" value="{{ price_max }}">
                     </div>
-                    
+
                     <div class="filter-group">
                         <label class="filter-label">Min Capacity</label>
                         <select name="capacity" class="filter-select">
@@ -48,7 +48,7 @@
                             <option value="4" {% if capacity == "4" %}selected{% endif %}>4+ People</option>
                         </select>
                     </div>
-                    
+
                     <div class="filter-group">
                         <button type="submit" class="filter-btn">Apply Filters</button>
                         <a href="{% url 'room_list' %}" class="btn" style="margin-left: 0.5rem;">Clear</a>
@@ -61,8 +61,7 @@
         <div class="results-info">
             <div>
                 <strong>{{ room_types.count }}</strong> room type{{ room_types.count|pluralize }} found
-                {% if selected_type or price_min or price_max or capacity %}
-                with applied filters
+                {% if selected_type or price_min or price_max or capacity %} with applied filters
                 {% endif %}
             </div>
         </div>
@@ -88,7 +87,7 @@
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                         <div>
                             <strong style="color: #e74c3c; font-size: 1.5rem;">${{ room_type.price_per_night }}</strong>
-                            <span style="color: #666;">/ night</span>
+                            <span style="color: #666;"> / night</span>
                         </div>
                         <div style="color: #666;">
                             <strong>Capacity:</strong> {{ room_type.capacity }} person{{ room_type.capacity|pluralize }}

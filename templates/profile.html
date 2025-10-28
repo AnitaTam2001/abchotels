@@ -23,15 +23,15 @@
                             <h3 style="margin: 0; color: #2c3e50;">{{ user.username }}</h3>
                             <p style="color: #666; margin: 0.5rem 0 0 0;">Member since {{ user.date_joined|date:"M Y" }}</p>
                         </div>
-                        
+
                         <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                             <a href="{% url 'profile' %}" class="btn" style="text-align: left; background: #f8f9fa; color: #2c3e50;">
-                                📊 Booking History
+                                📖 Booking History
                             </a>
                             <a href="#" class="btn" style="text-align: left; background: #f8f9fa; color: #666;">
                                 ⚙️ Account Settings
                             </a>
-                            <a href="{% url 'logout' %}" class="btn" style="text-align: left; background: #f8f9fa; color: #e74c3c;">
+                            <a href="{% url 'logout' %}" class="btn" style="text-align: left; background: #f8f9fa; color: #674c3c;">
                                 🚪 Logout
                             </a>
                         </div>
@@ -43,12 +43,12 @@
                     <!-- Booking History -->
                     <div style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 2rem;">
                         <h2 style="margin-bottom: 1.5rem; color: #2c3e50;">Booking History</h2>
-                        
+
                         {% if user_bookings %}
                         <div style="display: grid; gap: 1rem;">
                             {% for booking in user_bookings %}
                             <div style="border: 1px solid #e0e0e0; padding: 1.5rem; border-radius: 8px;">
-                                <div style="display: flex; justify-content: between; align-items: flex-start; margin-bottom: 1rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
                                     <div>
                                         <h4 style="margin: 0 0 0.5rem 0; color: #2c3e50;">
                                             {{ booking.room.room_type.name }} - Room {{ booking.room.room_number }}
@@ -62,7 +62,7 @@
                                             {% if booking.status == 'confirmed' %}#27ae60
                                             {% elif booking.status == 'pending' %}#f39c12
                                             {% elif booking.status == 'cancelled' %}#e74c3c
-                                            {% else %}#95a5a6{% endif %}; 
+                                            {% else %}#95a5a6{% endif %};
                                             color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem; text-transform: capitalize;">
                                             {{ booking.status }}
                                         </span>
@@ -97,7 +97,7 @@
                         <h2 style="margin-bottom: 1.5rem; color: #2c3e50;">Quick Actions</h2>
                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
                             <a href="{% url 'room_list' %}" class="btn" style="text-align: center; padding: 1.5rem;">
-                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🏨</div>
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🛏️</div>
                                 Book a Room
                             </a>
                             <a href="{% url 'quick_booking' %}" class="btn" style="text-align: center; padding: 1.5rem;">
@@ -105,7 +105,7 @@
                                 Quick Booking
                             </a>
                             <a href="{% url 'contact' %}" class="btn" style="text-align: center; padding: 1.5rem;">
-                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">💬</div>
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">📞</div>
                                 Contact Support
                             </a>
                         </div>

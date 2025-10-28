@@ -7,8 +7,8 @@ class RoomType(models.Model):
     description = models.TextField()
     price_per_night = models.DecimalField(max_digits=10, decimal_places=2)
     capacity = models.IntegerField()
-    image = models.ImageField(upload_to='room_types/', null=True, blank=True)
-    
+    image = models.ImageField(upload_to='room_types/', null=True, blank=True)  # FIXED: ImageField
+
     def __str__(self):
         return self.name
 
@@ -16,7 +16,7 @@ class Room(models.Model):
     room_number = models.CharField(max_length=10, unique=True)
     room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE)
     is_available = models.BooleanField(default=True)
-    
+
     def __str__(self):
         return f"Room {self.room_number} - {self.room_type.name}"
 
@@ -27,7 +27,7 @@ class Booking(models.Model):
         ('cancelled', 'Cancelled'),
         ('completed', 'Completed'),
     ]
-    
+
     guest_name = models.CharField(max_length=100)
     guest_email = models.EmailField()
     guest_phone = models.CharField(max_length=20)
@@ -37,7 +37,7 @@ class Booking(models.Model):
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
-    
+
     def __str__(self):
         return f"Booking #{self.id} - {self.guest_name}"
 
@@ -49,23 +49,23 @@ class FAQ(models.Model):
         ('payment', 'Payment & Cancellation'),
         ('general', 'General Information'),
     ]
-    
+
     question = models.CharField(max_length=255)
     answer = models.TextField()
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='general')
     order = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
-    
+
     class Meta:
         ordering = ['category', 'order', 'question']
-    
+
     def __str__(self):
         return self.question
 
 class Department(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
-    
+
     def __str__(self):
         return self.name
 
@@ -77,7 +77,7 @@ class JobListing(models.Model):
         ('temporary', 'Temporary'),
         ('internship', 'Internship'),
     ]
-    
+
     EXPERIENCE_LEVEL_CHOICES = [
         ('entry', 'Entry Level'),
         ('mid', 'Mid Level'),
@@ -85,7 +85,7 @@ class JobListing(models.Model):
         ('manager', 'Manager'),
         ('executive', 'Executive'),
     ]
-    
+
     title = models.CharField(max_length=200)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     job_type = models.CharField(max_length=20, choices=JOB_TYPE_CHOICES)
@@ -99,13 +99,13 @@ class JobListing(models.Model):
     is_active = models.BooleanField(default=True)
     posted_date = models.DateTimeField(auto_now_add=True)
     application_deadline = models.DateField(null=True, blank=True)
-    
+
     class Meta:
         ordering = ['-posted_date']
-    
+
     def __str__(self):
         return self.title
-    
+
     def is_open(self):
         if self.application_deadline:
             return date.today() <= self.application_deadline
@@ -119,7 +119,7 @@ class JobApplication(models.Model):
         ('rejected', 'Rejected'),
         ('hired', 'Hired'),
     ]
-    
+
     job = models.ForeignKey(JobListing, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
@@ -133,6 +133,6 @@ class JobApplication(models.Model):
     expected_salary = models.CharField(max_length=100, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='submitted')
     applied_date = models.DateTimeField(auto_now_add=True)
-    
+
     def __str__(self):
         return f"{self.first_name} {self.last_name} - {self.job.title}"
