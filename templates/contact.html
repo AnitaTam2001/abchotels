@@ -1,0 +1,140 @@
+<!-- templates/contact.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="contact-hero">
+    <div class="container">
+        <h1 class="hero-title">Contact Us</h1>
+        <p class="hero-subtitle">We're Here to Help You Plan Your Perfect Stay</p>
+    </div>
+</section>
+
+<section style="padding: 4rem 0;">
+    <div class="container">
+        <div style="max-width: 1000px; margin: 0 auto;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;">
+                <div>
+                    <h2 style="margin-bottom: 2rem;">Get In Touch</h2>
+                    
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="color: #2c3e50; margin-bottom: 1rem;">📍 Address</h3>
+                        <p style="color: #666;">
+                            123 Luxury Avenue<br>
+                            Hospitality District<br>
+                            City, State 12345<br>
+                            United States
+                        </p>
+                    </div>
+                    
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="color: #2c3e50; margin-bottom: 1rem;">📞 Phone</h3>
+                        <p style="color: #666;">
+                            Main: +1 (555) 123-4567<br>
+                            Reservations: +1 (555) 123-4568
+                        </p>
+                    </div>
+                    
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="color: #2c3e50; margin-bottom: 1rem;">✉️ Email</h3>
+                        <p style="color: #666;">
+                            General: info@abchotels.com<br>
+                            Reservations: reservations@abchotels.com<br>
+                            Support: support@abchotels.com
+                        </p>
+                    </div>
+
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="color: #2c3e50; margin-bottom: 1rem;">🕒 Business Hours</h3>
+                        <p style="color: #666;">
+                            Front Desk: 24/7<br>
+                            Reservations: 6:00 AM - 12:00 AM<br>
+                            Restaurant: 7:00 AM - 11:00 PM
+                        </p>
+                    </div>
+                </div>
+                
+                <div>
+                    <h2 style="margin-bottom: 2rem;">Send Us a Message</h2>
+                    <form method="post" style="display: grid; gap: 1.5rem;">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label class="form-label">Your Name</label>
+                            <input type="text" name="name" class="form-input" placeholder="Enter your full name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Your Email</label>
+                            <input type="email" name="email" class="form-input" placeholder="Enter your email address" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Subject</label>
+                            <input type="text" name="subject" class="form-input" placeholder="Enter message subject" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Preferred Contact Method</label>
+                            <div class="contact-preferences">
+                                <label class="contact-preference">
+                                    <input type="radio" name="contact_method" value="email" class="amenity-checkbox" checked>
+                                    <span>Email</span>
+                                </label>
+                                <label class="contact-preference">
+                                    <input type="radio" name="contact_method" value="phone" class="amenity-checkbox">
+                                    <span>Phone</span>
+                                </label>
+                                <label class="contact-preference">
+                                    <input type="radio" name="contact_method" value="both" class="amenity-checkbox">
+                                    <span>Both</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Message</label>
+                            <textarea rows="5" name="message" class="form-input" placeholder="Enter your message" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn" style="width: 100%;">Send Message</button>
+                    </form>
+                </div>
+            </div>
+
+            <div style="margin-top: 4rem;">
+                <h2 style="text-align: center; margin-bottom: 2rem;">Find Us</h2>
+                <div style="background: #f8f9fa; padding: 2rem; border-radius: 10px; text-align: center;">
+                    <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Hotel Location" style="width: 100%; height: 300px; object-fit: cover; border-radius: 8px;">
+                    <p style="margin-top: 1rem; color: #666;">
+                        Located in the heart of the city, easily accessible from major transportation hubs
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+// Add interactive selection for contact preferences
+document.addEventListener('DOMContentLoaded', function() {
+    const contactPreferences = document.querySelectorAll('.contact-preference');
+    
+    contactPreferences.forEach(pref => {
+        const radio = pref.querySelector('input[type="radio"]');
+        
+        pref.addEventListener('click', function() {
+            // Update radio button
+            radio.checked = true;
+            
+            // Update visual selection
+            contactPreferences.forEach(p => p.classList.remove('selected'));
+            pref.classList.add('selected');
+        });
+        
+        // Initialize selection for checked radio
+        if (radio.checked) {
+            pref.classList.add('selected');
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,109 @@
+<!-- templates/room_list.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="hero-section" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');">
+    <div class="container">
+        <h1 class="hero-title">Our Rooms & Suites</h1>
+        <p class="hero-subtitle">Discover our luxurious accommodations designed for your comfort</p>
+    </div>
+</section>
+
+<section style="padding: 2rem 0;">
+    <div class="container">
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <h3 style="margin-bottom: 1rem;">Filter Rooms</h3>
+            <form method="get" action="{% url 'room_list' %}">
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label class="filter-label">Room Type</label>
+                        <select name="room_type" class="filter-select">
+                            <option value="">All Types</option>
+                            {% for room_type in all_room_types %}
+                            <option value="{{ room_type.name }}" {% if selected_type == room_type.name %}selected{% endif %}>
+                                {{ room_type.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="filter-label">Min Price</label>
+                        <input type="number" name="price_min" class="filter-input" placeholder="$0" value="{{ price_min }}">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="filter-label">Max Price</label>
+                        <input type="number" name="price_max" class="filter-input" placeholder="$1000" value="{{ price_max }}">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="filter-label">Min Capacity</label>
+                        <select name="capacity" class="filter-select">
+                            <option value="">Any Capacity</option>
+                            <option value="1" {% if capacity == "1" %}selected{% endif %}>1 Person</option>
+                            <option value="2" {% if capacity == "2" %}selected{% endif %}>2 People</option>
+                            <option value="3" {% if capacity == "3" %}selected{% endif %}>3 People</option>
+                            <option value="4" {% if capacity == "4" %}selected{% endif %}>4+ People</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <button type="submit" class="filter-btn">Apply Filters</button>
+                        <a href="{% url 'room_list' %}" class="btn" style="margin-left: 0.5rem;">Clear</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Results Info -->
+        <div class="results-info">
+            <div>
+                <strong>{{ room_types.count }}</strong> room type{{ room_types.count|pluralize }} found
+                {% if selected_type or price_min or price_max or capacity %}
+                with applied filters
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Room Grid -->
+        <div class="room-grid">
+            {% for room_type in room_types %}
+            <div class="room-card">
+                <div class="room-image">
+                    {% if room_type.name == 'Standard Room' %}
+                    <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Standard Room">
+                    {% elif room_type.name == 'Deluxe Room' %}
+                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Deluxe Room">
+                    {% elif room_type.name == 'Executive Suite' %}
+                    <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Executive Suite">
+                    {% elif room_type.name == 'Presidential Suite' %}
+                    <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Presidential Suite">
+                    {% endif %}
+                </div>
+                <div class="room-content">
+                    <h2 class="room-title">{{ room_type.name }}</h2>
+                    <p style="color: #666; margin-bottom: 1.5rem; line-height: 1.6;">{{ room_type.description }}</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <div>
+                            <strong style="color: #e74c3c; font-size: 1.5rem;">${{ room_type.price_per_night }}</strong>
+                            <span style="color: #666;">/ night</span>
+                        </div>
+                        <div style="color: #666;">
+                            <strong>Capacity:</strong> {{ room_type.capacity }} person{{ room_type.capacity|pluralize }}
+                        </div>
+                    </div>
+                    <a href="{% url 'room_detail' room_type.id %}" class="btn" style="width: 100%; text-align: center;">View Available Rooms</a>
+                </div>
+            </div>
+            {% empty %}
+            <div style="text-align: center; grid-column: 1 / -1; padding: 3rem;">
+                <h3>No rooms found matching your criteria.</h3>
+                <p>Please try different filter options.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,116 @@
+<!-- templates/home.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="container">
+        <h1 class="hero-title">Welcome to ABC Hotels</h1>
+        <p class="hero-subtitle">Experience Luxury and Comfort Like Never Before</p>
+        <a href="{% url 'room_list' %}" class="btn btn-primary">Book Your Stay</a>
+    </div>
+</section>
+
+<section style="padding: 4rem 0;">
+    <div class="container">
+        <h2 style="text-align: center; margin-bottom: 3rem;">Our Room Types</h2>
+        <div class="room-grid">
+            {% for room_type in room_types %}
+            <div class="room-card">
+                <div class="room-image">
+                    {% if room_type.name == 'Standard Room' %}
+                    <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Standard Room">
+                    {% elif room_type.name == 'Deluxe Room' %}
+                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Deluxe Room">
+                    {% elif room_type.name == 'Executive Suite' %}
+                    <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Executive Suite">
+                    {% elif room_type.name == 'Presidential Suite' %}
+                    <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Presidential Suite">
+                    {% else %}
+                    <span>Room Image</span>
+                    {% endif %}
+                </div>
+                <div class="room-content">
+                    <h3 class="room-title">{{ room_type.name }}</h3>
+                    <p style="color: #666; margin-bottom: 1rem;">{{ room_type.description|truncatewords:20 }}</p>
+                    <div class="room-features">
+                        <span style="font-weight: bold; color: #e74c3c;">${{ room_type.price_per_night }}/night</span>
+                        <span style="color: #666;">Capacity: {{ room_type.capacity }}</span>
+                    </div>
+                    <a href="{% url 'room_detail' room_type.id %}" class="btn" style="width: 100%; text-align: center;">View Details</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section style="background: #f8f9fa; padding: 4rem 0;">
+    <div class="container">
+        <div style="text-align: center;">
+            <h2 style="margin-bottom: 3rem;">Why Choose ABC Hotels?</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🏨 Luxury Rooms</h3>
+                    <p>Spacious and elegantly designed rooms with modern amenities</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🍽️ Fine Dining</h3>
+                    <p>Exquisite culinary experiences with world-class chefs</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🏊‍♂️ Premium Facilities</h3>
+                    <p>Swimming pool, spa, and fitness center for your relaxation</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📍 Prime Location</h3>
+                    <p>Centrally located with easy access to major attractions</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section style="padding: 4rem 0;">
+    <div class="container">
+        <h2 style="text-align: center; margin-bottom: 3rem;">Hotel Gallery</h2>
+        <div class="image-gallery">
+            <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Hotel Pool" class="gallery-image">
+            <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Restaurant" class="gallery-image">
+            <img src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Spa" class="gallery-image">
+        </div>
+    </div>
+</section>
+
+<!-- Add this section to templates/home.html before closing block -->
+<section class="quick-booking">
+    <div class="container">
+        <h2 style="text-align: center; margin-bottom: 2rem; color: white;">Quick Booking</h2>
+        <form method="get" action="{% url 'quick_booking' %}">
+            <div class="booking-form-grid">
+                <div class="booking-form-group">
+                    <label class="filter-label" style="color: white;">Check-in</label>
+                    <input type="date" name="check_in" class="booking-input" required>
+                </div>
+                <div class="booking-form-group">
+                    <label class="filter-label" style="color: white;">Check-out</label>
+                    <input type="date" name="check_out" class="booking-input" required>
+                </div>
+                <div class="booking-form-group">
+                    <label class="filter-label" style="color: white;">Guests</label>
+                    <select name="guests" class="booking-input">
+                        <option value="1">1 Guest</option>
+                        <option value="2" selected>2 Guests</option>
+                        <option value="3">3 Guests</option>
+                        <option value="4">4 Guests</option>
+                        <option value="5">5+ Guests</option>
+                    </select>
+                </div>
+                <div class="booking-form-group">
+                    <button type="submit" class="booking-btn">Check Availability</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+{% endblock %}
