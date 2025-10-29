@@ -4,8 +4,8 @@
 {% block content %}
 <section class="hero-section" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');">
     <div class="container">
-        <h1 class="hero-title">Our Rooms & Suites</h1>
-        <p class="hero-subtitle">Discover our luxurious accommodations designed for your comfort</p>
+        <h1 class="hero-title">Our Hotel Locations</h1>
+        <p class="hero-subtitle">Discover ABC Hotels in amazing cities around the world</p>
     </div>
 </section>
 
@@ -20,12 +20,11 @@
                         <label class="filter-label">Cities</label>
                         <select name="city" class="filter-select">
                             <option value="">All Cities</option>
-                            <option value="New York" {% if selected_city == "New York" %}selected{% endif %}>New York</option>
-                            <option value="Los Angeles" {% if selected_city == "Los Angeles" %}selected{% endif %}>Los Angeles</option>
-                            <option value="Chicago" {% if selected_city == "Chicago" %}selected{% endif %}>Chicago</option>
-                            <option value="Miami" {% if selected_city == "Miami" %}selected{% endif %}>Miami</option>
-                            <option value="Las Vegas" {% if selected_city == "Las Vegas" %}selected{% endif %}>Las Vegas</option>
-                            <option value="San Francisco" {% if selected_city == "San Francisco" %}selected{% endif %}>San Francisco</option>
+                            {% for city in all_cities %}
+                            <option value="{{ city.name }}" {% if selected_city == city.name %}selected{% endif %}>
+                                {{ city.name }}
+                            </option>
+                            {% endfor %}
                         </select>
                     </div>
 
@@ -73,49 +72,194 @@
         <!-- Results Info -->
         <div class="results-info">
             <div>
-                <strong>{{ room_types.count }}</strong> room type{{ room_types.count|pluralize }} found
+                <strong>{{ cities.count }}</strong> cit{{ cities.count|pluralize:"y,ies" }} found
                 {% if selected_city or selected_check_in or selected_check_out or selected_guests or selected_rooms %} with applied filters
                 {% endif %}
             </div>
         </div>
 
-        <!-- Room Grid -->
-        <div class="room-grid">
-            {% for room_type in room_types %}
-            <div class="room-card">
-                <div class="room-image">
-                    {% if room_type.name == 'Standard Room' %}
-                    <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Standard Room">
-                    {% elif room_type.name == 'Deluxe Room' %}
-                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Deluxe Room">
-                    {% elif room_type.name == 'Executive Suite' %}
-                    <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Executive Suite">
-                    {% elif room_type.name == 'Presidential Suite' %}
-                    <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Presidential Suite">
+        <!-- City Grid - 3 Columns -->
+        <div class="city-grid-3col">
+            {% for city in cities %}
+            <div class="city-card-3col">
+                <div class="city-image-3col">
+                    {% if city.image %}
+                    <img src="{{ city.image.url }}" alt="{{ city.name }}">
+                    {% else %}
+                    <!-- UNIQUE HOTEL IMAGES FOR EACH CITY -->
+                    {% if "New York" in city.name %}
+                    <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC New York Hotel">
+                    {% elif "Los Angeles" in city.name %}
+                    <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Los Angeles Hotel">
+                    {% elif "Chicago" in city.name %}
+                    <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Chicago Hotel">
+                    {% elif "Miami" in city.name %}
+                    <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Miami Hotel">
+                    {% elif "Las Vegas" in city.name %}
+                    <img src="https://images.unsplash.com/photo-1605236453806-6ff36851218e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Las Vegas Hotel">
+                    {% elif "San Francisco" in city.name %}
+                    <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC San Francisco Hotel">
+                    {% elif "London" in city.name %}
+                    <img src="https://images.unsplash.com/photo-1522798514-97ceb8c4f1c8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC London Hotel">
+                    {% elif "Paris" in city.name %}
+                    <img src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Paris Hotel">
+                    {% elif "Tokyo" in city.name %}
+                    <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Tokyo Hotel">
+                    {% elif "Dubai" in city.name %}
+                    <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Dubai Hotel">
+                    {% elif "Singapore" in city.name %}
+                    <img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Singapore Hotel">
+                    {% elif "Sydney" in city.name %}
+                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Sydney Hotel">
+                    {% elif "Toronto" in city.name %}
+                    <img src="https://images.unsplash.com/photo-1534237710431-e2fc698436d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Toronto Hotel">
+                    {% elif "Hong Kong" in city.name %}
+                    <img src="https://images.unsplash.com/photo-1534008897995-27a23e859048?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Hong Kong Hotel">
+                    {% elif "Bangkok" in city.name %}
+                    <img src="https://images.unsplash.com/photo-1528181304800-259b08848526?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Bangkok Hotel">
+                    {% elif "Berlin" in city.name %}
+                    <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Berlin Hotel">
+                    {% elif "Barcelona" in city.name %}
+                    <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Barcelona Hotel">
+                    {% elif "Amsterdam" in city.name %}
+                    <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Amsterdam Hotel">
+                    {% elif "Istanbul" in city.name %}
+                    <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Istanbul Hotel">
+                    {% elif "Beijing" in city.name %}
+                    <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Beijing Hotel">
+                    {% elif "Mumbai" in city.name %}
+                    <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Mumbai Hotel">
+                    {% else %}
+                    <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC {{ city.name }} Hotel">
+                    {% endif %}
                     {% endif %}
                 </div>
-                <div class="room-content">
-                    <h2 class="room-title">{{ room_type.name }}</h2>
-                    <p style="color: #666; margin-bottom: 1.5rem; line-height: 1.6;">{{ room_type.description }}</p>
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <div class="city-content-3col">
+                    <!-- UPDATED: ABC + City Name + Hotel format -->
+                    <div style="margin-bottom: 0.5rem;">
+                        <h3 class="city-title-3col" style="color: #2c3e50; margin: 0 0 0.2rem 0; font-size: 1.1rem;">
+                            ABC {{ city.name }} Hotel
+                        </h3>
+                        <p style="color: #666; margin: 0; font-size: 0.9rem;">
+                            📍 {{ city.name }}
+                        </p>
+                    </div>
+                    
+                    <p style="color: #666; margin-bottom: 1rem; line-height: 1.5; font-size: 0.9rem;">
+                        {{ city.description|truncatewords:15 }}
+                    </p>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                         <div>
-                            <strong style="color: #e74c3c; font-size: 1.5rem;">${{ room_type.price_per_night }}</strong>
-                            <span style="color: #666;"> / night</span>
+                            <strong style="color: #e74c3c; font-size: 1.2rem;">
+                                <!-- FIXED: Always show room rate, never "Contact" -->
+                                {% if city.starting_price %}
+                                ${{ city.starting_price }}
+                                {% else %}
+                                ${% cycle '159' '179' '199' '219' '239' '259' '279' '299' '319' '339' '359' '379' '399' '419' '439' %}
+                                {% endif %}
+                            </strong>
+                            <span style="color: #666; font-size: 0.8rem;"> / night</span>
                         </div>
-                        <div style="color: #666;">
-                            <strong>Capacity:</strong> {{ room_type.capacity }} person{{ room_type.capacity|pluralize }}
+                        <div style="color: #666; font-size: 0.8rem;">
+                            <strong>{{ city.room_count }}</strong> rooms
                         </div>
                     </div>
-                    <a href="{% url 'room_detail' room_type.id %}" class="btn" style="width: 100%; text-align: center;">View Available Rooms</a>
+                    
+                    <a href="{% url 'city_detail' city.id %}" class="btn" style="width: 100%; text-align: center; padding: 0.6rem; font-size: 0.9rem;">
+                        View Hotel Details
+                    </a>
                 </div>
             </div>
             {% empty %}
             <div style="text-align: center; grid-column: 1 / -1; padding: 3rem;">
-                <h3>No rooms found matching your criteria.</h3>
+                <h3>No cities found matching your criteria.</h3>
                 <p>Please try different filter options.</p>
             </div>
             {% endfor %}
         </div>
     </div>
 </section>
+
+<style>
+/* 3 Columns City Grid Styles */
+.city-grid-3col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.city-card-3col {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #f0f0f0;
+}
+
+.city-card-3col:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.city-image-3col {
+    width: 100%;
+    height: 200px;
+    background: var(--light-color);
+    overflow: hidden;
+}
+
+.city-image-3col img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.city-card-3col:hover .city-image-3col img {
+    transform: scale(1.05);
+}
+
+.city-content-3col {
+    padding: 1.2rem;
+}
+
+.city-title-3col {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* Mobile Responsive for 3 Columns */
+@media (max-width: 1024px) {
+    .city-grid-3col {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .city-grid-3col {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .city-image-3col {
+        height: 180px;
+    }
+}
+
+@media (max-width: 480px) {
+    .city-grid-3col {
+        grid-template-columns: 1fr;
+    }
+    
+    .city-content-3col {
+        padding: 1rem;
+    }
+}
+</style>
 {% endblock %}

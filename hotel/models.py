@@ -2,12 +2,24 @@
 from django.db import models
 from datetime import date
 
+class City(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    image = models.ImageField(upload_to='cities/', null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = "Cities"
+
 class RoomType(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
     price_per_night = models.DecimalField(max_digits=10, decimal_places=2)
     capacity = models.IntegerField()
-    image = models.ImageField(upload_to='room_types/', null=True, blank=True)  # FIXED: ImageField
+    image = models.ImageField(upload_to='room_types/', null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -15,10 +27,11 @@ class RoomType(models.Model):
 class Room(models.Model):
     room_number = models.CharField(max_length=10, unique=True)
     room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE)
+    city = models.ForeignKey(City, on_delete=models.CASCADE, default=1)  # Add city relationship
     is_available = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"Room {self.room_number} - {self.room_type.name}"
+        return f"Room {self.room_number} - {self.room_type.name} - {self.city.name}"
 
 class Booking(models.Model):
     STATUS_CHOICES = [

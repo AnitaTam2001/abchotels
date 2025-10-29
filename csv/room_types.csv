@@ -1,0 +1,11 @@
+id,name,description,price_per_night,capacity
+1,Standard Room,"Comfortable room with queen bed, work desk, free WiFi, and modern amenities perfect for solo travelers or couples.",129.00,2
+2,Deluxe Room,"Spacious room with king bed, sitting area, premium amenities, and enhanced comfort with city views.",189.00,2
+3,Executive Suite,"Luxurious suite with separate living area, king bed, executive desk, and premium business amenities.",299.00,3
+4,Presidential Suite,"Ultimate luxury with multiple rooms, premium furnishings, exclusive services, and panoramic views.",599.00,4
+5,Family Suite,"Spacious suite with two bedrooms, kitchenette, and family-friendly amenities perfect for groups.",249.00,5
+6,Accessible Room,"Fully accessible room with roll-in shower, lowered fixtures, and special amenities for guests with disabilities.",139.00,2
+7,Pool View Room,"Tropical retreat with private balcony, pool views, and resort-style amenities.",169.00,2
+8,Corner Suite,"Expansive corner suite with wrap-around windows, separate living area, and enhanced natural light.",349.00,3
+9,Honeymoon Suite,"Romantic escape with champagne service, rose petal turndown, and special couple amenities.",399.00,2
+10,Panoramic Suite,"Floor-to-ceiling windows with 270-degree city views, luxury bedding, and premium technology.",459.00,3

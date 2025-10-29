@@ -1,0 +1,120 @@
+<!-- templates/city_detail.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<section style="padding: 4rem 0;">
+    <div class="container">
+        <div style="max-width: 1000px; margin: 0 auto;">
+            <!-- City Header -->
+            <div style="background: white; padding: 3rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem;">
+                    <div style="flex: 1;">
+                        <h1 style="margin-bottom: 0.5rem; color: #2c3e50;">ABC Hotels {{ city.name }}</h1>
+                        <p style="font-size: 1.2rem; color: #666; line-height: 1.6;">{{ city.description }}</p>
+                    </div>
+                    <div style="flex-shrink: 0; text-align: right;">
+                        <p style="font-size: 1.5rem; color: #e74c3c; margin-bottom: 0.5rem;">
+                            <strong>Rooms starting from ${{ city.starting_price|default:"0" }}</strong>
+                        </p>
+                        <p style="color: #666; margin: 0;">{{ city.room_count }} rooms available</p>
+                    </div>
+                </div>
+                
+                <!-- City Image -->
+                <div style="border-radius: 10px; overflow: hidden; margin-bottom: 2rem;">
+                    {% if city.image %}
+                    <img src="{{ city.image.url }}" alt="{{ city.name }}" style="width: 100%; height: 400px; object-fit: cover;">
+                    {% else %}
+                    <img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="{{ city.name }}" style="width: 100%; height: 400px; object-fit: cover;">
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Available Room Types -->
+            <div style="margin-bottom: 3rem;">
+                <h2 style="margin-bottom: 1.5rem;">Available Room Types in {{ city.name }}</h2>
+                {% if room_types %}
+                <div class="room-grid">
+                    {% for room_type in room_types %}
+                    <div class="room-card">
+                        <div class="room-image">
+                            {% if room_type.image %}
+                            <img src="{{ room_type.image.url }}" alt="{{ room_type.name }}">
+                            {% else %}
+                            {% if room_type.name == 'Standard Room' %}
+                            <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Standard Room">
+                            {% elif room_type.name == 'Deluxe Room' %}
+                            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Deluxe Room">
+                            {% elif room_type.name == 'Executive Suite' %}
+                            <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Executive Suite">
+                            {% elif room_type.name == 'Presidential Suite' %}
+                            <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Presidential Suite">
+                            {% endif %}
+                            {% endif %}
+                        </div>
+                        <div class="room-content">
+                            <h3 class="room-title">{{ room_type.name }}</h3>
+                            <p style="color: #666; margin-bottom: 1rem; line-height: 1.6;">{{ room_type.description }}</p>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                <div>
+                                    <strong style="color: #e74c3c; font-size: 1.3rem;">${{ room_type.price_per_night }}</strong>
+                                    <span style="color: #666;"> / night</span>
+                                </div>
+                                <div style="color: #666;">
+                                    <strong>Capacity:</strong> {{ room_type.capacity }} person{{ room_type.capacity|pluralize }}
+                                </div>
+                            </div>
+                            <a href="{% url 'room_list' %}?city={{ city.name|urlencode }}" class="btn" style="width: 100%; text-align: center;">Check Availability</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div style="text-align: center; padding: 3rem; background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px;">
+                    <h3 style="color: #856404; margin-bottom: 1rem;">No rooms currently available</h3>
+                    <p style="color: #856404;">There are no available rooms in {{ city.name }} at the moment. Please check back later or explore our other locations.</p>
+                    <a href="{% url 'room_list' %}" class="btn btn-primary" style="margin-top: 1rem;">View Other Cities</a>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Other Cities -->
+            {% if other_cities %}
+            <div style="border-top: 2px solid #f0f0f0; padding-top: 3rem;">
+                <h2 style="margin-bottom: 2rem;">Explore Other Locations</h2>
+                <div class="city-grid">
+                    {% for other_city in other_cities %}
+                    <div class="city-card">
+                        <div class="city-image">
+                            {% if other_city.image %}
+                            <img src="{{ other_city.image.url }}" alt="{{ other_city.name }}">
+                            {% else %}
+                            <img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="{{ other_city.name }}">
+                            {% endif %}
+                        </div>
+                        <div class="city-content">
+                            <h3 class="city-title">{{ other_city.name }}</h3>
+                            <p style="color: #666; margin-bottom: 1rem; line-height: 1.6;">{{ other_city.description|truncatewords:20 }}</p>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                <div>
+                                    <strong style="color: #e74c3c; font-size: 1.2rem;">
+                                        {% if other_city.starting_price %}
+                                        ${{ other_city.starting_price }}
+                                        {% else %}
+                                        Contact
+                                        {% endif %}
+                                    </strong>
+                                    <span style="color: #666;"> / night</span>
+                                </div>
+                            </div>
+                            <a href="{% url 'city_detail' other_city.id %}" class="btn" style="width: 100%; text-align: center;">View Hotel</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

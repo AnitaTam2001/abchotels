@@ -7,9 +7,9 @@ from . import views
 urlpatterns = [
     path('', views.home, name='home'),
     path('rooms/', views.room_list, name='room_list'),
-    path('room/<int:room_type_id>/', views.room_detail, name='room_detail'),
+    path('city/<int:city_id>/', views.city_detail, name='city_detail'),  # ADDED: City detail
     path('book/<int:room_id>/', views.booking_form, name='booking_form'),
-    path('quick-booking/', views.room_list, name='quick_booking'),  # ADDED: quick_booking URL
+    path('quick-booking/', views.room_list, name='quick_booking'),
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
     path('faq/', views.faq, name='faq'),

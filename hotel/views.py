@@ -4,22 +4,22 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.contrib import messages
 from django.utils import timezone
-from django.db.models import Q
+from django.db.models import Q, Count
 from decimal import Decimal
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
-from .models import RoomType, Room, Booking, FAQ, Department, JobListing, JobApplication
+from .models import City, RoomType, Room, Booking, FAQ, Department, JobListing, JobApplication
 from datetime import datetime, date
 
 def home(request):
     """Home page view"""
-    room_types = RoomType.objects.all()
-    return render(request, 'home.html', {'room_types': room_types})
+    cities = City.objects.filter(is_active=True)[:4]  # Show 4 featured cities
+    return render(request, 'home.html', {'cities': cities})
 
 def room_list(request):
-    """Room list page view with filters"""
-    room_types = RoomType.objects.all()
+    """City list page view with filters"""
+    cities = City.objects.filter(is_active=True)
 
     # Get filter parameters
     city_filter = request.GET.get('city', '')
@@ -29,15 +29,11 @@ def room_list(request):
     rooms_filter = request.GET.get('rooms', '')
 
     # Apply filters
-    filtered_rooms = room_types
+    filtered_cities = cities
 
-    # City filter (using room type name as city for now)
+    # City filter
     if city_filter:
-        filtered_rooms = filtered_rooms.filter(name__icontains=city_filter)
-
-    # Guests filter (capacity)
-    if guests_filter:
-        filtered_rooms = filtered_rooms.filter(capacity__gte=guests_filter)
+        filtered_cities = filtered_cities.filter(name__icontains=city_filter)
 
     # Date availability filter
     if check_in_date and check_out_date:
@@ -45,41 +41,74 @@ def room_list(request):
             check_in = datetime.strptime(check_in_date, '%Y-%m-%d').date()
             check_out = datetime.strptime(check_out_date, '%Y-%m-%d').date()
             
-            # Get rooms that are not booked for the selected dates
-            booked_room_ids = Booking.objects.filter(
-                status__in=['confirmed', 'pending'],
-                check_in__lt=check_out,
-                check_out__gt=check_in
-            ).values_list('room__room_type_id', flat=True)
+            # Get cities that have available rooms for the selected dates
+            cities_with_availability = []
+            for city in filtered_cities:
+                # Count available rooms in this city for the selected dates
+                available_rooms = Room.objects.filter(
+                    city=city,
+                    is_available=True
+                ).exclude(
+                    id__in=Booking.objects.filter(
+                        status__in=['confirmed', 'pending'],
+                        check_in__lt=check_out,
+                        check_out__gt=check_in
+                    ).values_list('room_id', flat=True)
+                )
+                
+                if available_rooms.exists():
+                    cities_with_availability.append(city.id)
             
-            # Exclude room types that have booked rooms
-            filtered_rooms = filtered_rooms.exclude(id__in=booked_room_ids)
+            filtered_cities = filtered_cities.filter(id__in=cities_with_availability)
             
         except (ValueError, TypeError):
             # If date parsing fails, continue without date filtering
             pass
 
-    # Rooms filter (number of available rooms of each type)
+    # Guests filter (capacity)
+    if guests_filter:
+        cities_with_capacity = []
+        for city in filtered_cities:
+            # Check if city has rooms that can accommodate the number of guests
+            suitable_rooms = Room.objects.filter(
+                city=city,
+                room_type__capacity__gte=guests_filter,
+                is_available=True
+            )
+            if suitable_rooms.exists():
+                cities_with_capacity.append(city.id)
+        
+        filtered_cities = filtered_cities.filter(id__in=cities_with_capacity)
+
+    # Rooms filter (number of available rooms)
     if rooms_filter:
         try:
             rooms_count = int(rooms_filter)
-            # Filter room types that have at least the requested number of available rooms
-            room_types_with_availability = []
-            for room_type in filtered_rooms:
-                available_count = Room.objects.filter(
-                    room_type=room_type, 
+            cities_with_sufficient_rooms = []
+            for city in filtered_cities:
+                available_rooms_count = Room.objects.filter(
+                    city=city,
                     is_available=True
                 ).count()
-                if available_count >= rooms_count:
-                    room_types_with_availability.append(room_type.id)
+                if available_rooms_count >= rooms_count:
+                    cities_with_sufficient_rooms.append(city.id)
             
-            filtered_rooms = filtered_rooms.filter(id__in=room_types_with_availability)
+            filtered_cities = filtered_cities.filter(id__in=cities_with_sufficient_rooms)
         except ValueError:
             pass
 
+    # Add room count and starting price to each city
+    for city in filtered_cities:
+        city.room_count = Room.objects.filter(city=city, is_available=True).count()
+        cheapest_room = Room.objects.filter(
+            city=city, 
+            is_available=True
+        ).select_related('room_type').order_by('room_type__price_per_night').first()
+        city.starting_price = cheapest_room.room_type.price_per_night if cheapest_room else 0
+
     return render(request, 'room_list.html', {
-        'room_types': filtered_rooms,
-        'all_room_types': room_types,
+        'cities': filtered_cities,
+        'all_cities': City.objects.filter(is_active=True),
         'selected_city': city_filter,
         'selected_check_in': check_in_date,
         'selected_check_out': check_out_date,
@@ -87,21 +116,27 @@ def room_list(request):
         'selected_rooms': rooms_filter
     })
 
-def room_detail(request, room_type_id):
-    """Room detail page view"""
-    room_type = get_object_or_404(RoomType, id=room_type_id)
-    available_rooms = Room.objects.filter(room_type=room_type, is_available=True)
+def city_detail(request, city_id):
+    """City detail page view"""
+    city = get_object_or_404(City, id=city_id, is_active=True)
+    
+    # Get available rooms in this city
+    available_rooms = Room.objects.filter(city=city, is_available=True)
+    
+    # Get unique room types available in this city
+    room_types = RoomType.objects.filter(
+        room__city=city,
+        room__is_available=True
+    ).distinct()
+    
+    # Get other active cities for recommendations
+    other_cities = City.objects.filter(is_active=True).exclude(id=city_id)[:3]
 
-    # Get similar rooms for recommendations - FIXED: exclude instead of execute
-    similar_rooms = RoomType.objects.exclude(id=room_type_id).filter(
-        price_per_night__lte=room_type.price_per_night * Decimal('1.5'),
-        price_per_night__gte=room_type.price_per_night * Decimal('0.5')
-    )[:3]
-
-    return render(request, 'room_detail.html', {
-        'room_type': room_type,
+    return render(request, 'city_detail.html', {
+        'city': city,
         'available_rooms': available_rooms,
-        'similar_rooms': similar_rooms
+        'room_types': room_types,
+        'other_cities': other_cities
     })
 
 def booking_form(request, room_id):
