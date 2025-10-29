@@ -22,33 +22,69 @@ def room_list(request):
     room_types = RoomType.objects.all()
 
     # Get filter parameters
-    room_type_filter = request.GET.get('room_type', '')
-    price_min = request.GET.get('price_min', '')
-    price_max = request.GET.get('price_max', '')
-    capacity = request.GET.get('capacity', '')
+    city_filter = request.GET.get('city', '')
+    check_in_date = request.GET.get('check_in', '')
+    check_out_date = request.GET.get('check_out', '')
+    guests_filter = request.GET.get('guests', '')
+    rooms_filter = request.GET.get('rooms', '')
 
     # Apply filters
     filtered_rooms = room_types
 
-    if room_type_filter:
-        filtered_rooms = filtered_rooms.filter(name__icontains=room_type_filter)
+    # City filter (using room type name as city for now)
+    if city_filter:
+        filtered_rooms = filtered_rooms.filter(name__icontains=city_filter)
 
-    if price_min:
-        filtered_rooms = filtered_rooms.filter(price_per_night__gte=price_min)
+    # Guests filter (capacity)
+    if guests_filter:
+        filtered_rooms = filtered_rooms.filter(capacity__gte=guests_filter)
 
-    if price_max:
-        filtered_rooms = filtered_rooms.filter(price_per_night__lte=price_max)
+    # Date availability filter
+    if check_in_date and check_out_date:
+        try:
+            check_in = datetime.strptime(check_in_date, '%Y-%m-%d').date()
+            check_out = datetime.strptime(check_out_date, '%Y-%m-%d').date()
+            
+            # Get rooms that are not booked for the selected dates
+            booked_room_ids = Booking.objects.filter(
+                status__in=['confirmed', 'pending'],
+                check_in__lt=check_out,
+                check_out__gt=check_in
+            ).values_list('room__room_type_id', flat=True)
+            
+            # Exclude room types that have booked rooms
+            filtered_rooms = filtered_rooms.exclude(id__in=booked_room_ids)
+            
+        except (ValueError, TypeError):
+            # If date parsing fails, continue without date filtering
+            pass
 
-    if capacity:
-        filtered_rooms = filtered_rooms.filter(capacity__gte=capacity)
+    # Rooms filter (number of available rooms of each type)
+    if rooms_filter:
+        try:
+            rooms_count = int(rooms_filter)
+            # Filter room types that have at least the requested number of available rooms
+            room_types_with_availability = []
+            for room_type in filtered_rooms:
+                available_count = Room.objects.filter(
+                    room_type=room_type, 
+                    is_available=True
+                ).count()
+                if available_count >= rooms_count:
+                    room_types_with_availability.append(room_type.id)
+            
+            filtered_rooms = filtered_rooms.filter(id__in=room_types_with_availability)
+        except ValueError:
+            pass
 
     return render(request, 'room_list.html', {
         'room_types': filtered_rooms,
         'all_room_types': room_types,
-        'selected_type': room_type_filter,
-        'price_min': price_min,
-        'price_max': price_max,
-        'capacity': capacity
+        'selected_city': city_filter,
+        'selected_check_in': check_in_date,
+        'selected_check_out': check_out_date,
+        'selected_guests': guests_filter,
+        'selected_rooms': rooms_filter
     })
 
 def room_detail(request, room_type_id):

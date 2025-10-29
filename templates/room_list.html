@@ -13,45 +13,58 @@
     <div class="container">
         <!-- Filter Section -->
         <div class="filter-section">
-            <h3 style="margin-bottom: 1rem;">Filter Rooms</h3>
+            <h3 style="margin-bottom: 1rem;">Find Your Perfect Stay</h3>
             <form method="get" action="{% url 'room_list' %}">
                 <div class="filter-grid">
                     <div class="filter-group">
-                        <label class="filter-label">Room Type</label>
-                        <select name="room_type" class="filter-select">
-                            <option value="">All Types</option>
-                            {% for room_type in all_room_types %}
-                            <option value="{{ room_type.name }}" {% if selected_type == room_type.name %}selected{% endif %}>
-                                {{ room_type.name }}
-                            </option>
-                            {% endfor %}
+                        <label class="filter-label">Cities</label>
+                        <select name="city" class="filter-select">
+                            <option value="">All Cities</option>
+                            <option value="New York" {% if selected_city == "New York" %}selected{% endif %}>New York</option>
+                            <option value="Los Angeles" {% if selected_city == "Los Angeles" %}selected{% endif %}>Los Angeles</option>
+                            <option value="Chicago" {% if selected_city == "Chicago" %}selected{% endif %}>Chicago</option>
+                            <option value="Miami" {% if selected_city == "Miami" %}selected{% endif %}>Miami</option>
+                            <option value="Las Vegas" {% if selected_city == "Las Vegas" %}selected{% endif %}>Las Vegas</option>
+                            <option value="San Francisco" {% if selected_city == "San Francisco" %}selected{% endif %}>San Francisco</option>
                         </select>
                     </div>
 
                     <div class="filter-group">
-                        <label class="filter-label">Min Price</label>
-                        <input type="number" name="price_min" class="filter-input" placeholder="$0" value="{{ price_min }}">
+                        <label class="filter-label">Check-in Date</label>
+                        <input type="date" name="check_in" class="filter-input" value="{{ selected_check_in }}">
                     </div>
 
                     <div class="filter-group">
-                        <label class="filter-label">Max Price</label>
-                        <input type="number" name="price_max" class="filter-input" placeholder="$1000" value="{{ price_max }}">
+                        <label class="filter-label">Check-out Date</label>
+                        <input type="date" name="check_out" class="filter-input" value="{{ selected_check_out }}">
                     </div>
 
                     <div class="filter-group">
-                        <label class="filter-label">Min Capacity</label>
-                        <select name="capacity" class="filter-select">
-                            <option value="">Any Capacity</option>
-                            <option value="1" {% if capacity == "1" %}selected{% endif %}>1 Person</option>
-                            <option value="2" {% if capacity == "2" %}selected{% endif %}>2 People</option>
-                            <option value="3" {% if capacity == "3" %}selected{% endif %}>3 People</option>
-                            <option value="4" {% if capacity == "4" %}selected{% endif %}>4+ People</option>
+                        <label class="filter-label">Guests</label>
+                        <select name="guests" class="filter-select">
+                            <option value="">Any Number</option>
+                            <option value="1" {% if selected_guests == "1" %}selected{% endif %}>1 Guest</option>
+                            <option value="2" {% if selected_guests == "2" %}selected{% endif %}>2 Guests</option>
+                            <option value="3" {% if selected_guests == "3" %}selected{% endif %}>3 Guests</option>
+                            <option value="4" {% if selected_guests == "4" %}selected{% endif %}>4+ Guests</option>
                         </select>
                     </div>
 
                     <div class="filter-group">
-                        <button type="submit" class="filter-btn">Apply Filters</button>
-                        <a href="{% url 'room_list' %}" class="btn" style="margin-left: 0.5rem;">Clear</a>
+                        <label class="filter-label">Rooms</label>
+                        <select name="rooms" class="filter-select">
+                            <option value="">Any Number</option>
+                            <option value="1" {% if selected_rooms == "1" %}selected{% endif %}>1 Room</option>
+                            <option value="2" {% if selected_rooms == "2" %}selected{% endif %}>2 Rooms</option>
+                            <option value="3" {% if selected_rooms == "3" %}selected{% endif %}>3 Rooms</option>
+                            <option value="4" {% if selected_rooms == "4" %}selected{% endif %}>4+ Rooms</option>
+                        </select>
+                    </div>
+
+                    <!-- Buttons on the same line -->
+                    <div class="filter-group" style="display: flex; gap: 0.5rem; align-items: end;">
+                        <button type="submit" class="filter-btn" style="flex: 1;">Search</button>
+                        <a href="{% url 'room_list' %}" class="btn" style="flex: 1; text-align: center;">Clear</a>
                     </div>
                 </div>
             </form>
@@ -61,7 +74,7 @@
         <div class="results-info">
             <div>
                 <strong>{{ room_types.count }}</strong> room type{{ room_types.count|pluralize }} found
-                {% if selected_type or price_min or price_max or capacity %} with applied filters
+                {% if selected_city or selected_check_in or selected_check_out or selected_guests or selected_rooms %} with applied filters
                 {% endif %}
             </div>
         </div>
