@@ -10,59 +10,25 @@
     </div>
 </section>
 
-<section style="padding: 4rem 0;">
-    <div class="container">
-        <h2 style="text-align: center; margin-bottom: 3rem;">Our Room Types</h2>
-        <div class="room-grid">
-            {% for room_type in room_types %}
-            <div class="room-card">
-                <div class="room-image">
-                    {% if room_type.name == 'Standard Room' %}
-                    <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Standard Room">
-                    {% elif room_type.name == 'Deluxe Room' %}
-                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Deluxe Room">
-                    {% elif room_type.name == 'Executive Suite' %}
-                    <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Executive Suite">
-                    {% elif room_type.name == 'Presidential Suite' %}
-                    <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Presidential Suite">
-                    {% else %}
-                    <span>Room Image</span>
-                    {% endif %}
-                </div>
-                <div class="room-content">
-                    <h3 class="room-title">{{ room_type.name }}</h3>
-                    <p style="color: #666; margin-bottom: 1rem;">{{ room_type.description|truncatewords:20 }}</p>
-                    <div class="room-features">
-                        <span style="font-weight: bold; color: #e74c3c;">${{ room_type.price_per_night }}/night</span>
-                        <span style="color: #666;">Capacity: {{ room_type.capacity }}</span>
-                    </div>
-                    <a href="{% url 'room_detail' room_type.id %}" class="btn" style="width: 100%; text-align: center;">View Details</a>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-
 <section style="background: #f8f9fa; padding: 4rem 0;">
     <div class="container">
         <div style="text-align: center;">
             <h2 style="margin-bottom: 3rem;">Why Choose ABC Hotels?</h2>
             <div class="feature-grid">
                 <div class="feature-card">
-                    <h3>🏨 Luxury Rooms</h3>
+                    <h3>Luxury Rooms</h3>
                     <p>Spacious and elegantly designed rooms with modern amenities</p>
                 </div>
                 <div class="feature-card">
-                    <h3>🍽️ Fine Dining</h3>
+                    <h3>Fine Dining</h3>
                     <p>Exquisite culinary experiences with world-class chefs</p>
                 </div>
                 <div class="feature-card">
-                    <h3>🏊‍♂️ Premium Facilities</h3>
+                    <h3>Premium Facilities</h3>
                     <p>Swimming pool, spa, and fitness center for your relaxation</p>
                 </div>
                 <div class="feature-card">
-                    <h3>📍 Prime Location</h3>
+                    <h3>Prime Locations</h3>
                     <p>Centrally located with easy access to major attractions</p>
                 </div>
             </div>
