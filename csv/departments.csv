@@ -1,11 +1,21 @@
-id,name,description
-1,Front Office,"Guest services, reception, concierge, and front desk operations"
-2,Food & Beverage,"Restaurants, bars, room service, banquets, and catering services"
-3,Housekeeping,"Room cleaning, laundry, maintenance, and public area cleanliness"
-4,Sales & Marketing,"Business development, promotions, partnerships, and revenue management"
-5,Human Resources,"Employee management, recruitment, training, and development programs"
-6,Finance & Accounting,"Financial operations, budgeting, reporting, and payment processing"
-7,Engineering,"Facility maintenance, technical operations, and equipment management"
-8,Security,"Safety, surveillance, emergency response, and guest protection"
-9,Spa & Wellness,"Fitness center, spa treatments, wellness programs, and recreational activities"
-10,Events & Banquets,"Meeting rooms, weddings, conferences, and special event planning"
+name,description
+Front Office,Handles guest check-in, check-out, concierge services, and front desk operations
+Housekeeping,Responsible for room cleaning, maintenance, and ensuring guest room quality standards
+Food & Beverage,Manages restaurants, bars, room service, banquets, and catering operations
+Sales & Marketing,Handles promotions, partnerships, revenue management, and corporate sales
+Human Resources,Manages recruitment, training, employee relations, and staff development
+Finance & Accounting,Handles financial operations, billing, payroll, and budget management
+Engineering & Maintenance,Responsible for building maintenance, repairs, and facility operations
+Security,Ensures guest safety, property security, and emergency response procedures
+Spa & Wellness,Manages spa services, fitness center, pool, and wellness programs
+Events & Conferences,Handles meeting rooms, conferences, weddings, and special events
+Revenue Management,Optimizes room pricing, inventory control, and distribution channels
+Guest Relations,Manages guest feedback, special requests, and customer service excellence
+Procurement,Handles purchasing, inventory management, and supplier relationships
+IT Department,Manages technology infrastructure, systems, and digital guest services
+Quality Assurance,Ensures service standards, compliance, and continuous improvement
+Environmental Services,Manages sustainability initiatives and environmental compliance
+Transportation,Handles valet parking, shuttle services, and guest transportation
+Risk Management,Manages insurance, safety protocols, and risk assessment
+Corporate Communications,Handles public relations, media, and internal communications
+Learning & Development,Manages staff training programs and career development initiatives

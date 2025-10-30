@@ -1,0 +1,55 @@
+# ABC Hotels - Django Project Requirements
+
+# Web Framework
+Django==4.2.7
+
+# Database
+psycopg2-binary==2.9.7
+
+# Image Processing (for ImageField)
+Pillow==10.0.1
+
+# Environment Variables
+python-dotenv==1.0.0
+
+# Development & Testing
+pytest==7.4.2
+pytest-django==4.5.2
+pytest-cov==4.1.0
+
+# Code Quality
+black==23.9.1
+flake8==6.1.0
+isort==5.12.0
+
+# Database Migrations & Extensions
+django-extensions==3.2.3
+
+# Security
+bcrypt==4.0.1
+cryptography==41.0.4
+
+# API Development (if needed)
+djangorestframework==3.14.0
+django-cors-headers==4.3.1
+drf-yasg==1.21.5
+
+# Static Files & Production
+whitenoise==6.5.0
+gunicorn==21.2.0
+
+# Date/Time Handling
+python-dateutil==2.8.2
+pytz==2023.3
+
+# CSV Handling
+openpyxl==3.1.2
+
+# Email (if needed)
+django-anymail==10.1
+
+# Debugging (Development only)
+django-debug-toolbar==4.2.0
+ipdb==0.13.13
+
+# Environment-specific requirements

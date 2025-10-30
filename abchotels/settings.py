@@ -57,8 +57,12 @@ WSGI_APPLICATION = 'abchotels.wsgi.application'
 # Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'abchotels',
+        'USER': 'abchotels_user',
+        'PASSWORD': 'abc123hotels',
+        'HOST': 'localhost',
+        'PORT': '5433'
     }
 }
 

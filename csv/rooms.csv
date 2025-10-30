@@ -1,51 +1,21 @@
-id,room_number,room_type_id,city_id,is_available
-1,NYCSTD101,1,1,1
-2,NYCSTD102,1,1,1
-3,NYCSTD103,1,1,1
-4,NYCSTD104,1,1,1
-5,NYCDLX201,2,1,1
-6,NYCDLX202,2,1,1
-7,NYCDLX203,2,1,1
-8,NYCEXE301,3,1,1
-9,NYCEXE302,3,1,1
-10,NYCPRE401,4,1,1
-11,LAXSTD101,1,2,1
-12,LAXSTD102,1,2,1
-13,LAXSTD103,1,2,1
-14,LAXSTD104,1,2,1
-15,LAXDLX201,2,2,1
-16,LAXDLX202,2,2,1
-17,LAXDLX203,2,2,1
-18,LAXEXE301,3,2,1
-19,LAXEXE302,3,2,1
-20,LAXPRE401,4,2,1
-21,CHISTD101,1,3,1
-22,CHISTD102,1,3,1
-23,CHISTD103,1,3,1
-24,CHISTD104,1,3,1
-25,CHIDLX201,2,3,1
-26,CHIDLX202,2,3,1
-27,CHIDLX203,2,3,1
-28,CHIEXE301,3,3,1
-29,CHIEXE302,3,3,1
-30,CHIPRE401,4,3,1
-31,MIASTD101,1,4,1
-32,MIASTD102,1,4,1
-33,MIASTD103,1,4,1
-34,MIASTD104,1,4,1
-35,MIADLX201,2,4,1
-36,MIADLX202,2,4,1
-37,MIADLX203,2,4,1
-38,MIAEXE301,3,4,1
-39,MIAEXE302,3,4,1
-40,MIAPRE401,4,4,1
-41,LVGSTD101,1,5,1
-42,LVGSTD102,1,5,1
-43,LVGSTD103,1,5,1
-44,LVGSTD104,1,5,1
-45,LVGDLX201,2,5,1
-46,LVGDLX202,2,5,1
-47,LVGDLX203,2,5,1
-48,LVGEXE301,3,5,1
-49,LVGEXE302,3,5,1
-50,LVGPRE401,4,5,1
+room_number,room_type,city,is_available
+101,Standard King,New York,True
+102,Standard Twin,New York,True
+201,Deluxe King,New York,True
+202,Deluxe Suite,New York,True
+301,Executive King,New York,True
+501,Standard King,London,True
+502,Executive Suite,London,True
+601,Presidential Suite,Paris,True
+602,Honeymoon Suite,Paris,True
+701,Ocean View Suite,Dubai,True
+702,Royal Suite,Dubai,True
+801,Family Suite,Tokyo,True
+802,Business Twin,Tokyo,True
+901,City View King,Singapore,True
+902,Junior Suite,Singapore,True
+1001,Pool View King,Bangkok,True
+1002,Grand Deluxe,Bangkok,True
+1101,Accessible King,Sydney,True
+1102,Garden View Twin,Sydney,True
+1201,Corner Suite,Rome,True
