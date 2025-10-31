@@ -22,6 +22,7 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
     path('profile/', views.profile, name='profile'),
+    path('room-type/<int:room_type_id>/', views.room_detail, name='room_detail'),
 ]
 
 # Serve media files in development

@@ -16,82 +16,6 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .forms import CustomUserCreationForm  # ADD THIS IMPORT
 
-
-
-def register(request):
-    if request.method == 'POST':
-        # Get form data
-        username = request.POST.get('username')
-        email = request.POST.get('email')  # Get email from form
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-        
-        # Validation
-        errors = []
-        
-        # Check if passwords match
-        if password1 != password2:
-            errors.append("Passwords do not match.")
-        
-        # Check if username already exists
-        if User.objects.filter(username=username).exists():
-            errors.append("Username already exists. Please choose a different one.")
-        
-        # Check if email already exists
-        if User.objects.filter(email=email).exists():
-            errors.append("Email address is already registered. Please use a different email.")
-        
-        # Check if email is provided and valid
-        if not email:
-            errors.append("Email address is required.")
-        elif '@' not in email:
-            errors.append("Please enter a valid email address.")
-        
-        # If there are errors, show them
-        if errors:
-            for error in errors:
-                messages.error(request, error)
-            # Return the form with existing data
-            context = {
-                'form': {
-                    'username': {'value': username},
-                    'email': {'value': email},
-                }
-            }
-            return render(request, 'register.html', context)
-        
-        # If no errors, create the user
-        try:
-            user = User.objects.create_user(
-                username=username,
-                email=email,  # Save email to user model
-                password=password1
-            )
-            
-            # Log the user in after registration
-            login(request, user)
-            messages.success(request, "Registration successful! Welcome to ABC Hotels.")
-            return redirect('home')
-            
-        except Exception as e:
-            messages.error(request, f"An error occurred during registration: {str(e)}")
-            context = {
-                'form': {
-                    'username': {'value': username},
-                    'email': {'value': email},
-                }
-            }
-            return render(request, 'register.html', context)
-    
-    # If it's a GET request, show empty form
-    return render(request, 'register.html')
-
-
-
-
-
-
-
 def home(request):
     """Home page view"""
     cities = City.objects.filter(is_active=True)[:4]  # Show 4 featured cities
@@ -196,19 +120,25 @@ def room_list(request):
         'selected_rooms': rooms_filter
     })
 
+# hotel/views.py - Update city_detail function
 def city_detail(request, city_id):
     """City detail page view"""
     city = get_object_or_404(City, id=city_id, is_active=True)
-    
+
     # Get available rooms in this city
     available_rooms = Room.objects.filter(city=city, is_available=True)
-    
+
     # Get unique room types available in this city
     room_types = RoomType.objects.filter(
         room__city=city,
         room__is_available=True
     ).distinct()
-    
+
+    # Calculate starting price and room count
+    city.room_count = available_rooms.count()
+    cheapest_room = available_rooms.select_related('room_type').order_by('room_type__price_per_night').first()
+    city.starting_price = cheapest_room.room_type.price_per_night if cheapest_room else 0
+
     # Get other active cities for recommendations
     other_cities = City.objects.filter(is_active=True).exclude(id=city_id)[:3]
 
@@ -514,4 +444,25 @@ def register(request):
         form = CustomUserCreationForm()
     
     return render(request, 'registration/register.html', {'form': form})
+
+# hotel/views.py - ADD THIS FUNCTION
+def room_detail(request, room_type_id):
+    """Room type detail page with available rooms"""
+    room_type = get_object_or_404(RoomType, id=room_type_id)
+    
+    # Get available rooms of this type
+    available_rooms = Room.objects.filter(
+        room_type=room_type, 
+        is_available=True
+    )
+    
+    # Get similar room types (exclude current one)
+    similar_rooms = RoomType.objects.exclude(id=room_type_id)[:3]
+    
+    return render(request, 'room_detail.html', {
+        'room_type': room_type,
+        'available_rooms': available_rooms,
+        'similar_rooms': similar_rooms
+    })
+
 

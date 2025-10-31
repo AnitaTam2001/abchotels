@@ -23,6 +23,7 @@
                         <strong>${{ room_type.price_per_night }}</strong> / night
                     </p>
                     <p style="line-height: 1.8; color: #666; margin-bottom: 2rem;">{{ room_type.description }}</p>
+                    
                     <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
                         <h3 style="margin-bottom: 1rem;">Room Features</h3>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
@@ -30,8 +31,8 @@
                                 <strong>Capacity:</strong> {{ room_type.capacity }} person{{ room_type.capacity|pluralize }}
                             </div>
                             <div>
-                                <strong>Bed Type:</strong>
-                                {% if room_type.name == 'Standard Room' %}Queen Bed
+                                <strong>Bed Type:</strong> 
+                                {% if room_type.name == 'Standard Room' %}Queen Bed + Sofa
                                 {% elif room_type.name == 'Deluxe Room' %}King Bed
                                 {% elif room_type.name == 'Executive Suite' %}King Bed + Sofa
                                 {% else %}Super King Bed{% endif %}
@@ -60,7 +61,7 @@
                 <div style="border: 1px solid #ddd; padding: 1.5rem; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                     <div>
                         <h3 style="margin: 0; color: #2c3e50;">Room {{ room.room_number }}</h3>
-                        <p style="margin: 0; color: #27ae60;">✓ Available</p>
+                        <p style="margin: 0; color: #27ae60;">Available</p>
                     </div>
                     <a href="{% url 'booking_form' room.id %}" class="btn btn-primary">Book Now</a>
                 </div>
@@ -107,4 +108,100 @@
         </div>
     </div>
 </section>
+
+<style>
+    .room-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+    }
+
+    .room-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid #f0f0f0;
+    }
+
+    .room-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .room-image {
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+    }
+
+    .room-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .room-card:hover .room-image img {
+        transform: scale(1.05);
+    }
+
+    .room-content {
+        padding: 1.5rem;
+    }
+
+    .room-title {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        color: #2c3e50;
+        font-weight: 600;
+    }
+
+    .room-features {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .btn {
+        display: inline-block;
+        background: #3498db;
+        color: white;
+        padding: 0.8rem 1.5rem;
+        text-decoration: none;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        transition: background 0.3s;
+        text-align: center;
+        font-size: 0.9rem;
+    }
+
+    .btn:hover {
+        background: #2980b9;
+        color: white;
+        text-decoration: none;
+    }
+
+    .btn-primary {
+        background: #e74c3c;
+    }
+
+    .btn-primary:hover {
+        background: #c0392b;
+    }
+
+    @media (max-width: 768px) {
+        .container > div:first-child {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        
+        .room-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
 {% endblock %}

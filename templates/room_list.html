@@ -108,17 +108,17 @@
                     {% elif "Dubai" in city.name %}
                     <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Dubai Hotel">
                     {% elif "Singapore" in city.name %}
-                    <img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Singapore Hotel">
+                    <img src="https://images.unsplash.com/photo-1525625293386-3f8f1938fedd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Singapore Hotel">
                     {% elif "Sydney" in city.name %}
                     <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Sydney Hotel">
                     {% elif "Toronto" in city.name %}
-                    <img src="https://images.unsplash.com/photo-1534237710431-e2fc698436d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Toronto Hotel">
+                    <img src="https://images.unsplash.com/photo-1534237710431-e27c698479d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Toronto Hotel">
                     {% elif "Hong Kong" in city.name %}
                     <img src="https://images.unsplash.com/photo-1534008897995-27a23e859048?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Hong Kong Hotel">
                     {% elif "Bangkok" in city.name %}
                     <img src="https://images.unsplash.com/photo-1528181304800-259b08848526?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Bangkok Hotel">
                     {% elif "Berlin" in city.name %}
-                    <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Berlin Hotel">
+                    <img src="https://images.unsplash.com/photo-1618773928121-c3222f663791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Berlin Hotel">
                     {% elif "Barcelona" in city.name %}
                     <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Barcelona Hotel">
                     {% elif "Amsterdam" in city.name %}
@@ -137,18 +137,10 @@
                 <div class="city-content-3col">
                     <!-- UPDATED: ABC + City Name + Hotel format -->
                     <div style="margin-bottom: 0.5rem;">
-                        <h3 class="city-title-3col" style="color: #2c3e50; margin: 0 0 0.2rem 0; font-size: 1.1rem;">
-                            ABC {{ city.name }} Hotel
-                        </h3>
-                        <p style="color: #666; margin: 0; font-size: 0.9rem;">
-                            📍 {{ city.name }}
-                        </p>
+                        <h3 class="city-title-3col" style="color: #2c3e50; margin: 0 0 0.2rem 0; font-size: 1.1rem;">ABC {{ city.name }} Hotel</h3>
+                        <p style="color: #666; margin: 0; font-size: 0.9rem;">{{ city.name }}</p>
                     </div>
-                    
-                    <p style="color: #666; margin-bottom: 1rem; line-height: 1.5; font-size: 0.9rem;">
-                        {{ city.description|truncatewords:15 }}
-                    </p>
-                    
+                    <p style="color: #666; margin-bottom: 1rem; line-height: 1.5; font-size: 0.9rem;">{{ city.description|truncatewords:15 }}</p>
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                         <div>
                             <strong style="color: #e74c3c; font-size: 1.2rem;">
@@ -159,13 +151,12 @@
                                 ${% cycle '159' '179' '199' '219' '239' '259' '279' '299' '319' '339' '359' '379' '399' '419' '439' %}
                                 {% endif %}
                             </strong>
-                            <span style="color: #666; font-size: 0.8rem;"> / night</span>
+                            <span style="color: #666; font-size: 0.8rem;"> /night</span>
                         </div>
                         <div style="color: #666; font-size: 0.8rem;">
                             <strong>{{ city.room_count }}</strong> rooms
                         </div>
                     </div>
-                    
                     <a href="{% url 'city_detail' city.id %}" class="btn" style="width: 100%; text-align: center; padding: 0.6rem; font-size: 0.9rem;">
                         View Hotel Details
                     </a>
@@ -182,84 +173,188 @@
 </section>
 
 <style>
-/* 3 Columns City Grid Styles */
-.city-grid-3col {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    margin-top: 2rem;
-}
-
-.city-card-3col {
-    background: white;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid #f0f0f0;
-}
-
-.city-card-3col:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-}
-
-.city-image-3col {
-    width: 100%;
-    height: 200px;
-    background: var(--light-color);
-    overflow: hidden;
-}
-
-.city-image-3col img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.city-card-3col:hover .city-image-3col img {
-    transform: scale(1.05);
-}
-
-.city-content-3col {
-    padding: 1.2rem;
-}
-
-.city-title-3col {
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
-    color: var(--primary-color);
-    font-weight: 600;
-}
-
-/* Mobile Responsive for 3 Columns */
-@media (max-width: 1024px) {
-    .city-grid-3col {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1.2rem;
+    /* Filter Section Styles */
+    .filter-section {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        margin-bottom: 2rem;
     }
-}
 
-@media (max-width: 768px) {
-    .city-grid-3col {
-        grid-template-columns: 1fr;
+    .filter-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 1rem;
+        align-items: end;
     }
-    
-    .city-image-3col {
-        height: 180px;
-    }
-}
 
-@media (max-width: 480px) {
-    .city-grid-3col {
-        grid-template-columns: 1fr;
+    .filter-group {
+        display: flex;
+        flex-direction: column;
     }
-    
-    .city-content-3col {
+
+    .filter-label {
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        color: #2c3e50;
+        font-size: 0.9rem;
+    }
+
+    .filter-select, .filter-input {
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        width: 100%;
+    }
+
+    .filter-btn {
+        background: #e74c3c;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: background 0.3s;
+    }
+
+    .filter-btn:hover {
+        background: #c0392b;
+    }
+
+    .results-info {
+        background: #e8f4fd;
         padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        color: #2c3e50;
     }
-}
+
+    /* 3 Columns City Grid Styles */
+    .city-grid-3col {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .city-card-3col {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid #f0f0f0;
+    }
+
+    .city-card-3col:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .city-image-3col {
+        width: 100%;
+        height: 200px;
+        background: #f8f9fa;
+        overflow: hidden;
+    }
+
+    .city-image-3col img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .city-card-3col:hover .city-image-3col img {
+        transform: scale(1.05);
+    }
+
+    .city-content-3col {
+        padding: 1.2rem;
+    }
+
+    .city-title-3col {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+        color: #2c3e50;
+        font-weight: 600;
+    }
+
+    .btn {
+        display: inline-block;
+        background: #3498db;
+        color: white;
+        padding: 0.8rem 1.5rem;
+        text-decoration: none;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        transition: background 0.3s;
+        text-align: center;
+    }
+
+    .btn:hover {
+        background: #2980b9;
+        color: white;
+        text-decoration: none;
+    }
+
+    .hero-section {
+        background-size: cover;
+        background-position: center;
+        color: white;
+        text-align: center;
+        padding: 4rem 0;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.2rem;
+        opacity: 0.9;
+    }
+
+    /* Mobile Responsive for 3 Columns */
+    @media (max-width: 1024px) {
+        .city-grid-3col {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.2rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .city-grid-3col {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        
+        .city-image-3col {
+            height: 180px;
+        }
+        
+        .filter-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .city-grid-3col {
+            grid-template-columns: 1fr;
+        }
+        
+        .city-content-3col {
+            padding: 1rem;
+        }
+        
+        .hero-title {
+            font-size: 2rem;
+        }
+    }
 </style>
 {% endblock %}
