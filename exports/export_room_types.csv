@@ -1,0 +1,21 @@
+name,price_per_night,capacity
+Standard King,150.00,2
+Standard Twin,140.00,2
+Deluxe King,250.00,3
+Deluxe Suite,350.00,4
+Executive King,300.00,2
+Executive Suite,450.00,3
+Presidential Suite,800.00,4
+Family Suite,400.00,5
+Honeymoon Suite,550.00,2
+Accessible King,160.00,2
+Pool View King,280.00,2
+Ocean View Suite,600.00,3
+City View King,320.00,2
+Garden View Twin,180.00,2
+Corner Suite,480.00,3
+Penthouse Suite,1200.00,4
+Business Twin,220.00,2
+Junior Suite,380.00,3
+Grand Deluxe,420.00,3
+Royal Suite,1500.00,4

@@ -1,0 +1,21 @@
+name,is_active
+New York,True
+London,False
+Paris,False
+Tokyo,True
+Dubai,True
+Singapore,False
+Bangkok,False
+Sydney,True
+Rome,False
+Barcelona,True
+Istanbul,True
+Hong Kong,True
+Los Angeles,False
+Miami,True
+Las Vegas,True
+Chicago,False
+San Francisco,False
+Amsterdam,False
+Vienna,True
+Prague,True
