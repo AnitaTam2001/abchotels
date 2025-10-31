@@ -11,6 +11,86 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .models import City, RoomType, Room, Booking, FAQ, Department, JobListing, JobApplication
 from datetime import datetime, date
+from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from django.conf import settings
+from .forms import CustomUserCreationForm  # ADD THIS IMPORT
+
+
+
+def register(request):
+    if request.method == 'POST':
+        # Get form data
+        username = request.POST.get('username')
+        email = request.POST.get('email')  # Get email from form
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        
+        # Validation
+        errors = []
+        
+        # Check if passwords match
+        if password1 != password2:
+            errors.append("Passwords do not match.")
+        
+        # Check if username already exists
+        if User.objects.filter(username=username).exists():
+            errors.append("Username already exists. Please choose a different one.")
+        
+        # Check if email already exists
+        if User.objects.filter(email=email).exists():
+            errors.append("Email address is already registered. Please use a different email.")
+        
+        # Check if email is provided and valid
+        if not email:
+            errors.append("Email address is required.")
+        elif '@' not in email:
+            errors.append("Please enter a valid email address.")
+        
+        # If there are errors, show them
+        if errors:
+            for error in errors:
+                messages.error(request, error)
+            # Return the form with existing data
+            context = {
+                'form': {
+                    'username': {'value': username},
+                    'email': {'value': email},
+                }
+            }
+            return render(request, 'register.html', context)
+        
+        # If no errors, create the user
+        try:
+            user = User.objects.create_user(
+                username=username,
+                email=email,  # Save email to user model
+                password=password1
+            )
+            
+            # Log the user in after registration
+            login(request, user)
+            messages.success(request, "Registration successful! Welcome to ABC Hotels.")
+            return redirect('home')
+            
+        except Exception as e:
+            messages.error(request, f"An error occurred during registration: {str(e)}")
+            context = {
+                'form': {
+                    'username': {'value': username},
+                    'email': {'value': email},
+                }
+            }
+            return render(request, 'register.html', context)
+    
+    # If it's a GET request, show empty form
+    return render(request, 'register.html')
+
+
+
+
+
+
 
 def home(request):
     """Home page view"""
@@ -395,3 +475,43 @@ def profile(request):
     return render(request, 'profile.html', {
         'user_bookings': user_bookings
     })
+
+# Add this function to hotel/views.py if you want email functionality
+
+def send_welcome_email(user_email, username):
+    subject = 'Welcome to Our Hotel Booking System'
+    message = f'''
+    Dear {username},
+    
+    Thank you for registering with our hotel booking system!
+    
+    We're excited to have you as a member of our community.
+    
+    Best regards,
+    Hotel Team
+    '''
+    
+    send_mail(
+        subject,
+        message,
+        settings.DEFAULT_FROM_EMAIL,
+        [user_email],
+        fail_silently=False,
+    )
+
+
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Account {username} created successfully! Please log in.')
+            return redirect('login')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = CustomUserCreationForm()
+    
+    return render(request, 'registration/register.html', {'form': form})
+
