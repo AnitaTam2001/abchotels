@@ -29,7 +29,7 @@ class Room(models.Model):
     room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE)
     is_available = models.BooleanField(default=True)
     # Remove room_number field completely
-    
+
     def __str__(self):
         return f"{self.room_type.name} in {self.city.name}"
 
@@ -52,7 +52,7 @@ class Booking(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Booking #{self.id} - {self.guest_name}"
+        return f'Booking #{self.id} - {self.guest_name}'
 
 class FAQ(models.Model):
     CATEGORY_CHOICES = [
@@ -68,7 +68,7 @@ class FAQ(models.Model):
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='general')
     order = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
-
+    
     class Meta:
         ordering = ['category', 'order', 'question']
 

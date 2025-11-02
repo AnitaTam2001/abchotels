@@ -9,7 +9,7 @@ from decimal import Decimal
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
-from .models import City, RoomType, Room, Booking, Department, JobListing, JobApplication  # REMOVED: FAQ
+from .models import City, RoomType, Room, Booking, Department, JobListing, JobApplication, FAQ
 from datetime import datetime, date
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
@@ -171,7 +171,7 @@ def room_list(request):
             is_available=True
         ).select_related('room_type').order_by('room_type__price_per_night').first()
         city.starting_price = cheapest_room.room_type.price_per_night if cheapest_room else 0
-    
+
     return render(request, 'room_list.html', {
         'cities': filtered_cities,
         'all_cities': City.objects.filter(is_active=True),
@@ -185,10 +185,8 @@ def room_list(request):
 def city_detail(request, city_id):
     """City detail page view"""
     city = get_object_or_404(City, id=city_id, is_active=True)
-
     # Get available rooms in this city
     available_rooms = Room.objects.filter(city=city, is_available=True)
-
     # Get unique room types available in this city
     room_types = RoomType.objects.filter(
         room__city=city,
@@ -291,7 +289,8 @@ def contact(request):
     return render(request, 'contact.html')
 
 def faq(request):
-    """FAQ page view - UPDATED: No FAQ model"""
+    """FAQ page view"""
+    faqs = FAQ.objects.filter(is_active=True)
     categories = {
         'booking': 'Booking & Reservations',
         'rooms': 'Rooms & Amenities',
@@ -300,13 +299,13 @@ def faq(request):
         'general': 'General Information',
     }
 
-    # Create empty FAQ structure since no FAQ model exists
-    faqs = {}
+    # Group FAQs by category
+    faqs_by_category = {}
     for category_key, category_name in categories.items():
-        faqs[category_name] = []  # Empty list - you can add static FAQs here if needed
+        faqs_by_category[category_name] = faqs.filter(category=category_key)
 
     return render(request, 'faq.html', {
-        'faqs': faqs,
+        'faqs_by_category': faqs_by_category,
         'categories': categories
     })
 
@@ -374,7 +373,7 @@ def job_application(request, job_id):
         if not all(required_fields):
             messages.error(request, 'Please fill in all required fields.')
             return render(request, 'job_application.html', {'job': job})
-        
+
         # Validate file type
         allowed_types = ['.pdf', '.doc', '.docx']
         file_extension = os.path.splitext(resume.name)[1].lower()
@@ -401,7 +400,6 @@ def job_application(request, job_id):
             expected_salary=expected_salary,
             resume=resume
         )
-
         messages.success(request, f'Thank you {first_name}! Your application for {job.title} has been submitted successfully.')
         return redirect('careers')
 
@@ -449,15 +447,15 @@ def profile(request):
 def send_welcome_email(user_email, username):
     subject = 'Welcome to Our Hotel Booking System'
     message = f'''
-Dear {username},
+    Dear {username},
 
-Thank you for registering with our hotel booking system!
+    Thank you for registering with our hotel booking system!
 
-We're excited to have you as a member of our community.
+    We're excited to have you as a member of our community.
 
-Best regards,
-Hotel Team
-'''
+    Best regards,
+    Hotel Team
+    '''
 
     send_mail(
         subject,
@@ -470,26 +468,26 @@ Hotel Team
 def room_detail(request, room_type_id):
     """Room type detail page showing available rooms"""
     room_type = get_object_or_404(RoomType, id=room_type_id)
-    
+
     # Get available rooms of this type
     available_rooms = Room.objects.filter(
         room_type=room_type,
         is_available=True
     ).select_related('city')
-    
+
     # Get filter parameters
     city_filter = request.GET.get('city', '')
-    
+
     # Apply city filter if provided
     if city_filter:
         available_rooms = available_rooms.filter(city__name__icontains=city_filter)
-    
+
     # Get unique cities where this room type is available
     available_cities = City.objects.filter(
         room__room_type=room_type,
         room__is_available=True
     ).distinct()
-    
+
     return render(request, 'room_detail.html', {
         'room_type': room_type,
         'available_rooms': available_rooms,
