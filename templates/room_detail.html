@@ -7,14 +7,20 @@
         <div style="max-width: 1000px; margin: 0 auto;">
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 3rem;">
                 <div>
-                    {% if room_type.name == 'Standard Room' %}
+                    {% if room_type.name == 'Standard King' or room_type.name == 'Standard Twin' %}
                     <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="{{ room_type.name }}" style="width: 100%; height: 400px; object-fit: cover; border-radius: 10px;">
-                    {% elif room_type.name == 'Deluxe Room' %}
+                    {% elif room_type.name == 'Deluxe King' or room_type.name == 'Deluxe Suite' %}
                     <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="{{ room_type.name }}" style="width: 100%; height: 400px; object-fit: cover; border-radius: 10px;">
-                    {% elif room_type.name == 'Executive Suite' %}
+                    {% elif room_type.name == 'Executive King' or room_type.name == 'Executive Suite' %}
                     <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="{{ room_type.name }}" style="width: 100%; height: 400px; object-fit: cover; border-radius: 10px;">
                     {% elif room_type.name == 'Presidential Suite' %}
                     <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="{{ room_type.name }}" style="width: 100%; height: 400px; object-fit: cover; border-radius: 10px;">
+                    {% elif room_type.name == 'Family Suite' %}
+                    <img src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="{{ room_type.name }}" style="width: 100%; height: 400px; object-fit: cover; border-radius: 10px;">
+                    {% elif room_type.name == 'Honeymoon Suite' %}
+                    <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="{{ room_type.name }}" style="width: 100%; height: 400px; object-fit: cover; border-radius: 10px;">
+                    {% else %}
+                    <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="{{ room_type.name }}" style="width: 100%; height: 400px; object-fit: cover; border-radius: 10px;">
                     {% endif %}
                 </div>
                 <div>
@@ -31,22 +37,29 @@
                                 <strong>Capacity:</strong> {{ room_type.capacity }} person{{ room_type.capacity|pluralize }}
                             </div>
                             <div>
-                                <strong>Bed Type:</strong> 
-                                {% if room_type.name == 'Standard Room' %}Queen Bed + Sofa
-                                {% elif room_type.name == 'Deluxe Room' %}King Bed
-                                {% elif room_type.name == 'Executive Suite' %}King Bed + Sofa
-                                {% else %}Super King Bed{% endif %}
+                                <strong>Bed Type:</strong>
+                                {% if 'Standard' in room_type.name %}Queen Bed
+                                {% elif 'Deluxe' in room_type.name %}King Bed
+                                {% elif 'Executive' in room_type.name %}King Bed + Sofa
+                                {% elif 'Presidential' in room_type.name %}Super King Bed
+                                {% elif 'Family' in room_type.name %}Multiple Beds
+                                {% elif 'Honeymoon' in room_type.name %}King Bed
+                                {% else %}Queen Bed{% endif %}
                             </div>
                             <div>
                                 <strong>Size:</strong>
-                                {% if room_type.name == 'Standard Room' %}300 sq ft
-                                {% elif room_type.name == 'Deluxe Room' %}450 sq ft
-                                {% elif room_type.name == 'Executive Suite' %}650 sq ft
-                                {% else %}1000 sq ft{% endif %}
+                                {% if 'Standard' in room_type.name %}300 sq ft
+                                {% elif 'Deluxe' in room_type.name %}450 sq ft
+                                {% elif 'Executive' in room_type.name %}650 sq ft
+                                {% elif 'Presidential' in room_type.name %}1000 sq ft
+                                {% elif 'Family' in room_type.name %}800 sq ft
+                                {% elif 'Honeymoon' in room_type.name %}600 sq ft
+                                {% else %}350 sq ft{% endif %}
                             </div>
                             <div>
                                 <strong>View:</strong>
-                                {% if room_type.name == 'Presidential Suite' %}Panoramic City View
+                                {% if 'Presidential' in room_type.name %}Panoramic City View
+                                {% elif 'Honeymoon' in room_type.name %}Romantic City View
                                 {% else %}City View{% endif %}
                             </div>
                         </div>
@@ -55,12 +68,13 @@
             </div>
 
             <h2 style="margin-bottom: 1.5rem;">Available Rooms</h2>
+            
             {% if available_rooms %}
             <div style="display: grid; gap: 1rem; margin-bottom: 3rem;">
                 {% for room in available_rooms %}
                 <div style="border: 1px solid #ddd; padding: 1.5rem; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                     <div>
-                        <h3 style="margin: 0; color: #2c3e50;">Room {{ room.room_number }}</h3>
+                        <h3 style="margin: 0; color: #2c3e50;">{{ room.city.name }}</h3>
                         <p style="margin: 0; color: #27ae60;">Available</p>
                     </div>
                     <a href="{% url 'booking_form' room.id %}" class="btn btn-primary">Book Now</a>
@@ -81,14 +95,16 @@
                     {% for similar_room in similar_rooms %}
                     <div class="room-card">
                         <div class="room-image">
-                            {% if similar_room.name == 'Standard Room' %}
+                            {% if similar_room.name == 'Standard King' or similar_room.name == 'Standard Twin' %}
                             <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Standard Room">
-                            {% elif similar_room.name == 'Deluxe Room' %}
+                            {% elif similar_room.name == 'Deluxe King' or similar_room.name == 'Deluxe Suite' %}
                             <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Deluxe Room">
-                            {% elif similar_room.name == 'Executive Suite' %}
+                            {% elif similar_room.name == 'Executive King' or similar_room.name == 'Executive Suite' %}
                             <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Executive Suite">
                             {% elif similar_room.name == 'Presidential Suite' %}
                             <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Presidential Suite">
+                            {% else %}
+                            <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="{{ similar_room.name }}">
                             {% endif %}
                         </div>
                         <div class="room-content">
@@ -110,98 +126,98 @@
 </section>
 
 <style>
-    .room-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+.room-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.room-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #f0f0f0;
+}
+
+.room-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.room-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.room-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.room-card:hover .room-image img {
+    transform: scale(1.05);
+}
+
+.room-content {
+    padding: 1.5rem;
+}
+
+.room-title {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.room-features {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.btn {
+    display: inline-block;
+    background: #3498db;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.btn:hover {
+    background: #2980b9;
+    color: white;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: #e74c3c;
+}
+
+.btn-primary:hover {
+    background: #c0392b;
+}
+
+@media (max-width: 768px) {
+    .container > div:first-child {
+        grid-template-columns: 1fr;
         gap: 2rem;
     }
-
-    .room-card {
-        background: white;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border: 1px solid #f0f0f0;
+    
+    .room-grid {
+        grid-template-columns: 1fr;
     }
-
-    .room-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    }
-
-    .room-image {
-        width: 100%;
-        height: 200px;
-        overflow: hidden;
-    }
-
-    .room-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.3s ease;
-    }
-
-    .room-card:hover .room-image img {
-        transform: scale(1.05);
-    }
-
-    .room-content {
-        padding: 1.5rem;
-    }
-
-    .room-title {
-        font-size: 1.2rem;
-        margin-bottom: 0.5rem;
-        color: #2c3e50;
-        font-weight: 600;
-    }
-
-    .room-features {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1rem;
-    }
-
-    .btn {
-        display: inline-block;
-        background: #3498db;
-        color: white;
-        padding: 0.8rem 1.5rem;
-        text-decoration: none;
-        border-radius: 5px;
-        border: none;
-        cursor: pointer;
-        transition: background 0.3s;
-        text-align: center;
-        font-size: 0.9rem;
-    }
-
-    .btn:hover {
-        background: #2980b9;
-        color: white;
-        text-decoration: none;
-    }
-
-    .btn-primary {
-        background: #e74c3c;
-    }
-
-    .btn-primary:hover {
-        background: #c0392b;
-    }
-
-    @media (max-width: 768px) {
-        .container > div:first-child {
-            grid-template-columns: 1fr;
-            gap: 2rem;
-        }
-        
-        .room-grid {
-            grid-template-columns: 1fr;
-        }
-    }
+}
 </style>
 {% endblock %}

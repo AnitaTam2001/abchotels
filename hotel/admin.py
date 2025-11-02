@@ -1,7 +1,6 @@
 # hotel/admin.py
 from django.contrib import admin
-from .models import City, RoomType, Room, Booking, FAQ, Department, JobListing, JobApplication
-# hotel/admin.py
+from .models import Room, City, RoomType, Booking, Department, JobListing, JobApplication
 
 @admin.register(City)
 class CityAdmin(admin.ModelAdmin):
@@ -16,9 +15,14 @@ class RoomTypeAdmin(admin.ModelAdmin):
 
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):
-    list_display = ['room_number', 'room_type', 'is_available']
+    # Remove room_number from list_display and use id instead
+    list_display = ['id', 'city', 'room_type', 'is_available']
     list_filter = ['room_type', 'is_available']
-    search_fields = ['room_number']
+    # Remove room_number from search_fields
+    search_fields = ['city__name', 'room_type__name']
+    
+    # Fields to show in forms (no room_number anymore)
+    fields = ('city', 'room_type', 'is_available')
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
@@ -26,13 +30,6 @@ class BookingAdmin(admin.ModelAdmin):
     list_filter = ['status', 'check_in', 'check_out']
     search_fields = ['guest_name', 'guest_email']
     date_hierarchy = 'created_at'
-
-@admin.register(FAQ)
-class FAQAdmin(admin.ModelAdmin):
-    list_display = ['question', 'category', 'order', 'is_active']
-    list_filter = ['category', 'is_active']
-    list_editable = ['order', 'is_active']
-    search_fields = ['question', 'answer']
 
 @admin.register(Department)
 class DepartmentAdmin(admin.ModelAdmin):

@@ -25,13 +25,13 @@ class RoomType(models.Model):
         return self.name
 
 class Room(models.Model):
-    room_number = models.CharField(max_length=10, unique=True)
+    city = models.ForeignKey(City, on_delete=models.CASCADE)
     room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE)
-    city = models.ForeignKey(City, on_delete=models.CASCADE, default=1)  # Add city relationship
     is_available = models.BooleanField(default=True)
-
+    # Remove room_number field completely
+    
     def __str__(self):
-        return f"Room {self.room_number} - {self.room_type.name} - {self.city.name}"
+        return f"{self.room_type.name} in {self.city.name}"
 
 class Booking(models.Model):
     STATUS_CHOICES = [

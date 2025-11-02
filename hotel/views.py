@@ -9,16 +9,82 @@ from decimal import Decimal
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
-from .models import City, RoomType, Room, Booking, FAQ, Department, JobListing, JobApplication
+from .models import City, RoomType, Room, Booking, Department, JobListing, JobApplication  # REMOVED: FAQ
 from datetime import datetime, date
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.conf import settings
-from .forms import CustomUserCreationForm  # ADD THIS IMPORT
+from .forms import CustomUserCreationForm
+
+def register(request):
+    if request.method == 'POST':
+        # Get form data
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+
+        # Validation
+        errors = []
+
+        # Check if passwords match
+        if password1 != password2:
+            errors.append("Passwords do not match.")
+
+        # Check if username already exists
+        if User.objects.filter(username=username).exists():
+            errors.append("Username already exists. Please choose a different one.")
+
+        # Check if email already exists
+        if User.objects.filter(email=email).exists():
+            errors.append("Email address is already registered. Please use a different email.")
+
+        # Check if email is provided and valid
+        if not email:
+            errors.append("Email address is required.")
+        elif '@' not in email:
+            errors.append("Please enter a valid email address.")
+
+        # If there are errors, show them
+        if errors:
+            for error in errors:
+                messages.error(request, error)
+            context = {
+                'form': {
+                    'username': {'value': username},
+                    'email': {'value': email},
+                }
+            }
+            return render(request, 'register.html', context)
+
+        # If no errors, create the user
+        try:
+            user = User.objects.create_user(
+                username=username,
+                email=email,
+                password=password1
+            )
+            # Log the user in after registration
+            login(request, user)
+            messages.success(request, "Registration successful! Welcome to ABC Hotels.")
+            return redirect('home')
+
+        except Exception as e:
+            messages.error(request, f"An error occurred during registration: {str(e)}")
+            context = {
+                'form': {
+                    'username': {'value': username},
+                    'email': {'value': email},
+                }
+            }
+            return render(request, 'register.html', context)
+
+    # If it's a GET request, show empty form
+    return render(request, 'register.html')
 
 def home(request):
     """Home page view"""
-    cities = City.objects.filter(is_active=True)[:4]  # Show 4 featured cities
+    cities = City.objects.filter(is_active=True)[:4]
     return render(request, 'home.html', {'cities': cities})
 
 def room_list(request):
@@ -44,11 +110,10 @@ def room_list(request):
         try:
             check_in = datetime.strptime(check_in_date, '%Y-%m-%d').date()
             check_out = datetime.strptime(check_out_date, '%Y-%m-%d').date()
-            
+
             # Get cities that have available rooms for the selected dates
             cities_with_availability = []
             for city in filtered_cities:
-                # Count available rooms in this city for the selected dates
                 available_rooms = Room.objects.filter(
                     city=city,
                     is_available=True
@@ -59,21 +124,18 @@ def room_list(request):
                         check_out__gt=check_in
                     ).values_list('room_id', flat=True)
                 )
-                
+
                 if available_rooms.exists():
                     cities_with_availability.append(city.id)
-            
+
             filtered_cities = filtered_cities.filter(id__in=cities_with_availability)
-            
         except (ValueError, TypeError):
-            # If date parsing fails, continue without date filtering
             pass
 
     # Guests filter (capacity)
     if guests_filter:
         cities_with_capacity = []
         for city in filtered_cities:
-            # Check if city has rooms that can accommodate the number of guests
             suitable_rooms = Room.objects.filter(
                 city=city,
                 room_type__capacity__gte=guests_filter,
@@ -81,7 +143,7 @@ def room_list(request):
             )
             if suitable_rooms.exists():
                 cities_with_capacity.append(city.id)
-        
+
         filtered_cities = filtered_cities.filter(id__in=cities_with_capacity)
 
     # Rooms filter (number of available rooms)
@@ -96,7 +158,7 @@ def room_list(request):
                 ).count()
                 if available_rooms_count >= rooms_count:
                     cities_with_sufficient_rooms.append(city.id)
-            
+
             filtered_cities = filtered_cities.filter(id__in=cities_with_sufficient_rooms)
         except ValueError:
             pass
@@ -105,11 +167,11 @@ def room_list(request):
     for city in filtered_cities:
         city.room_count = Room.objects.filter(city=city, is_available=True).count()
         cheapest_room = Room.objects.filter(
-            city=city, 
+            city=city,
             is_available=True
         ).select_related('room_type').order_by('room_type__price_per_night').first()
         city.starting_price = cheapest_room.room_type.price_per_night if cheapest_room else 0
-
+    
     return render(request, 'room_list.html', {
         'cities': filtered_cities,
         'all_cities': City.objects.filter(is_active=True),
@@ -120,7 +182,6 @@ def room_list(request):
         'selected_rooms': rooms_filter
     })
 
-# hotel/views.py - Update city_detail function
 def city_detail(request, city_id):
     """City detail page view"""
     city = get_object_or_404(City, id=city_id, is_active=True)
@@ -133,11 +194,6 @@ def city_detail(request, city_id):
         room__city=city,
         room__is_available=True
     ).distinct()
-
-    # Calculate starting price and room count
-    city.room_count = available_rooms.count()
-    cheapest_room = available_rooms.select_related('room_type').order_by('room_type__price_per_night').first()
-    city.starting_price = cheapest_room.room_type.price_per_night if cheapest_room else 0
 
     # Get other active cities for recommendations
     other_cities = City.objects.filter(is_active=True).exclude(id=city_id)[:3]
@@ -229,14 +285,13 @@ def contact(request):
         message = request.POST.get('message')
         contact_method = request.POST.get('contact_method', 'email')
 
-        # Here you would typically save to database or send email
         messages.success(request, f'Thank you {name}! Your message has been sent. We will contact you via {contact_method} soon.')
         return redirect('contact')
 
     return render(request, 'contact.html')
 
 def faq(request):
-    """FAQ page view"""
+    """FAQ page view - UPDATED: No FAQ model"""
     categories = {
         'booking': 'Booking & Reservations',
         'rooms': 'Rooms & Amenities',
@@ -245,9 +300,10 @@ def faq(request):
         'general': 'General Information',
     }
 
+    # Create empty FAQ structure since no FAQ model exists
     faqs = {}
     for category_key, category_name in categories.items():
-        faqs[category_name] = FAQ.objects.filter(category=category_key, is_active=True)
+        faqs[category_name] = []  # Empty list - you can add static FAQs here if needed
 
     return render(request, 'faq.html', {
         'faqs': faqs,
@@ -313,8 +369,9 @@ def job_application(request, job_id):
         expected_salary = request.POST.get('expected_salary', '')
         resume = request.FILES.get('resume')
 
-        # Validate required fields - FIXED: use list for all()
-        if not all([first_name, last_name, email, phone, cover_letter, available_start_date, resume]):
+        # Validate required fields
+        required_fields = [first_name, last_name, email, phone, cover_letter, available_start_date, resume]
+        if not all(required_fields):
             messages.error(request, 'Please fill in all required fields.')
             return render(request, 'job_application.html', {'job': job})
         
@@ -354,23 +411,6 @@ def why_work_with_us(request):
     """Why work with us page"""
     return render(request, 'why_work_with_us.html')
 
-def register(request):
-    """User registration view"""
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            # Log the user in after registration
-            login(request, user)
-            messages.success(request, f'Account created successfully! Welcome, {user.username}!')
-            return redirect('home')
-        else:
-            messages.error(request, 'Please correct the errors below.')
-    else:
-        form = UserCreationForm()
-
-    return render(request, 'register.html', {'form': form})
-
 def user_login(request):
     """User login view"""
     if request.method == 'POST':
@@ -385,6 +425,8 @@ def user_login(request):
                 return redirect('home')
             else:
                 messages.error(request, 'Invalid username or password.')
+        else:
+            messages.error(request, 'Invalid username or password.')
     else:
         form = AuthenticationForm()
 
@@ -399,28 +441,24 @@ def user_logout(request):
 @login_required
 def profile(request):
     """User profile view"""
-    # Get user's bookings
     user_bookings = Booking.objects.filter(guest_email=request.user.email)
-
     return render(request, 'profile.html', {
         'user_bookings': user_bookings
     })
 
-# Add this function to hotel/views.py if you want email functionality
-
 def send_welcome_email(user_email, username):
     subject = 'Welcome to Our Hotel Booking System'
     message = f'''
-    Dear {username},
-    
-    Thank you for registering with our hotel booking system!
-    
-    We're excited to have you as a member of our community.
-    
-    Best regards,
-    Hotel Team
-    '''
-    
+Dear {username},
+
+Thank you for registering with our hotel booking system!
+
+We're excited to have you as a member of our community.
+
+Best regards,
+Hotel Team
+'''
+
     send_mail(
         subject,
         message,
@@ -429,40 +467,32 @@ def send_welcome_email(user_email, username):
         fail_silently=False,
     )
 
-
-def register(request):
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            username = form.cleaned_data.get('username')
-            messages.success(request, f'Account {username} created successfully! Please log in.')
-            return redirect('login')
-        else:
-            messages.error(request, 'Please correct the errors below.')
-    else:
-        form = CustomUserCreationForm()
-    
-    return render(request, 'registration/register.html', {'form': form})
-
-# hotel/views.py - ADD THIS FUNCTION
 def room_detail(request, room_type_id):
-    """Room type detail page with available rooms"""
+    """Room type detail page showing available rooms"""
     room_type = get_object_or_404(RoomType, id=room_type_id)
     
     # Get available rooms of this type
     available_rooms = Room.objects.filter(
-        room_type=room_type, 
+        room_type=room_type,
         is_available=True
-    )
+    ).select_related('city')
     
-    # Get similar room types (exclude current one)
-    similar_rooms = RoomType.objects.exclude(id=room_type_id)[:3]
+    # Get filter parameters
+    city_filter = request.GET.get('city', '')
+    
+    # Apply city filter if provided
+    if city_filter:
+        available_rooms = available_rooms.filter(city__name__icontains=city_filter)
+    
+    # Get unique cities where this room type is available
+    available_cities = City.objects.filter(
+        room__room_type=room_type,
+        room__is_available=True
+    ).distinct()
     
     return render(request, 'room_detail.html', {
         'room_type': room_type,
         'available_rooms': available_rooms,
-        'similar_rooms': similar_rooms
+        'available_cities': available_cities,
+        'selected_city': city_filter
     })
-
-
