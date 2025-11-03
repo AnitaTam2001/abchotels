@@ -1,4 +1,6 @@
 # create_city_detail_django.py
+# Run this script to generate the Django-compatible city_detail.html template
+
 def create_city_detail_template():
     """Create the complete city_detail.html template for Django with local images"""
     
@@ -104,7 +106,7 @@ def create_city_detail_template():
                 <strong>Capacity:</strong> {{ room_type.capacity }} person{{ room_type.capacity|pluralize }}
               </div>
             </div>
-            <a href="{% url 'room_detail' room_type.id %}" class="btn" style="width: 100%; text-align: center; background: #3498db; color: white; padding: 12px; border-radius: 6px; text-decoration: none; display: block;">
+            <a href="{% url 'room_type_detail' room_type.id %}" class="btn" style="width: 100%; text-align: center; background: #3498db; color: white; padding: 12px; border-radius: 6px; text-decoration: none; display: block;">
               View Available Rooms
             </a>
           </div>
@@ -167,19 +169,57 @@ def create_city_detail_template():
 {% endblock %}
 """
 
+    # Create the templates directory if it doesn't exist
     import os
     os.makedirs('templates', exist_ok=True)
     
+    # Write the template file
     with open('templates/city_detail.html', 'w', encoding='utf-8') as f:
         f.write(template_content)
     
     print("✅ SUCCESS: Django-compatible templates/city_detail.html has been created!")
     return True
 
+def show_instructions():
+    """Show instructions for required images"""
+    print("\n📋 REQUIRED IMAGE FILES (with underscores):")
+    print("\n🏙️  City Images (save in static/images/cities/):")
+    cities = [
+        'new_york.jpg', 'london.jpg', 'paris.jpg', 'tokyo.jpg', 'dubai.jpg',
+        'singapore.jpg', 'bangkok.jpg', 'sydney.jpg', 'rome.jpg', 'barcelona.jpg',
+        'istanbul.jpg', 'hong_kong.jpg', 'los_angeles.jpg', 'miami.jpg', 'las_vegas.jpg',
+        'chicago.jpg', 'san_francisco.jpg', 'amsterdam.jpg', 'vienna.jpg', 'prague.jpg',
+        'default.jpg'
+    ]
+    for city in cities:
+        print(f"   📷 {city}")
+    
+    print("\n🛏️  Room Type Images (save in static/images/rooms/):")
+    rooms = [
+        'standard_king.png', 'standard_twin.png', 'deluxe_king.png', 
+        'deluxe_suite.png', 'executive_king.png', 'executive_suite.png',
+        'presidential_suite.png', 'family_suite.png', 'honeymoon_suite.png'
+    ]
+    for room in rooms:
+        print(f"   🛏️  {room}")
+    
+    print("\n🔧 KEY CHANGES FOR DJANGO:")
+    print("   ✅ Uses {% load static %} at the top")
+    print("   ✅ Uses {% static 'path/to/image.jpg' %} instead of url_for()")
+    print("   ✅ Uses {% url 'view_name' arg %} for URL routing")
+    print("   ✅ File names use underscores (new_york.jpg instead of newyork.jpg)")
+
 if __name__ == "__main__":
-    create_city_detail_template()
-    print("\n📋 Access your city pages using these URLs:")
-    print("   http://localhost:8000/city/391/")
-    print("   http://localhost:8000/city/1/")
-    print("   http://localhost:8000/city/2/")
-    print("   etc...")
+    print("🏨 Creating Django-compatible city_detail.html template...")
+    print("=" * 60)
+    
+    if create_city_detail_template():
+        show_instructions()
+        print("\n🚀 NEXT STEPS:")
+        print("1. Add your city images to static/images/cities/")
+        print("2. Add your room images to static/images/rooms/")
+        print("3. Make sure your Django settings.py has STATIC_URL configured")
+        print("4. Run your Django server: python manage.py runserver")
+        print("5. Visit: http://localhost:8000/city/391/")
+    else:
+        print("❌ Failed to create template")

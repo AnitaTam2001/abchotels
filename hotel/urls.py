@@ -3,7 +3,6 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from . import views
-from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -21,7 +20,8 @@ urlpatterns = [
     path('login/', views.user_login, name='login'),
     path('logout/', views.user_logout, name='logout'),
     path('profile/', views.profile, name='profile'),
-path('room-type/<int:room_type_id>/', views.room_detail, name='room_detail'),
+    path('room-type/<int:room_type_id>/', views.room_detail, name='room_detail'),
+    path('dashboard/', views.dashboard, name='dashboard'),
 ]
 
 # Serve media files in development

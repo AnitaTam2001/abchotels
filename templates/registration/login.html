@@ -20,9 +20,9 @@
                 {% if messages %}
                 <div class="messages" style="margin-bottom: 2rem;">
                     {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }}" style="background: {% if message.tags == 'error' %}#f8d7da{% else %}#d4edda{% endif %}; color: {% if message.tags == 'error' %}#721c24{% else %}#155724{% endif %}; padding: 1rem; border-radius: 5px; border: 1px solid {% if message.tags == 'error' %}#f5c6cb{% else %}#c3e6cb{% endif %};">
-                        {{ message }}
-                    </div>
+                <div class="alert alert-{{ message.tags }}" style="background: {% if message.tags == 'error' %}#f8d7da{% else %}#d4edda{% endif %}; color: {% if message.tags == 'error' %}#721c24{% else %}#155724{% endif %}; padding: 1rem; border-radius: 5px; border: 1px solid {% if message.tags == 'error' %}#f5c6cb{% else %}#c3e6cb{% endif %};">
+                     {{ message }}
+                </div>
                     {% endfor %}
                 </div>
                 {% endif %}

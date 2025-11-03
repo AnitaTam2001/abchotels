@@ -57,12 +57,8 @@ WSGI_APPLICATION = 'abchotels.wsgi.application'
 # Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'abchotels',
-        'USER': 'abchotels_user',
-        'PASSWORD': 'abc123hotels',
-        'HOST': 'localhost',
-        'PORT': '5433'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -102,15 +98,14 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Create directories if they don't exist
-os.makedirs(STATIC_ROOT, exist_ok=True)
-os.makedirs(MEDIA_ROOT, exist_ok=True)
-os.makedirs(BASE_DIR / 'static', exist_ok=True)
-
-# abchotels/settings.py - Add these settings
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
-LOGIN_URL = '/login/'
+# Authentication settings
+LOGIN_REDIRECT_URL = 'dashboard'  # Use URL name instead of path
+LOGOUT_REDIRECT_URL = 'login'     # Use URL name instead of path
+LOGIN_URL = 'login'               # Use URL name instead of path
 
 # Email configuration (for password reset, you can use console backend for development)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Create directories if they don't exist
+os.makedirs(STATIC_ROOT, exist_ok=True)
+os.makedirs(MEDIA_ROOT, exist_ok=True)

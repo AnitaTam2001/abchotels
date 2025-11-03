@@ -1,274 +1,92 @@
 # hotel/views.py
-import os
-from django.shortcuts import render, get_object_or_404, redirect
-from django.http import JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.utils import timezone
-from django.db.models import Q, Count
-from decimal import Decimal
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from .models import City, RoomType, Room, Booking, Department, JobListing, JobApplication, FAQ
-from datetime import datetime, date
 from django.contrib.auth.models import User
-from django.core.mail import send_mail
-from django.conf import settings
 from .forms import CustomUserCreationForm
 
 def register(request):
+    """
+    User registration view for ABC Hotels
+    """
     if request.method == 'POST':
-        # Get form data
+        form = CustomUserCreationForm(request.POST)  # Use custom form
+        if form.is_valid():
+            # Save the user
+            user = form.save()
+
+            # Auto-login after registration
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=password)
+
+            if user is not None:
+                login(request, user)
+                messages.success(request, f'Account created successfully! Welcome, {username}!')
+                return redirect('dashboard')
+        else:
+            # Form has errors
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f'{field}: {error}')
+    else:
+        form = CustomUserCreationForm()  # Use custom form
+    
+    return render(request, 'registration/register.html', {'form': form})
+
+def user_login(request):
+    """
+    Custom login view for ABC Hotels
+    """
+    if request.method == 'POST':
         username = request.POST.get('username')
-        email = request.POST.get('email')
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-
-        # Validation
-        errors = []
-
-        # Check if passwords match
-        if password1 != password2:
-            errors.append("Passwords do not match.")
-
-        # Check if username already exists
-        if User.objects.filter(username=username).exists():
-            errors.append("Username already exists. Please choose a different one.")
-
-        # Check if email already exists
-        if User.objects.filter(email=email).exists():
-            errors.append("Email address is already registered. Please use a different email.")
-
-        # Check if email is provided and valid
-        if not email:
-            errors.append("Email address is required.")
-        elif '@' not in email:
-            errors.append("Please enter a valid email address.")
-
-        # If there are errors, show them
-        if errors:
-            for error in errors:
-                messages.error(request, error)
-            context = {
-                'form': {
-                    'username': {'value': username},
-                    'email': {'value': email},
-                }
-            }
-            return render(request, 'register.html', context)
-
-        # If no errors, create the user
-        try:
-            user = User.objects.create_user(
-                username=username,
-                email=email,
-                password=password1
-            )
-            # Log the user in after registration
+        password = request.POST.get('password')
+        
+        # Authenticate user
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            # Login successful
             login(request, user)
-            messages.success(request, "Registration successful! Welcome to ABC Hotels.")
-            return redirect('home')
+            messages.success(request, f'Welcome back, {username}!')
+            
+            # Redirect to next page or dashboard
+            next_page = request.GET.get('next', 'dashboard')
+            return redirect(next_page)
+        else:
+            # Login failed
+            messages.error(request, 'Invalid username or password. Please try again.')
+    
+    # If GET request or failed login, show login page
+    return render(request, 'registration/login.html')
 
-        except Exception as e:
-            messages.error(request, f"An error occurred during registration: {str(e)}")
-            context = {
-                'form': {
-                    'username': {'value': username},
-                    'email': {'value': email},
-                }
-            }
-            return render(request, 'register.html', context)
+def user_logout(request):
+    """
+    Logout view
+    """
+    logout(request)
+    messages.success(request, 'You have been successfully logged out.')
+    return redirect('login')
 
-    # If it's a GET request, show empty form
-    return render(request, 'register.html')
+@login_required
+def dashboard(request):
+    """
+    Dashboard view - requires login
+    """
+    return render(request, 'dashboard.html', {'user': request.user})
+
+@login_required
+def profile(request):
+    """
+    User profile view
+    """
+    return render(request, 'profile.html', {'user': request.user})
 
 def home(request):
     """Home page view"""
-    cities = City.objects.filter(is_active=True)[:4]
-    return render(request, 'home.html', {'cities': cities})
-
-def room_list(request):
-    """City list page view with filters"""
-    cities = City.objects.filter(is_active=True)
-
-    # Get filter parameters
-    city_filter = request.GET.get('city', '')
-    check_in_date = request.GET.get('check_in', '')
-    check_out_date = request.GET.get('check_out', '')
-    guests_filter = request.GET.get('guests', '')
-    rooms_filter = request.GET.get('rooms', '')
-
-    # Apply filters
-    filtered_cities = cities
-
-    # City filter
-    if city_filter:
-        filtered_cities = filtered_cities.filter(name__icontains=city_filter)
-
-    # Date availability filter
-    if check_in_date and check_out_date:
-        try:
-            check_in = datetime.strptime(check_in_date, '%Y-%m-%d').date()
-            check_out = datetime.strptime(check_out_date, '%Y-%m-%d').date()
-
-            # Get cities that have available rooms for the selected dates
-            cities_with_availability = []
-            for city in filtered_cities:
-                available_rooms = Room.objects.filter(
-                    city=city,
-                    is_available=True
-                ).exclude(
-                    id__in=Booking.objects.filter(
-                        status__in=['confirmed', 'pending'],
-                        check_in__lt=check_out,
-                        check_out__gt=check_in
-                    ).values_list('room_id', flat=True)
-                )
-
-                if available_rooms.exists():
-                    cities_with_availability.append(city.id)
-
-            filtered_cities = filtered_cities.filter(id__in=cities_with_availability)
-        except (ValueError, TypeError):
-            pass
-
-    # Guests filter (capacity)
-    if guests_filter:
-        cities_with_capacity = []
-        for city in filtered_cities:
-            suitable_rooms = Room.objects.filter(
-                city=city,
-                room_type__capacity__gte=guests_filter,
-                is_available=True
-            )
-            if suitable_rooms.exists():
-                cities_with_capacity.append(city.id)
-
-        filtered_cities = filtered_cities.filter(id__in=cities_with_capacity)
-
-    # Rooms filter (number of available rooms)
-    if rooms_filter:
-        try:
-            rooms_count = int(rooms_filter)
-            cities_with_sufficient_rooms = []
-            for city in filtered_cities:
-                available_rooms_count = Room.objects.filter(
-                    city=city,
-                    is_available=True
-                ).count()
-                if available_rooms_count >= rooms_count:
-                    cities_with_sufficient_rooms.append(city.id)
-
-            filtered_cities = filtered_cities.filter(id__in=cities_with_sufficient_rooms)
-        except ValueError:
-            pass
-
-    # Add room count and starting price to each city
-    for city in filtered_cities:
-        city.room_count = Room.objects.filter(city=city, is_available=True).count()
-        cheapest_room = Room.objects.filter(
-            city=city,
-            is_available=True
-        ).select_related('room_type').order_by('room_type__price_per_night').first()
-        city.starting_price = cheapest_room.room_type.price_per_night if cheapest_room else 0
-
-    return render(request, 'room_list.html', {
-        'cities': filtered_cities,
-        'all_cities': City.objects.filter(is_active=True),
-        'selected_city': city_filter,
-        'selected_check_in': check_in_date,
-        'selected_check_out': check_out_date,
-        'selected_guests': guests_filter,
-        'selected_rooms': rooms_filter
-    })
-
-def city_detail(request, city_id):
-    """City detail page view"""
-    city = get_object_or_404(City, id=city_id, is_active=True)
-    # Get available rooms in this city
-    available_rooms = Room.objects.filter(city=city, is_available=True)
-    # Get unique room types available in this city
-    room_types = RoomType.objects.filter(
-        room__city=city,
-        room__is_available=True
-    ).distinct()
-
-    # Get other active cities for recommendations
-    other_cities = City.objects.filter(is_active=True).exclude(id=city_id)[:3]
-
-    return render(request, 'city_detail.html', {
-        'city': city,
-        'available_rooms': available_rooms,
-        'room_types': room_types,
-        'other_cities': other_cities
-    })
-
-def booking_form(request, room_id):
-    """Booking form view"""
-    room = get_object_or_404(Room, id=room_id)
-
-    if request.method == 'POST':
-        guest_name = request.POST.get('guest_name')
-        guest_email = request.POST.get('guest_email')
-        guest_phone = request.POST.get('guest_phone')
-        check_in = request.POST.get('check_in')
-        check_out = request.POST.get('check_out')
-
-        # Validate dates
-        try:
-            check_in_date = datetime.strptime(check_in, '%Y-%m-%d').date()
-            check_out_date = datetime.strptime(check_out, '%Y-%m-%d').date()
-        except (ValueError, TypeError):
-            messages.error(request, 'Please enter valid dates.')
-            return render(request, 'booking_form.html', {'room': room})
-
-        # Check if dates are valid
-        today = date.today()
-        if check_in_date < today:
-            messages.error(request, 'Check-in date cannot be in the past.')
-            return render(request, 'booking_form.html', {'room': room})
-
-        if check_out_date <= check_in_date:
-            messages.error(request, 'Check-out date must be after check-in date.')
-            return render(request, 'booking_form.html', {'room': room})
-
-        # Check room availability for the dates
-        existing_bookings = Booking.objects.filter(
-            room=room,
-            status__in=['confirmed', 'pending'],
-            check_in__lt=check_out_date,
-            check_out__gt=check_in_date
-        )
-
-        if existing_bookings.exists():
-            messages.error(request, 'Sorry, this room is not available for the selected dates.')
-            return render(request, 'booking_form.html', {'room': room})
-
-        # Calculate total price
-        nights = (check_out_date - check_in_date).days
-        total_price = nights * room.room_type.price_per_night
-
-        # Create booking
-        booking = Booking.objects.create(
-            guest_name=guest_name,
-            guest_email=guest_email,
-            guest_phone=guest_phone,
-            room=room,
-            check_in=check_in_date,
-            check_out=check_out_date,
-            total_price=total_price,
-            status='pending'
-        )
-
-        messages.success(request, f'Booking submitted successfully! Your total is ${total_price:.2f}. We will contact you soon.')
-        return redirect('home')
-
-    # Set minimum date for check-in to today
-    today = date.today().isoformat()
-    return render(request, 'booking_form.html', {
-        'room': room,
-        'today': today
-    })
+    return render(request, 'home.html')
 
 def about(request):
     """About page view"""
@@ -290,207 +108,38 @@ def contact(request):
 
 def faq(request):
     """FAQ page view"""
-    faqs = FAQ.objects.filter(is_active=True)
-    categories = {
-        'booking': 'Booking & Reservations',
-        'rooms': 'Rooms & Amenities',
-        'services': 'Hotel Services',
-        'payment': 'Payment & Cancellation',
-        'general': 'General Information',
-    }
+    return render(request, 'faq.html')
 
-    # Group FAQs by category
-    faqs_by_category = {}
-    for category_key, category_name in categories.items():
-        faqs_by_category[category_name] = faqs.filter(category=category_key)
+def room_list(request):
+    """Room list page view"""
+    return render(request, 'room_list.html')
 
-    return render(request, 'faq.html', {
-        'faqs_by_category': faqs_by_category,
-        'categories': categories
-    })
+# Add these to your existing hotel/views.py
+
+def city_detail(request, city_id):
+    """City detail page view"""
+    return render(request, 'city_detail.html')
+
+def booking_form(request, room_id):
+    """Booking form view"""
+    return render(request, 'booking_form.html')
 
 def careers(request):
-    """Careers main page view"""
-    departments = Department.objects.all()
-    active_jobs = JobListing.objects.filter(is_active=True)
-
-    # Get filter parameters
-    department_filter = request.GET.get('department', '')
-    job_type_filter = request.GET.get('job_type', '')
-    experience_filter = request.GET.get('experience', '')
-
-    # Apply filters
-    if department_filter:
-        active_jobs = active_jobs.filter(department_id=department_filter)
-
-    if job_type_filter:
-        active_jobs = active_jobs.filter(job_type=job_type_filter)
-
-    if experience_filter:
-        active_jobs = active_jobs.filter(experience_level=experience_filter)
-
-    return render(request, 'careers.html', {
-        'departments': departments,
-        'active_jobs': active_jobs,
-        'selected_department': department_filter,
-        'selected_job_type': job_type_filter,
-        'selected_experience': experience_filter,
-    })
+    """Careers page view"""
+    return render(request, 'careers.html')
 
 def job_detail(request, job_id):
     """Job detail page view"""
-    job = get_object_or_404(JobListing, id=job_id, is_active=True)
-
-    # Get related jobs in the same department
-    related_jobs = JobListing.objects.filter(
-        department=job.department,
-        is_active=True
-    ).exclude(id=job.id)[:3]
-
-    return render(request, 'job_detail.html', {
-        'job': job,
-        'related_jobs': related_jobs,
-    })
+    return render(request, 'job_detail.html')
 
 def job_application(request, job_id):
     """Job application form view"""
-    job = get_object_or_404(JobListing, id=job_id, is_active=True)
-
-    if request.method == 'POST':
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        email = request.POST.get('email')
-        phone = request.POST.get('phone')
-        cover_letter = request.POST.get('cover_letter')
-        portfolio_url = request.POST.get('portfolio_url', '')
-        linkedin_url = request.POST.get('linkedin_url', '')
-        available_start_date = request.POST.get('available_start_date')
-        expected_salary = request.POST.get('expected_salary', '')
-        resume = request.FILES.get('resume')
-
-        # Validate required fields
-        required_fields = [first_name, last_name, email, phone, cover_letter, available_start_date, resume]
-        if not all(required_fields):
-            messages.error(request, 'Please fill in all required fields.')
-            return render(request, 'job_application.html', {'job': job})
-
-        # Validate file type
-        allowed_types = ['.pdf', '.doc', '.docx']
-        file_extension = os.path.splitext(resume.name)[1].lower()
-        if file_extension not in allowed_types:
-            messages.error(request, 'Please upload a PDF, DOC, or DOCX file.')
-            return render(request, 'job_application.html', {'job': job})
-
-        # Validate file size (5MB max)
-        if resume.size > 5 * 1024 * 1024:
-            messages.error(request, 'Resume file size must be less than 5MB.')
-            return render(request, 'job_application.html', {'job': job})
-
-        # Create application
-        application = JobApplication.objects.create(
-            job=job,
-            first_name=first_name,
-            last_name=last_name,
-            email=email,
-            phone=phone,
-            cover_letter=cover_letter,
-            portfolio_url=portfolio_url,
-            linkedin_url=linkedin_url,
-            available_start_date=available_start_date,
-            expected_salary=expected_salary,
-            resume=resume
-        )
-        messages.success(request, f'Thank you {first_name}! Your application for {job.title} has been submitted successfully.')
-        return redirect('careers')
-
-    return render(request, 'job_application.html', {'job': job})
+    return render(request, 'job_application.html')
 
 def why_work_with_us(request):
     """Why work with us page"""
     return render(request, 'why_work_with_us.html')
 
-def user_login(request):
-    """User login view"""
-    if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                login(request, user)
-                messages.success(request, f'Welcome back, {username}!')
-                return redirect('home')
-            else:
-                messages.error(request, 'Invalid username or password.')
-        else:
-            messages.error(request, 'Invalid username or password.')
-    else:
-        form = AuthenticationForm()
-
-    return render(request, 'login.html', {'form': form})
-
-def user_logout(request):
-    """User logout view"""
-    logout(request)
-    messages.success(request, 'You have been successfully logged out.')
-    return redirect('home')
-
-@login_required
-def profile(request):
-    """User profile view"""
-    user_bookings = Booking.objects.filter(guest_email=request.user.email)
-    return render(request, 'profile.html', {
-        'user_bookings': user_bookings
-    })
-
-def send_welcome_email(user_email, username):
-    subject = 'Welcome to Our Hotel Booking System'
-    message = f'''
-    Dear {username},
-
-    Thank you for registering with our hotel booking system!
-
-    We're excited to have you as a member of our community.
-
-    Best regards,
-    Hotel Team
-    '''
-
-    send_mail(
-        subject,
-        message,
-        settings.DEFAULT_FROM_EMAIL,
-        [user_email],
-        fail_silently=False,
-    )
-
 def room_detail(request, room_type_id):
-    """Room type detail page showing available rooms"""
-    room_type = get_object_or_404(RoomType, id=room_type_id)
-
-    # Get available rooms of this type
-    available_rooms = Room.objects.filter(
-        room_type=room_type,
-        is_available=True
-    ).select_related('city')
-
-    # Get filter parameters
-    city_filter = request.GET.get('city', '')
-
-    # Apply city filter if provided
-    if city_filter:
-        available_rooms = available_rooms.filter(city__name__icontains=city_filter)
-
-    # Get unique cities where this room type is available
-    available_cities = City.objects.filter(
-        room__room_type=room_type,
-        room__is_available=True
-    ).distinct()
-
-    return render(request, 'room_detail.html', {
-        'room_type': room_type,
-        'available_rooms': available_rooms,
-        'available_cities': available_cities,
-        'selected_city': city_filter
-    })
+    """Room type detail page"""
+    return render(request, 'room_detail.html')
