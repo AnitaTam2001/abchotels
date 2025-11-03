@@ -37,8 +37,8 @@
                     <div style="margin-bottom: 2rem;">
                         <h3 style="color: #2c3e50; margin-bottom: 1rem;">✉️ Email</h3>
                         <p style="color: #666;">
-<!--                              General: info@abchotels.com<br> -->
-                            General : anitatam2001@gmail.com<br>
+                            General: info@abchotels.com<br>
+                            General: anitatam2001@gmail.com<br>
                             Reservations: reservations@abchotels.com<br>
                             Support: support@abchotels.com
                         </p>
@@ -74,24 +74,6 @@
                         </div>
                         
                         <div class="form-group">
-                            <label class="form-label">Preferred Contact Method</label>
-                            <div class="contact-preferences">
-                                <label class="contact-preference">
-                                    <input type="radio" name="contact_method" value="email" class="amenity-checkbox" checked>
-                                    <span>Email</span>
-                                </label>
-                                <label class="contact-preference">
-                                    <input type="radio" name="contact_method" value="phone" class="amenity-checkbox">
-                                    <span>Phone</span>
-                                </label>
-                                <label class="contact-preference">
-                                    <input type="radio" name="contact_method" value="both" class="amenity-checkbox">
-                                    <span>Both</span>
-                                </label>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
                             <label class="form-label">Message</label>
                             <textarea rows="5" name="message" class="form-input" placeholder="Enter your message" required></textarea>
                         </div>
@@ -115,27 +97,10 @@
 </section>
 
 <script>
-// Add interactive selection for contact preferences
+// JavaScript for any other interactive elements can remain here
+// The contact preferences script has been removed since the section is gone
 document.addEventListener('DOMContentLoaded', function() {
-    const contactPreferences = document.querySelectorAll('.contact-preference');
-    
-    contactPreferences.forEach(pref => {
-        const radio = pref.querySelector('input[type="radio"]');
-        
-        pref.addEventListener('click', function() {
-            // Update radio button
-            radio.checked = true;
-            
-            // Update visual selection
-            contactPreferences.forEach(p => p.classList.remove('selected'));
-            pref.classList.add('selected');
-        });
-        
-        // Initialize selection for checked radio
-        if (radio.checked) {
-            pref.classList.add('selected');
-        }
-    });
+    // Add any other JavaScript functionality needed for the page
 });
 </script>
 {% endblock %}
