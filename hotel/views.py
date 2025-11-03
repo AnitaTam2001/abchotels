@@ -129,7 +129,9 @@ def contact(request):
                 email_subject,
                 email_message,
                 settings.DEFAULT_FROM_EMAIL,  # From email
-                ['info@abchotels.com'],  # To email - change to your hotel's email
+                ['anitatam2001@gmail.com'],
+#               ['info@abchotels.com'],  
+#               To email - change to your hotel's email
                 fail_silently=False,
             )
             
