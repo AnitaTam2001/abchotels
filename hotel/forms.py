@@ -38,3 +38,28 @@ class CustomUserCreationForm(UserCreationForm):
         if commit:
             user.save()
         return user
+    
+# hotel/forms.py
+from django import forms
+
+class ContactForm(forms.Form):
+    name = forms.CharField(max_length=100, required=True)
+    email = forms.EmailField(required=True)
+    subject = forms.CharField(max_length=200, required=True)
+    message = forms.CharField(widget=forms.Textarea, required=True)
+    contact_method = forms.ChoiceField(
+        choices=[
+            ('email', 'Email'),
+            ('phone', 'Phone'),
+            ('both', 'Both')
+        ],
+        initial='email'
+    )
+    name = forms.CharField(max_length=100, required=True)
+    email = forms.EmailField(required=True)
+    subject = forms.CharField(max_length=200, required=True)
+    contact_method = forms.ChoiceField(
+        choices=[('email', 'Email'), ('phone', 'Phone'), ('both', 'Both')],
+        widget=forms.RadioSelect
+    )
+    message = forms.CharField(widget=forms.Textarea, required=True)

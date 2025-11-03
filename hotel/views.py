@@ -92,18 +92,81 @@ def about(request):
     """About page view"""
     return render(request, 'about.html')
 
+# hotel/views.py
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.core.mail import send_mail, BadHeaderError
+from django.http import HttpResponse
+from django.conf import settings
+
 def contact(request):
-    """Contact page view"""
+    """Contact page view with email functionality"""
     if request.method == 'POST':
         name = request.POST.get('name')
         email = request.POST.get('email')
         subject = request.POST.get('subject')
         message = request.POST.get('message')
         contact_method = request.POST.get('contact_method', 'email')
-
-        messages.success(request, f'Thank you {name}! Your message has been sent. We will contact you via {contact_method} soon.')
+        
+        # Prepare email content
+        email_subject = f"Contact Form: {subject}"
+        email_message = f"""
+        New contact form submission from ABC Hotels website:
+        
+        Name: {name}
+        Email: {email}
+        Preferred Contact Method: {contact_method}
+        
+        Message:
+        {message}
+        
+        This message was sent from the contact form on ABC Hotels website.
+        """
+        
+        try:
+            # Send email to hotel
+            send_mail(
+                email_subject,
+                email_message,
+                settings.DEFAULT_FROM_EMAIL,  # From email
+                ['info@abchotels.com'],  # To email - change to your hotel's email
+                fail_silently=False,
+            )
+            
+            # Send confirmation email to user
+            confirmation_subject = "Thank you for contacting ABC Hotels"
+            confirmation_message = f"""
+            Dear {name},
+            
+            Thank you for contacting ABC Hotels. We have received your message and will get back to you within 24 hours.
+            
+            Here's a summary of your inquiry:
+            Subject: {subject}
+            Preferred Contact Method: {contact_method}
+            
+            Our team will contact you using your preferred method soon.
+            
+            Best regards,
+            ABC Hotels Team
+            """
+            
+            send_mail(
+                confirmation_subject,
+                confirmation_message,
+                settings.DEFAULT_FROM_EMAIL,
+                [email],  # Send to the user who filled the form
+                fail_silently=False,
+            )
+            
+            messages.success(request, f'Thank you {name}! Your message has been sent. We will contact you via {contact_method} soon.')
+            
+        except BadHeaderError:
+            messages.error(request, 'Invalid header found. Please try again.')
+        except Exception as e:
+            messages.error(request, f'There was an error sending your message. Please try again later. Error: {str(e)}')
+        
         return redirect('contact')
-
+    
     return render(request, 'contact.html')
 
 def faq(request):
