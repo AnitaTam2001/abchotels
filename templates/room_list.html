@@ -1,8 +1,11 @@
 <!-- templates/room_list.html -->
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-<section class="hero-section" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+
+<!-- Alternative hero section using existing image -->
+<section class="hero-section" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('{% static 'images/cities/new_york.jpg' %}');">
     <div class="container">
         <h1 class="hero-title">Our Hotel Locations</h1>
         <p class="hero-subtitle">Discover ABC Hotels in amazing cities around the world</p>
@@ -59,7 +62,7 @@
                     </div>
 
                     <!-- Buttons on the same line -->
-                    <div class="filter-group" style="display: flex; gap: 0.5rem; align-items: end;">
+                    <div class="filter-group" style="display: flex; gap: 0.5rem; align-items: end;"> 
                         <button type="submit" class="filter-btn" style="flex: 1;">Search</button>
                         <a href="{% url 'room_list' %}" class="btn" style="flex: 1; text-align: center;">Clear</a>
                     </div>
@@ -84,71 +87,71 @@
                     {% if city.image %}
                     <img src="{{ city.image.url }}" alt="{{ city.name }}">
                     {% else %}
-                    <!-- UNIQUE HOTEL IMAGES FOR EACH CITY -->
+                    <!-- LOCAL HOTEL IMAGES FOR EACH CITY -->
                     {% if "New York" in city.name %}
-                    <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC New York Hotel">
+                    <img src="{% static 'images/cities/new_york.jpg' %}" alt="ABC New York Hotel">
                     {% elif "Los Angeles" in city.name %}
-                    <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Los Angeles Hotel">
+                    <img src="{% static 'images/cities/los_angeles.jpg' %}" alt="ABC Los Angeles Hotel">
                     {% elif "Chicago" in city.name %}
-                    <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Chicago Hotel">
+                    <img src="{% static 'images/cities/chicago.jpg' %}" alt="ABC Chicago Hotel">
                     {% elif "Miami" in city.name %}
-                    <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Miami Hotel">
+                    <img src="{% static 'images/cities/miami.jpg' %}" alt="ABC Miami Hotel">
                     {% elif "Las Vegas" in city.name %}
-                    <img src="https://images.unsplash.com/photo-1605236453806-6ff36851218e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Las Vegas Hotel">
+                    <img src="{% static 'images/cities/las_vegas.jpg' %}" alt="ABC Las Vegas Hotel">
                     {% elif "San Francisco" in city.name %}
-                    <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC San Francisco Hotel">
+                    <img src="{% static 'images/cities/san_francisco.jpg' %}" alt="ABC San Francisco Hotel">
                     {% elif "London" in city.name %}
-                    <img src="https://images.unsplash.com/photo-1522798514-97ceb8c4f1c8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC London Hotel">
+                    <img src="{% static 'images/cities/london.jpg' %}" alt="ABC London Hotel">
                     {% elif "Paris" in city.name %}
-                    <img src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Paris Hotel">
+                    <img src="{% static 'images/cities/paris.jpg' %}" alt="ABC Paris Hotel">
                     {% elif "Tokyo" in city.name %}
-                    <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Tokyo Hotel">
+                    <img src="{% static 'images/cities/tokyo.jpg' %}" alt="ABC Tokyo Hotel">
                     {% elif "Dubai" in city.name %}
-                    <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Dubai Hotel">
+                    <img src="{% static 'images/cities/dubai.jpg' %}" alt="ABC Dubai Hotel">
                     {% elif "Singapore" in city.name %}
-                    <img src="https://images.unsplash.com/photo-1525625293386-3f8f19389feb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Singapore Hotel">
+                    <img src="{% static 'images/cities/singapore.jpg' %}" alt="ABC Singapore Hotel">
                     {% elif "Sydney" in city.name %}
-                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Sydney Hotel">
+                    <img src="{% static 'images/cities/sydney.jpg' %}" alt="ABC Sydney Hotel">
                     {% elif "Toronto" in city.name %}
-                    <img src="https://images.unsplash.com/photo-1534237710431-e27c698479d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Toronto Hotel">
+                    <img src="{% static 'images/cities/toronto.jpg' %}" alt="ABC Toronto Hotel">
                     {% elif "Hong Kong" in city.name %}
-                    <img src="https://images.unsplash.com/photo-1531259733067-4f6e4c1c2c8e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Hong Kong Hotel">
+                    <img src="{% static 'images/cities/hong_kong.jpg' %}" alt="ABC Hong Kong Hotel">
                     {% elif "Bangkok" in city.name %}
-                    <img src="https://images.unsplash.com/photo-1528181304800-259b08848526?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Bangkok Hotel">
+                    <img src="{% static 'images/cities/bangkok.jpg' %}" alt="ABC Bangkok Hotel">
                     {% elif "Berlin" in city.name %}
-                    <img src="https://images.unsplash.com/photo-1618773928121-c3227663791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Berlin Hotel">
+                    <img src="{% static 'images/cities/berlin.jpg' %}" alt="ABC Berlin Hotel">
                     {% elif "Barcelona" in city.name %}
-                    <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Barcelona Hotel">
+                    <img src="{% static 'images/cities/barcelona.jpg' %}" alt="ABC Barcelona Hotel">
                     {% elif "Amsterdam" in city.name %}
-                    <img src="https://images.unsplash.com/photo-1590490360182-c33657733427?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Amsterdam Hotel">
+                    <img src="{% static 'images/cities/amsterdam.jpg' %}" alt="ABC Amsterdam Hotel">
                     {% elif "Istanbul" in city.name %}
-                    <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Istanbul Hotel">
+                    <img src="{% static 'images/cities/istanbul.jpg' %}" alt="ABC Istanbul Hotel">
                     {% elif "Beijing" in city.name %}
-                    <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Beijing Hotel">
+                    <img src="{% static 'images/cities/beijing.jpg' %}" alt="ABC Beijing Hotel">
                     {% elif "Mumbai" in city.name %}
-                    <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC Mumbai Hotel">
+                    <img src="{% static 'images/cities/mumbai.jpg' %}" alt="ABC Mumbai Hotel">
                     {% else %}
-                    <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ABC {{ city.name }} Hotel">
+                    <img src="{% static 'images/cities/default.jpg' %}" alt="ABC {{ city.name }} Hotel">
                     {% endif %}
                     {% endif %}
                 </div>
                 <div class="city-content-3col">
                     <!-- UPDATED: ABC + City Name + Hotel format -->
-                    <div style="margin-bottom: 0.5rem;">
+                    <div style="margin-bottom: 0.5rem;"> 
                         <h3 class="city-title-3col" style="color: #2c3e50; margin: 0 0 0.2rem 0; font-size: 1.1rem;">ABC {{ city.name }} Hotel</h3>
                         <p style="color: #666; margin: 0; font-size: 0.9rem;">{{ city.country }}</p>
                     </div>
                     <p style="color: #666; margin-bottom: 1rem; line-height: 1.5; font-size: 0.9rem;">{{ city.description|truncatewords:15 }}</p>
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                         <div>
-                            <strong style="color: #e74c3c; font-size: 1.2rem;">
-                                {% if city.starting_price %}
-                                ${{ city.starting_price }}
-                                {% else %}
-                                ${% cycle '159' '179' '199' '219' '239' '259' '279' '299' '319' '339' '359' '379' '399' '419' '439' %}
-                                {% endif %}
+                            <strong style="color: #674c3c; font-size: 1.2rem;">
+                            {% if city.starting_price %}
+                            ${{ city.starting_price }} 
+                            {% else %}
+                            ${% cycle '159' '179' '199' '219' '239' '259' '279' '299' '319' '339' '359' '379' '399' '419' '439' %}
+                            {% endif %}
                             </strong>
-                            <span style="color: #666; font-size: 0.8rem;"> /night</span>
+                            <span style="color: #666; font-size: 0.8rem;">/night</span>
                         </div>
                         <div style="color: #666; font-size: 0.8rem;">
                             <strong>{{ city.room_count }}</strong> rooms
@@ -330,13 +333,14 @@
         grid-template-columns: 1fr;
         gap: 1rem;
     }
-
     .city-image-3col {
         height: 180px;
     }
-
     .filter-grid {
         grid-template-columns: 1fr;
+    }
+    .hero-title {
+        font-size: 2.5rem;
     }
 }
 
@@ -344,13 +348,14 @@
     .city-grid-3col {
         grid-template-columns: 1fr;
     }
-
     .city-content-3col {
         padding: 1rem;
     }
-
     .hero-title {
         font-size: 2rem;
+    }
+    .hero-section {
+        padding: 3rem 0;
     }
 }
 </style>
