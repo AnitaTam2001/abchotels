@@ -39,7 +39,7 @@ ROOT_URLCONF = 'abchotels.urls'  # FIXED: was 'urlsts'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # FIXED: was missing closing quote
+        'DIRS': [BASE_DIR / 'templates'],  # This should include your templates directory
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
