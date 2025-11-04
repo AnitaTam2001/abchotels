@@ -6,6 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .forms import CustomUserCreationForm
+from .models import City
 
 def register(request):
     """
@@ -175,12 +176,6 @@ def faq(request):
     """FAQ page view"""
     return render(request, 'faq.html')
 
-def room_list(request):
-    """Room list page view"""
-    return render(request, 'room_list.html')
-
-# Add these to your existing hotel/views.py
-
 def city_detail(request, city_id):
     """City detail page view"""
     return render(request, 'city_detail.html')
@@ -208,3 +203,34 @@ def why_work_with_us(request):
 def room_detail(request, room_type_id):
     """Room type detail page"""
     return render(request, 'room_detail.html')
+
+# hotel/views.py
+from django.shortcuts import render
+from .models import City  # Add this import
+
+def room_list(request):
+    cities = City.objects.all()
+    all_cities = City.objects.all()  # For the filter dropdown
+    
+    # Get filter parameters
+    selected_city = request.GET.get('city', '')
+    selected_check_in = request.GET.get('check_in', '')
+    selected_check_out = request.GET.get('check_out', '')
+    selected_guests = request.GET.get('guests', '')
+    selected_rooms = request.GET.get('rooms', '')
+    
+    # Apply filters
+    if selected_city:
+        cities = cities.filter(name__icontains=selected_city)
+    
+    context = {
+        'cities': cities,
+        'all_cities': all_cities,
+        'selected_city': selected_city,
+        'selected_check_in': selected_check_in,
+        'selected_check_out': selected_check_out,
+        'selected_guests': selected_guests,
+        'selected_rooms': selected_rooms,
+    }
+    
+    return render(request, 'room_list.html', context)
