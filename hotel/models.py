@@ -28,7 +28,6 @@ class Room(models.Model):
     city = models.ForeignKey(City, on_delete=models.CASCADE)
     room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE)
     is_available = models.BooleanField(default=True)
-    # Remove room_number field completely
 
     def __str__(self):
         return f"{self.room_type.name} in {self.city.name}"
@@ -74,15 +73,14 @@ class FAQ(models.Model):
 
     def __str__(self):
         return self.question
-    
-# hotel/models.py
+
 class Department(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    description = models.TextField(blank=True)  # Make it optional if needed
-    
+    description = models.TextField(blank=True)
+
     def __str__(self):
         return self.name
-    
+
     class Meta:
         ordering = ['name']
 
@@ -136,7 +134,7 @@ class JobApplication(models.Model):
         ('rejected', 'Rejected'),
         ('hired', 'Hired'),
     ]
-
+    
     job = models.ForeignKey(JobListing, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)

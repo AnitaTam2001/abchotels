@@ -2,11 +2,6 @@
 from django.contrib import admin
 from .models import Room, City, RoomType, Booking, Department, JobListing, JobApplication
 
-@admin.register(City)
-class CityAdmin(admin.ModelAdmin):
-    list_display = ['name', 'description']
-    search_fields = ['name']
-
 @admin.register(RoomType)
 class RoomTypeAdmin(admin.ModelAdmin):
     list_display = ['name', 'price_per_night', 'capacity']
@@ -52,3 +47,20 @@ class JobApplicationAdmin(admin.ModelAdmin):
     search_fields = ['first_name', 'last_name', 'email']
     readonly_fields = ['applied_date']
     date_hierarchy = 'applied_date'
+
+# hotel/admin.py
+from django.contrib import admin
+from .models import City, RoomType, Room, Booking, FAQ, Department, JobListing, JobApplication
+
+@admin.register(City)
+class CityAdmin(admin.ModelAdmin):
+    list_display = ['name', 'is_active']
+    list_filter = ['is_active']
+    search_fields = ['name']
+    readonly_fields = ['image_preview']
+    
+    def image_preview(self, obj):
+        if obj.image:
+            return f'<img src="{obj.image.url}" style="max-height: 200px;" />'
+        return "No image"
+    image_preview.allow_tags = True
