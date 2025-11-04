@@ -1,21 +1,21 @@
 name,description
-Front Office,Handles guest check-in, check-out, concierge services, and front desk operations
-Housekeeping,Responsible for room cleaning, maintenance, and ensuring guest room quality standards
-Food & Beverage,Manages restaurants, bars, room service, banquets, and catering operations
-Sales & Marketing,Handles promotions, partnerships, revenue management, and corporate sales
-Human Resources,Manages recruitment, training, employee relations, and staff development
-Finance & Accounting,Handles financial operations, billing, payroll, and budget management
-Engineering & Maintenance,Responsible for building maintenance, repairs, and facility operations
-Security,Ensures guest safety, property security, and emergency response procedures
-Spa & Wellness,Manages spa services, fitness center, pool, and wellness programs
-Events & Conferences,Handles meeting rooms, conferences, weddings, and special events
-Revenue Management,Optimizes room pricing, inventory control, and distribution channels
-Guest Relations,Manages guest feedback, special requests, and customer service excellence
-Procurement,Handles purchasing, inventory management, and supplier relationships
-IT Department,Manages technology infrastructure, systems, and digital guest services
-Quality Assurance,Ensures service standards, compliance, and continuous improvement
+Front Office,Handles guest check-in and front desk operations
+Housekeeping,Responsible for room cleaning and ensuring guest room quality standards
+Food & Beverage,Manages restaurants and catering operations
+Sales & Marketing,Handles promotions and corporate sales
+Human Resources,Manages recruitment and staff development
+Finance & Accounting,Handles financial operations and budget management
+Engineering & Maintenance,Responsible for building maintenance and facility operations
+Security,Ensures guest safety and emergency response procedures
+Spa & Wellness,Manages spa services and wellness programs
+Events & Conferences,Handles meeting rooms and special events
+Revenue Management,Optimizes room pricing and distribution channels
+Guest Relations,Manages guest feedback and customer service excellence
+Procurement,Handles purchasing and supplier relationships
+IT Department,Manages technology infrastructure and digital guest services
+Quality Assurance,Ensures service standards and continuous improvement
 Environmental Services,Manages sustainability initiatives and environmental compliance
-Transportation,Handles valet parking, shuttle services, and guest transportation
-Risk Management,Manages insurance, safety protocols, and risk assessment
-Corporate Communications,Handles public relations, media, and internal communications
+Transportation,Handles valet parking and guest transportation
+Risk Management,Manages insurance and risk assessment
+Corporate Communications,Handles public relations and internal communications
 Learning & Development,Manages staff training programs and career development initiatives

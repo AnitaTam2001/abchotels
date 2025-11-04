@@ -74,13 +74,17 @@ class FAQ(models.Model):
 
     def __str__(self):
         return self.question
-
+    
+# hotel/models.py
 class Department(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField(blank=True)
-
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(blank=True)  # Make it optional if needed
+    
     def __str__(self):
         return self.name
+    
+    class Meta:
+        ordering = ['name']
 
 class JobListing(models.Model):
     JOB_TYPE_CHOICES = [

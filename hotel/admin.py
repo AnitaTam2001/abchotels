@@ -33,7 +33,7 @@ class BookingAdmin(admin.ModelAdmin):
 
 @admin.register(Department)
 class DepartmentAdmin(admin.ModelAdmin):
-    list_display = ['name']
+    list_display = ['name','description']
     search_fields = ['name']
 
 @admin.register(JobListing)

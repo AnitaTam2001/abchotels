@@ -1,10 +1,10 @@
 name,description,price_per_night,capacity
-Standard King,Comfortable room with king bed and basic amenities,150.00,2
-Standard Twin,Room with two twin beds and basic amenities,140.00,2
 Deluxe King,Spacious room with king bed and premium amenities,250.00,3
 Deluxe Suite,Larger suite with separate seating area and enhanced features,350.00,4
 Executive King,Business-class room with work desk and premium internet,300.00,2
 Executive Suite,Spacious suite ideal for business travelers and extended stays,450.00,3
-Presidential Suite,Ultra-luxurious suite with premium services and amenities,800.00,4
 Family Suite,Perfect for families with connecting rooms and kid-friendly amenities,400.00,5
 Honeymoon Suite,Romantic suite with champagne service and special touches,550.00,2
+Presidential Suite,Ultra-luxurious suite with premium services and amenities,800.00,4
+Standard King,Comfortable room with king bed and basic amenities,150.00,2
+Standard Twin,Room with two twin beds and basic amenities,140.00,2
