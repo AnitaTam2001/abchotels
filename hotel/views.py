@@ -1,241 +1,286 @@
 # hotel/views.py
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.db.models import Q, Count, Min
+from django.core.paginator import Paginator
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.core.mail import send_mail, BadHeaderError
-from django.http import HttpResponse
-from django.conf import settings
-from .forms import CustomUserCreationForm
-from .models import City
-
-def register(request):
-    """
-    User registration view for ABC Hotels
-    """
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)  # Use custom form
-        if form.is_valid():
-            # Save the user
-            user = form.save()
-
-            # Auto-login after registration
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=password)
-
-            if user is not None:
-                login(request, user)
-                messages.success(request, f'Account created successfully! Welcome, {username}!')
-                return redirect('dashboard')
-        else:
-            # Form has errors
-            for field, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, f'{field}: {error}')
-    else:
-        form = CustomUserCreationForm()  # Use custom form
-
-    return render(request, 'registration/register.html', {'form': form})
-
-def user_login(request):
-    """
-    Custom login view for ABC Hotels
-    """
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        # Authenticate user
-        user = authenticate(request, username=username, password=password)
-
-        if user is not None:
-            # Login successful
-            login(request, user)
-            messages.success(request, f'Welcome back, {username}!')
-            # Redirect to next page or dashboard
-            next_page = request.GET.get('next', 'dashboard')
-            return redirect(next_page)
-        else:
-            # Login failed
-            messages.error(request, 'Invalid username or password. Please try again.')
-    # If GET request or failed login, show login page
-    return render(request, 'registration/login.html')
-
-def user_logout(request):
-    """
-    Logout view
-    """
-    logout(request)
-    messages.success(request, 'You have been successfully logged out.')
-    return redirect('login')
-
-@login_required
-def dashboard(request):
-    """
-    Dashboard view - requires login
-    """
-    return render(request, 'dashboard.html', {'user': request.user})
-
-@login_required
-def profile(request):
-    """
-    User profile view
-    """
-    return render(request, 'profile.html', {'user': request.user})
+from django.contrib.auth.forms import UserCreationForm
+from django.utils.timezone import now
+from datetime import datetime, date
+from .models import City, RoomType, Room, Booking, FAQ, JobListing
 
 def home(request):
-    """Home page view"""
-    return render(request, 'home.html')
-
-def about(request):
-    """About page view"""
-    return render(request, 'about.html')
-
-def contact(request):
-    """Contact page view with email functionality"""
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        subject = request.POST.get('subject')
-        message = request.POST.get('message')
-        contact_method = request.POST.get('contact_method', 'email')
-
-        # Prepare email content
-        email_subject = f"Contact Form: {subject}"
-        email_message = f"""
-New contact form submission from ABC Hotels website:
-
-Name: {name}
-Email: {email}
-Preferred Contact Method: {contact_method}
-
-Message:
-{message}
-
-This message was sent from the contact form on ABC Hotels website.
-"""
-
-        try:
-            # Send email to hotel
-            send_mail(
-                email_subject,
-                email_message,
-                settings.DEFAULT_FROM_EMAIL,  # From email
-                ['info@abchotels.com'],  # To email - change to your hotel's email
-                fail_silently=False,
-            )
-
-            # Send confirmation email to user
-            confirmation_subject = "Thank you for contacting ABC Hotels"
-            confirmation_message = f"""
-Dear {name},
-
-Thank you for contacting ABC Hotels. We have received your message and will get back to you within 24 hours.
-
-Here's a summary of your inquiry:
-Subject: {subject}
-Preferred Contact Method: {contact_method}
-
-Our team will contact you using your preferred method soon.
-
-Best regards,
-ABC Hotels Team
-"""
-
-            send_mail(
-                confirmation_subject,
-                confirmation_message,
-                settings.DEFAULT_FROM_EMAIL,
-                [email], # Send to the user who filled the form
-                fail_silently=False,
-            )
-
-            messages.success(request, f'Thank you {name}: Your message has been sent. We will contact you via {contact_method} soon.')
-
-        except BadHeaderError:
-            messages.error(request, 'Invalid header found. Please try again.')
-        except Exception as e:
-            messages.error(request, f'There was an error sending your message. Please try again later. Error: {str(e)}')
-
-        return redirect('contact')
-
-    return render(request, 'contact.html')
-
-def faq(request):
-    """FAQ page view"""
-    return render(request, 'faq.html')
-
-def city_detail(request, city_id):
-    """City detail page view"""
-    return render(request, 'city_detail.html')
-
-def booking_form(request, room_id):
-    """Booking form view"""
-    return render(request, 'booking_form.html')
-
-def careers(request):
-    """Careers page view"""
-    return render(request, 'careers.html')
-
-def job_detail(request, job_id):
-    """Job detail page view"""
-    return render(request, 'job_detail.html')
-
-def job_application(request, job_id):
-    """Job application form view"""
-    return render(request, 'job_application.html')
-
-def why_work_with_us(request):
-    """Why work with us page"""
-    return render(request, 'why_work_with_us.html')
-
-def room_detail(request, room_type_id):
-    """Room type detail page"""
-    return render(request, 'room_detail.html')
+    featured_cities = City.objects.filter(is_active=True).annotate(
+        room_count=Count('room', filter=Q(room__is_available=True))
+    )[:3]
+    
+    context = {
+        'featured_cities': featured_cities,
+    }
+    return render(request, 'home.html', context)
 
 def room_list(request):
-    """Room list view with pagination and filtering"""
-    # Order cities by name in ascending order
-    cities = City.objects.all().order_by('name')
-    all_cities = City.objects.all().order_by('name')  # For the filter dropdown
-
+    # Get all active cities for the filter dropdown
+    all_cities = City.objects.filter(is_active=True)
+    
     # Get filter parameters
     selected_city = request.GET.get('city', '')
     selected_check_in = request.GET.get('check_in', '')
     selected_check_out = request.GET.get('check_out', '')
     selected_guests = request.GET.get('guests', '')
     selected_rooms = request.GET.get('rooms', '')
-
+    
+    # Start with all active cities
+    cities = City.objects.filter(is_active=True)
+    
     # Apply filters
     if selected_city:
         cities = cities.filter(name__icontains=selected_city)
-
-    # Pagination - 12 items per page
-    paginator = Paginator(cities, 12)
-    page_number = request.GET.get('page')
     
-    try:
-        paginated_cities = paginator.page(page_number)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page
-        paginated_cities = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range, deliver last page of results
-        paginated_cities = paginator.page(paginator.num_pages)
-
+    # Annotate with room count and starting price
+    cities = cities.annotate(
+        room_count=Count('room', filter=Q(room__is_available=True)),
+        starting_price=Min('room__room_type__price_per_night')
+    ).order_by('name')
+    
+    # Filter by minimum room count if specified
+    if selected_rooms:
+        min_rooms = int(selected_rooms)
+        cities = cities.filter(room_count__gte=min_rooms)
+    
+    # Pagination
+    paginator = Paginator(cities, 12)  # Show 12 cities per page
+    page_number = request.GET.get('page')
+    cities_page = paginator.get_page(page_number)
+    
     context = {
-        'cities': paginated_cities,  # Use paginated queryset
+        'cities': cities_page,
         'all_cities': all_cities,
         'selected_city': selected_city,
         'selected_check_in': selected_check_in,
         'selected_check_out': selected_check_out,
         'selected_guests': selected_guests,
         'selected_rooms': selected_rooms,
-        'paginator': paginator,  # Add paginator to context
     }
-
+    
     return render(request, 'room_list.html', context)
+
+def city_detail(request, city_id):
+    city = get_object_or_404(City, id=city_id, is_active=True)
+    
+    # Get filter parameters for the city-specific filter
+    selected_check_in = request.GET.get('check_in', '')
+    selected_check_out = request.GET.get('check_out', '')
+    selected_guests = request.GET.get('guests', '')
+    selected_rooms = request.GET.get('rooms', '')
+    
+    # Get available room types for this city
+    room_types = RoomType.objects.filter(
+        room__city=city,
+        room__is_available=True
+    ).distinct()
+    
+    # Apply room type filters based on capacity
+    if selected_guests:
+        room_types = room_types.filter(capacity__gte=int(selected_guests))
+    
+    # Get other cities for the "Explore Other Destinations" section
+    other_cities = City.objects.filter(
+        is_active=True
+    ).exclude(id=city_id).annotate(
+        room_count=Count('room', filter=Q(room__is_available=True))
+    )[:6]  # Limit to 6 cities
+    
+    context = {
+        'city': city,
+        'room_types': room_types,
+        'other_cities': other_cities,
+        'selected_check_in': selected_check_in,
+        'selected_check_out': selected_check_out,
+        'selected_guests': selected_guests,
+        'selected_rooms': selected_rooms,
+        'today': date.today().isoformat(),
+    }
+    
+    return render(request, 'city_detail.html', context)
+
+def room_detail(request, room_type_id):
+    room_type = get_object_or_404(RoomType, id=room_type_id)
+    
+    # Get available rooms of this type
+    available_rooms = Room.objects.filter(
+        room_type=room_type,
+        is_available=True
+    )
+    
+    context = {
+        'room_type': room_type,
+        'available_rooms': available_rooms,
+        'today': date.today().isoformat(),
+    }
+    
+    return render(request, 'room_detail.html', context)
+
+def booking_form(request, room_id):
+    room = get_object_or_404(Room, id=room_id, is_available=True)
+    
+    if request.method == 'POST':
+        # Process booking form
+        guest_name = request.POST.get('guest_name')
+        guest_email = request.POST.get('guest_email')
+        guest_phone = request.POST.get('guest_phone')
+        check_in = request.POST.get('check_in')
+        check_out = request.POST.get('check_out')
+        
+        # Validate dates
+        try:
+            check_in_date = datetime.strptime(check_in, '%Y-%m-%d').date()
+            check_out_date = datetime.strptime(check_out, '%Y-%m-%d').date()
+            
+            if check_in_date >= check_out_date:
+                messages.error(request, 'Check-out date must be after check-in date.')
+            elif check_in_date < date.today():
+                messages.error(request, 'Check-in date cannot be in the past.')
+            else:
+                # Calculate total price
+                nights = (check_out_date - check_in_date).days
+                total_price = room.room_type.price_per_night * nights
+                
+                # Create booking
+                booking = Booking.objects.create(
+                    guest_name=guest_name,
+                    guest_email=guest_email,
+                    guest_phone=guest_phone,
+                    room=room,
+                    check_in=check_in_date,
+                    check_out=check_out_date,
+                    total_price=total_price,
+                    status='pending'
+                )
+                
+                # Mark room as unavailable
+                room.is_available = False
+                room.save()
+                
+                messages.success(request, f'Booking confirmed! Your booking reference is #{booking.id}')
+                return redirect('home')
+                
+        except ValueError:
+            messages.error(request, 'Invalid date format.')
+    
+    context = {
+        'room': room,
+        'today': date.today().isoformat(),
+    }
+    
+    return render(request, 'booking_form.html', context)
+
+def about(request):
+    return render(request, 'about.html')
+
+def contact(request):
+    if request.method == 'POST':
+        # Process contact form
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+        
+        # Here you would typically send an email
+        messages.success(request, 'Thank you for your message! We will get back to you soon.')
+        return redirect('contact')
+    
+    return render(request, 'contact.html')
+
+def faq(request):
+    faqs = FAQ.objects.filter(is_active=True)
+    context = {
+        'faqs': faqs,
+    }
+    return render(request, 'faq.html', context)
+
+def careers(request):
+    job_listings = JobListing.objects.filter(is_active=True)
+    context = {
+        'job_listings': job_listings,
+    }
+    return render(request, 'careers.html', context)
+
+def job_detail(request, job_id):
+    job = get_object_or_404(JobListing, id=job_id, is_active=True)
+    context = {
+        'job': job,
+    }
+    return render(request, 'job_detail.html', context)
+
+def job_application(request, job_id):
+    job = get_object_or_404(JobListing, id=job_id, is_active=True)
+    
+    if request.method == 'POST':
+        # Process job application form
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        cover_letter = request.POST.get('cover_letter')
+        
+        # Here you would typically save the application and handle file uploads
+        messages.success(request, f'Thank you for applying to {job.title}! We will review your application.')
+        return redirect('careers')
+    
+    context = {
+        'job': job,
+    }
+    return render(request, 'job_application.html', context)
+
+def why_work_with_us(request):
+    return render(request, 'why_work_with_us.html')
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, 'Registration successful!')
+            return redirect('home')
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration/register.html', {'form': form})
+
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            messages.success(request, 'Login successful!')
+            return redirect('dashboard')
+        else:
+            messages.error(request, 'Invalid username or password.')
+    return render(request, 'registration/login.html')
+
+@login_required
+def user_logout(request):
+    logout(request)
+    messages.success(request, 'You have been logged out.')
+    return redirect('home')
+
+@login_required
+def profile(request):
+    return render(request, 'profile.html')
+
+@login_required
+def dashboard(request):
+    # Get user's bookings if user is authenticated
+    if request.user.is_authenticated:
+        # This would need to be adjusted based on your user-booking relationship
+        bookings = Booking.objects.filter(guest_email=request.user.email)
+    else:
+        bookings = []
+    
+    context = {
+        'bookings': bookings,
+    }
+    return render(request, 'dashboard.html', context)

@@ -53,20 +53,21 @@
                     </div>
 
                     <div class="filter-group">
+                        <!-- CHANGED: Room Type to Rooms (number of rooms) -->
                         <label class="filter-label">Rooms</label>
                         <select name="rooms" class="filter-select">
                             <option value="">Any</option>
-                            <option value="1" {% if selected_rooms == "1" %}selected{% endif %}>1</option>
-                            <option value="2" {% if selected_rooms == "2" %}selected{% endif %}>2</option>
-                            <option value="3" {% if selected_rooms == "3" %}selected{% endif %}>3</option>
-                            <option value="4" {% if selected_rooms == "4" %}selected{% endif %}>4+</option>
+                            <option value="1" {% if selected_rooms == "1" %}selected{% endif %}>1 Room</option>
+                            <option value="2" {% if selected_rooms == "2" %}selected{% endif %}>2 Rooms</option>
+                            <option value="3" {% if selected_rooms == "3" %}selected{% endif %}>3 Rooms</option>
+                            <option value="4" {% if selected_rooms == "4" %}selected{% endif %}>4+ Rooms</option>
                         </select>
                     </div>
 
                     <!-- Buttons on the same line -->
                     <div class="filter-group button-group">
-                        <button type="submit" class="filter-btn">Search</button>
-                        <a href="{% url 'room_list' %}" class="btn clear-btn">Clear</a>
+                        <button type="submit" class="filter-btn">Search Rooms</button>
+                        <a href="{% url 'room_list' %}" class="btn clear-btn">Clear Filters</a>
                     </div>
                 </div>
             </form>
@@ -156,7 +157,7 @@
                         </div>
                         <div>
                             <div style="color: #666; font-size: 0.8rem;"> 
-                                <strong>{{ city.room_count }}</strong> rooms
+                                <strong>{{ city.room_count }}</strong> rooms available
                             </div>
                         </div>
                     </div>
@@ -192,307 +193,289 @@
 </section>
 
 <style>
-/* Filter Section Styles */
-.filter-section {
-    background: white;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    margin-bottom: 2rem;
-}
-
-/* Single Line Filter Grid */
-.filter-grid-single-line {
-    display: flex;
-    gap: 1rem;
-    align-items: end;
-    flex-wrap: wrap;
-}
-
-.filter-group {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-width: 120px;
-}
-
-.button-group {
-    display: flex;
-    gap: 0.5rem;
-    min-width: 200px;
-}
-
-.button-group .filter-btn,
-.button-group .clear-btn {
-    flex: 1;
-    padding: 0.75rem 1rem;
-}
-
-.filter-label {
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-    color: #2c3e50;
-    font-size: 0.9rem;
-}
-
-.filter-select, .filter-input {
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 0.9rem;
-    width: 100%;
-}
-
-.filter-btn {
-    background: #e74c3c;
-    color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: background 0.3s;
-}
-
-.filter-btn:hover {
-    background: #c0392b;
-}
-
-.clear-btn {
-    background: #95a5a6;
-    color: white;
-    padding: 0.75rem 1.5rem;
-    text-decoration: none;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: background 0.3s;
-    text-align: center;
-    display: inline-block;
-}
-
-.clear-btn:hover {
-    background: #7f8c8d;
-    color: white;
-    text-decoration: none;
-}
-
-.results-info {
-    background: #e8f4fd;
-    padding: 1rem;
-    border-radius: 8px;
-    margin-bottom: 2rem;
-    color: #2c3e50;
-}
-
-/* 3 Columns City Grid Styles */
-.city-grid-3col {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    margin-top: 2rem;
-}
-
-.city-card-3col {
-    background: white;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid #f0f0f0;
-}
-
-.city-card-3col:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-}
-
-.city-image-3col {
-    width: 100%;
-    height: 200px;
-    background: #f8f9fa;
-    overflow: hidden;
-}
-
-.city-image-3col img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.city-card-3col:hover .city-image-3col img {
-    transform: scale(1.05);
-}
-
-.city-content-3col {
-    padding: 1.2rem;
-}
-
-.city-title-3col {
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
-    color: #2c3e50;
-    font-weight: 600;
-}
-
-.btn {
-    display: inline-block;
-    background: #3498db;
-    color: white;
-    padding: 0.8rem 1.5rem;
-    text-decoration: none;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    transition: background 0.3s;
-    text-align: center;
-}
-
-.btn:hover {
-    background: #2980b9;
-    color: white;
-    text-decoration: none;
-}
-
-.hero-section {
-    background-size: cover;
-    background-position: center;
-    color: white;
-    text-align: center;
-    padding: 4rem 0;
-}
-
-.hero-title {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-}
-
-.hero-subtitle {
-    font-size: 1.2rem;
-    opacity: 0.9;
-}
-
-/* Simple Pagination Styles */
-.simple-pagination {
-    margin: 2rem 0;
-    text-align: center;
-}
-
-.page-numbers {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-}
-
-.page-link, .current-page {
-    padding: 0.5rem 0.8rem;
-    font-size: 0.9rem;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: all 0.3s;
-    display: inline-block;
-}
-
-.page-link {
-    background: #3498db;
-    color: white;
-    border: 1px solid #3498db;
-}
-
-.page-link:hover {
-    background: #2980b9;
-    color: white;
-    text-decoration: none;
-}
-
-.current-page {
-    background: #e74c3c;
-    color: white;
-    border: 1px solid #e74c3c;
-    cursor: default;
-}
-
-/* Mobile Responsive for 3 Columns */
-@media (max-width: 1024px) {
-    .city-grid-3col {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1.2rem;
+    /* Filter Section Styles */
+    .filter-section {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        margin-bottom: 2rem;
     }
-    
+
+    /* Single Line Filter Grid */
     .filter-grid-single-line {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (max-width: 768px) {
-    .city-grid-3col {
-        grid-template-columns: 1fr;
+        display: flex;
         gap: 1rem;
+        align-items: end;
+        flex-wrap: wrap;
     }
-    
-    .city-image-3col {
-        height: 180px;
-    }
-    
-    .filter-grid-single-line {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .button-group {
-        grid-column: 1 / -1;
-        flex-direction: row;
-    }
-    
-    .hero-title {
-        font-size: 2.5rem;
-    }
-    
-    .page-numbers {
-        gap: 0.3rem;
-    }
-    
-    .page-link, .current-page {
-        padding: 0.4rem 0.6rem;
-        font-size: 0.8rem;
-    }
-}
 
-@media (max-width: 480px) {
-    .city-grid-3col {
-        grid-template-columns: 1fr;
-    }
-    
-    .city-content-3col {
-        padding: 1rem;
-    }
-    
-    .filter-grid-single-line {
-        grid-template-columns: 1fr;
-    }
-    
     .filter-group {
-        min-width: 100%;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-width: 120px;
     }
-    
-    .hero-title {
-        font-size: 2rem;
+
+    .button-group {
+        display: flex;
+        gap: 0.5rem;
+        min-width: 200px;
     }
-    
+
+    .button-group .filter-btn,
+    .button-group .clear-btn {
+        flex: 1;
+        padding: 0.75rem 1rem;
+    }
+
+    .filter-label {
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        color: #2c3e50;
+        font-size: 0.9rem;
+    }
+
+    .filter-select, .filter-input {
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        width: 100%;
+    }
+
+    .filter-btn {
+        background: #e74c3c;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: background 0.3s;
+    }
+
+    .filter-btn:hover {
+        background: #c0392b;
+    }
+
+    .clear-btn {
+        background: #95a5a6;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        text-decoration: none;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: background 0.3s;
+        text-align: center;
+        display: inline-block;
+    }
+
+    .clear-btn:hover {
+        background: #7f8c8d;
+        color: white;
+        text-decoration: none;
+    }
+
+    .results-info {
+        background: #e8f4fd;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        color: #2c3e50;
+    }
+
+    /* 3 Columns City Grid Styles */
+    .city-grid-3col {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .city-card-3col {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid #f0f0f0;
+    }
+
+    .city-card-3col:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .city-image-3col {
+        width: 100%;
+        height: 200px;
+        background: #f8f9fa;
+        overflow: hidden;
+    }
+
+    .city-image-3col img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .city-card-3col:hover .city-image-3col img {
+        transform: scale(1.05);
+    }
+
+    .city-content-3col {
+        padding: 1.2rem;
+    }
+
+    .city-title-3col {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+        color: #2c3e50;
+        font-weight: 600;
+    }
+
+    .btn {
+        display: inline-block;
+        background: #3498db;
+        color: white;
+        padding: 0.8rem 1.5rem;
+        text-decoration: none;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        transition: background 0.3s;
+        text-align: center;
+    }
+
+    .btn:hover {
+        background: #2980b9;
+        color: white;
+        text-decoration: none;
+    }
+
     .hero-section {
-        padding: 3rem 0;
+        background-size: cover;
+        background-position: center;
+        color: white;
+        text-align: center;
+        padding: 4rem 0;
     }
-    
+
+    .hero-title {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.2rem;
+        opacity: 0.9;
+    }
+
+    /* Simple Pagination Styles */
+    .simple-pagination {
+        margin: 2rem 0;
+        text-align: center;
+    }
+
     .page-numbers {
-        gap: 0.2rem;
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
     }
-    
+
     .page-link, .current-page {
-        padding: 0.3rem 0.5rem;
-        font-size: 0.8rem;
+        padding: 0.5rem 0.8rem;
+        font-size: 0.9rem;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: all 0.3s;
+        display: inline-block;
     }
-}
+
+    .page-link {
+        background: #3498db;
+        color: white;
+        border: 1px solid #3498db;
+    }
+
+    .page-link:hover {
+        background: #2980b9;
+        color: white;
+        text-decoration: none;
+    }
+
+    .current-page {
+        background: #e74c3c;
+        color: white;
+        border: 1px solid #e74c3c;
+        cursor: default;
+    }
+
+    /* Mobile Responsive for 3 Columns */
+    @media (max-width: 1024px) {
+        .city-grid-3col {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.2rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .city-grid-3col {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        
+        .city-image-3col {
+            height: 180px;
+        }
+        
+        .filter-grid-single-line {
+            flex-direction: column;
+        }
+        
+        .filter-group {
+            min-width: 100%;
+        }
+        
+        .button-group {
+            min-width: 100%;
+            flex-direction: row;
+        }
+        
+        .hero-title {
+            font-size: 2.5rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .city-grid-3col {
+            grid-template-columns: 1fr;
+        }
+        
+        .city-content-3col {
+            padding: 1rem;
+        }
+        
+        .filter-grid-single-line {
+            grid-template-columns: 1fr;
+        }
+        
+        .filter-group {
+            min-width: 100%;
+        }
+        
+        .hero-title {
+            font-size: 2rem;
+        }
+        
+        .hero-section {
+            padding: 3rem 0;
+        }
+    }
 </style>
 {% endblock %}
