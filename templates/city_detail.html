@@ -40,6 +40,9 @@
                 <img src="{% static 'images/cities/vienna.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
                 {% elif city.name == 'Prague' %}
                 <img src="{% static 'images/cities/prague.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                <!-- ADDED: Hong Kong -->
+                {% elif city.name == 'Hong Kong' %}
+                <img src="{% static 'images/cities/hong_kong.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
                 {% else %}
                 <img src="{% static 'images/cities/default.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
                 {% endif %}
@@ -86,11 +89,9 @@
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                             <div>
                                 <strong style="color: #e74c3c; font-size: 1.3rem;">${{ room_type.price_per_night }}</strong>
-                                <span style="color: #666;">/ night</span>
+                                <span style="color: #666;">/night</span>
                             </div>
-                            <div style="color: #666;">
-                                <strong>Capacity:</strong> {{ room_type.capacity }} person{{ room_type.capacity|pluralize }}
-                            </div>
+                            <div style="color: #666;">{{ room_type.capacity }} person{{ room_type.capacity|pluralize }}</div>
                         </div>
                         <a href="{% url 'room_detail' room_type.id %}" class="btn" style="width: 100%; text-align: center; background: #3498db; color: white; padding: 12px; border-radius: 6px; text-decoration: none; display: block;">
                             View Available Rooms
@@ -128,6 +129,9 @@
                         <img src="{% static 'images/cities/singapore.jpg' %}" alt="{{ other_city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
                         {% elif other_city.name == 'Chicago' %}
                         <img src="{% static 'images/cities/chicago.jpg' %}" alt="{{ other_city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        <!-- ADDED: Hong Kong for other cities section -->
+                        {% elif other_city.name == 'Hong Kong' %}
+                        <img src="{% static 'images/cities/hong_kong.jpg' %}" alt="{{ other_city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
                         {% else %}
                         <img src="{% static 'images/cities/default.jpg' %}" alt="{{ other_city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
                         {% endif %}
@@ -146,12 +150,12 @@
 </section>
 
 <style>
-.btn {
-    transition: background-color 0.3s ease;
-}
-
-.btn:hover {
-    background-color: #2980b9 !important;
-}
+    .btn {
+        transition: background-color 0.3s ease;
+    }
+    
+    .btn:hover {
+        background-color: #2980b9 !important;
+    }
 </style>
 {% endblock %}
