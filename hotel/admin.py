@@ -8,13 +8,13 @@ class CityAdmin(admin.ModelAdmin):
     list_filter = ['is_active']
     search_fields = ['name']
     readonly_fields = ['image_preview_large']
-    
+
     def image_preview(self, obj):
         if obj.image:
             return format_html('<img src="{}" style="max-height: 50px; max-width: 50px;" />', obj.image.url)
         return "No image"
     image_preview.short_description = 'Preview'
-    
+
     def image_preview_large(self, obj):
         if obj.image:
             return format_html('<img src="{}" style="max-height: 200px;" />', obj.image.url)
@@ -26,13 +26,13 @@ class RoomTypeAdmin(admin.ModelAdmin):
     list_filter = ['capacity']
     search_fields = ['name']
     readonly_fields = ['image_preview_large']
-    
+
     def image_preview(self, obj):
         if obj.image:
             return format_html('<img src="{}" style="max-height: 50px; max-width: 50px;" />', obj.image.url)
         return "No image"
     image_preview.short_description = 'Preview'
-    
+
     def image_preview_large(self, obj):
         if obj.image:
             return format_html('<img src="{}" style="max-height: 200px;" />', obj.image.url)

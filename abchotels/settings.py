@@ -21,7 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'hotel',  # our app
+    'hotel', # our app
 ]
 
 MIDDLEWARE = [
@@ -34,12 +34,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'abchotels.urls'  # FIXED: was 'urlsts'
+ROOT_URLCONF = 'abchotels.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # This should include your templates directory
+        'DIRS': [BASE_DIR / 'templates'], # This should include your templates directory
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -52,7 +52,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'abchotels.wsgi.application'  # FIXED: was 'WSGL_APPLICATION'
+WSGI_APPLICATION = 'abchotels.wsgi.application'
 
 # Database
 DATABASES = {
@@ -76,7 +76,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
-]  # FIXED: was extra }
+]
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
@@ -85,14 +85,14 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = '/static/'  # FIXED: was missing closing quote
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Media files
-MEDIA_URL = '/media/'  # FIXED: was missing closing quote
+MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
@@ -113,5 +113,5 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'anitatam2001@gmail.com'
-EMAIL_HOST_PASSWORD = 'tblhlhspicfhotwb'  # Make sure this is your actual 16-char App Password
+EMAIL_HOST_PASSWORD = 'tblh1hspicfhotwb'
 DEFAULT_FROM_EMAIL = 'anitatam2001@gmail.com'

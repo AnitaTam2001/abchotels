@@ -2,7 +2,6 @@
 from django.db import models
 from datetime import date
 
-# hotel/models.py
 class City(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
@@ -14,8 +13,8 @@ class City(models.Model):
 
     class Meta:
         verbose_name_plural = "Cities"
-        ordering = ['name']  # Add this line for default ordering
-        
+        ordering = ['name']
+
 class RoomType(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
@@ -69,7 +68,7 @@ class FAQ(models.Model):
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='general')
     order = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
-    
+
     class Meta:
         ordering = ['category', 'order', 'question']
 
@@ -136,7 +135,7 @@ class JobApplication(models.Model):
         ('rejected', 'Rejected'),
         ('hired', 'Hired'),
     ]
-    
+
     job = models.ForeignKey(JobListing, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)

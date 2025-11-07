@@ -14,13 +14,13 @@
 
 <section style="padding: 2rem 0;">
     <div class="container">
-        <!-- Filter Section -->
+        <!-- Filter Section - All on one line -->
         <div class="filter-section">
             <h3 style="margin-bottom: 1rem;">Find Your Perfect Stay</h3>
             <form method="get" action="{% url 'room_list' %}">
-                <div class="filter-grid">
+                <div class="filter-grid-single-line">
                     <div class="filter-group">
-                        <label class="filter-label">Cities</label>
+                        <label class="filter-label">City</label>
                         <select name="city" class="filter-select">
                             <option value="">All Cities</option>
                             {% for city in all_cities %}
@@ -32,39 +32,41 @@
                     </div>
 
                     <div class="filter-group">
-                        <label class="filter-label">Check-in Date</label>
+                        <label class="filter-label">Check-in</label>
                         <input type="date" name="check_in" class="filter-input" value="{{ selected_check_in }}">
                     </div>
+
                     <div class="filter-group">
-                        <label class="filter-label">Check-out Date</label>
+                        <label class="filter-label">Check-out</label>
                         <input type="date" name="check_out" class="filter-input" value="{{ selected_check_out }}">
                     </div>
+
                     <div class="filter-group">
                         <label class="filter-label">Guests</label>
                         <select name="guests" class="filter-select">
-                            <option value="">Any Number</option>
-                            <option value="1" {% if selected_guests == "1" %}selected{% endif %}>1 Guest</option>
-                            <option value="2" {% if selected_guests == "2" %}selected{% endif %}>2 Guests</option>
-                            <option value="3" {% if selected_guests == "3" %}selected{% endif %}>3 Guests</option>
-                            <option value="4" {% if selected_guests == "4" %}selected{% endif %}>4+ Guests</option>
+                            <option value="">Any</option>
+                            <option value="1" {% if selected_guests == "1" %}selected{% endif %}>1</option>
+                            <option value="2" {% if selected_guests == "2" %}selected{% endif %}>2</option>
+                            <option value="3" {% if selected_guests == "3" %}selected{% endif %}>3</option>
+                            <option value="4" {% if selected_guests == "4" %}selected{% endif %}>4+</option>
                         </select>
                     </div>
 
                     <div class="filter-group">
                         <label class="filter-label">Rooms</label>
                         <select name="rooms" class="filter-select">
-                            <option value="">Any Number</option>
-                            <option value="1" {% if selected_rooms == "1" %}selected{% endif %}>1 Room</option>
-                            <option value="2" {% if selected_rooms == "2" %}selected{% endif %}>2 Rooms</option>
-                            <option value="3" {% if selected_rooms == "3" %}selected{% endif %}>3 Rooms</option>
-                            <option value="4" {% if selected_rooms == "4" %}selected{% endif %}>4+ Rooms</option>
+                            <option value="">Any</option>
+                            <option value="1" {% if selected_rooms == "1" %}selected{% endif %}>1</option>
+                            <option value="2" {% if selected_rooms == "2" %}selected{% endif %}>2</option>
+                            <option value="3" {% if selected_rooms == "3" %}selected{% endif %}>3</option>
+                            <option value="4" {% if selected_rooms == "4" %}selected{% endif %}>4+</option>
                         </select>
                     </div>
 
                     <!-- Buttons on the same line -->
-                    <div class="filter-group" style="display: flex; gap: 0.5rem; align-items: end;">
-                        <button type="submit" class="filter-btn" style="flex: 1;">Search</button>
-                        <a href="{% url 'room_list' %}" class="btn" style="flex: 1; text-align: center;">Clear</a>
+                    <div class="filter-group button-group">
+                        <button type="submit" class="filter-btn">Search</button>
+                        <a href="{% url 'room_list' %}" class="btn clear-btn">Clear</a>
                     </div>
                 </div>
             </form>
@@ -73,9 +75,8 @@
         <!-- Results Info -->
         <div class="results-info">
             <div>
-                <strong>{{ cities.paginator.count }}</strong> cit{{ cities.paginator.count|pluralize:"y,ies" }} found
-                {% if selected_city or selected_check_in or selected_check_out or selected_guests or selected_rooms %} with applied filters{% endif %}
-                - Showing page {{ cities.number }} of {{ cities.paginator.num_pages }}
+                <strong>{{ cities.paginator.count }}</strong> cities found
+                {% if selected_city or selected_check_in or selected_check_out or selected_guests or selected_rooms %} with filters{% endif %}
             </div>
         </div>
 
@@ -172,36 +173,18 @@
             {% endfor %}
         </div>
 
-        <!-- Pagination -->
+        <!-- Simple Pagination - Only Page Numbers -->
         {% if cities.paginator.num_pages > 1 %}
-        <div class="pagination">
-            <div class="pagination-info">
-                Page {{ cities.number }} of {{ cities.paginator.num_pages }}
-            </div>
-            
-            <div class="pagination-controls">
-                {% if cities.has_previous %}
-                    <a href="?page=1{% if selected_city %}&city={{ selected_city }}{% endif %}{% if selected_check_in %}&check_in={{ selected_check_in }}{% endif %}{% if selected_check_out %}&check_out={{ selected_check_out }}{% endif %}{% if selected_guests %}&guests={{ selected_guests }}{% endif %}{% if selected_rooms %}&rooms={{ selected_rooms }}{% endif %}" 
-                       class="btn">First</a>
-                    <a href="?page={{ cities.previous_page_number }}{% if selected_city %}&city={{ selected_city }}{% endif %}{% if selected_check_in %}&check_in={{ selected_check_in }}{% endif %}{% if selected_check_out %}&check_out={{ selected_check_out }}{% endif %}{% if selected_guests %}&guests={{ selected_guests }}{% endif %}{% if selected_rooms %}&rooms={{ selected_rooms }}{% endif %}" 
-                       class="btn">Previous</a>
-                {% endif %}
-
+        <div class="simple-pagination">
+            <div class="page-numbers">
                 {% for num in cities.paginator.page_range %}
                     {% if cities.number == num %}
-                        <span class="btn current-page">{{ num }}</span>
-                    {% elif num > cities.number|add:'-3' and num < cities.number|add:'3' %}
+                        <span class="current-page">{{ num }}</span>
+                    {% else %}
                         <a href="?page={{ num }}{% if selected_city %}&city={{ selected_city }}{% endif %}{% if selected_check_in %}&check_in={{ selected_check_in }}{% endif %}{% if selected_check_out %}&check_out={{ selected_check_out }}{% endif %}{% if selected_guests %}&guests={{ selected_guests }}{% endif %}{% if selected_rooms %}&rooms={{ selected_rooms }}{% endif %}" 
-                           class="btn">{{ num }}</a>
+                           class="page-link">{{ num }}</a>
                     {% endif %}
                 {% endfor %}
-
-                {% if cities.has_next %}
-                    <a href="?page={{ cities.next_page_number }}{% if selected_city %}&city={{ selected_city }}{% endif %}{% if selected_check_in %}&check_in={{ selected_check_in }}{% endif %}{% if selected_check_out %}&check_out={{ selected_check_out }}{% endif %}{% if selected_guests %}&guests={{ selected_guests }}{% endif %}{% if selected_rooms %}&rooms={{ selected_rooms }}{% endif %}" 
-                       class="btn">Next</a>
-                    <a href="?page={{ cities.paginator.num_pages }}{% if selected_city %}&city={{ selected_city }}{% endif %}{% if selected_check_in %}&check_in={{ selected_check_in }}{% endif %}{% if selected_check_out %}&check_out={{ selected_check_out }}{% endif %}{% if selected_guests %}&guests={{ selected_guests }}{% endif %}{% if selected_rooms %}&rooms={{ selected_rooms }}{% endif %}" 
-                       class="btn">Last</a>
-                {% endif %}
             </div>
         </div>
         {% endif %}
@@ -218,16 +201,31 @@
     margin-bottom: 2rem;
 }
 
-.filter-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+/* Single Line Filter Grid */
+.filter-grid-single-line {
+    display: flex;
     gap: 1rem;
     align-items: end;
+    flex-wrap: wrap;
 }
 
 .filter-group {
     display: flex;
     flex-direction: column;
+    flex: 1;
+    min-width: 120px;
+}
+
+.button-group {
+    display: flex;
+    gap: 0.5rem;
+    min-width: 200px;
+}
+
+.button-group .filter-btn,
+.button-group .clear-btn {
+    flex: 1;
+    padding: 0.75rem 1rem;
 }
 
 .filter-label {
@@ -258,6 +256,26 @@
 
 .filter-btn:hover {
     background: #c0392b;
+}
+
+.clear-btn {
+    background: #95a5a6;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.3s;
+    text-align: center;
+    display: inline-block;
+}
+
+.clear-btn:hover {
+    background: #7f8c8d;
+    color: white;
+    text-decoration: none;
 }
 
 .results-info {
@@ -356,45 +374,44 @@
     opacity: 0.9;
 }
 
-/* Pagination Styles */
-.pagination {
+/* Simple Pagination Styles */
+.simple-pagination {
     margin: 2rem 0;
     text-align: center;
 }
 
-.pagination-info {
-    color: #666;
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
-}
-
-.pagination-controls {
+.page-numbers {
     display: flex;
     justify-content: center;
     gap: 0.5rem;
     flex-wrap: wrap;
 }
 
-.pagination-controls .btn {
-    padding: 0.5rem 1rem;
+.page-link, .current-page {
+    padding: 0.5rem 0.8rem;
     font-size: 0.9rem;
-    background: #3498db;
-    border: none;
     border-radius: 5px;
-    color: white;
     text-decoration: none;
-    transition: background 0.3s;
+    transition: all 0.3s;
     display: inline-block;
 }
 
-.pagination-controls .btn:hover {
+.page-link {
+    background: #3498db;
+    color: white;
+    border: 1px solid #3498db;
+}
+
+.page-link:hover {
     background: #2980b9;
     color: white;
     text-decoration: none;
 }
 
-.pagination-controls .btn.current-page {
+.current-page {
     background: #e74c3c;
+    color: white;
+    border: 1px solid #e74c3c;
     cursor: default;
 }
 
@@ -404,6 +421,10 @@
         grid-template-columns: repeat(2, 1fr);
         gap: 1.2rem;
     }
+    
+    .filter-grid-single-line {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 @media (max-width: 768px) {
@@ -411,14 +432,31 @@
         grid-template-columns: 1fr;
         gap: 1rem;
     }
+    
     .city-image-3col {
         height: 180px;
     }
-    .filter-grid {
-        grid-template-columns: 1fr;
+    
+    .filter-grid-single-line {
+        grid-template-columns: repeat(2, 1fr);
     }
+    
+    .button-group {
+        grid-column: 1 / -1;
+        flex-direction: row;
+    }
+    
     .hero-title {
         font-size: 2.5rem;
+    }
+    
+    .page-numbers {
+        gap: 0.3rem;
+    }
+    
+    .page-link, .current-page {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
     }
 }
 
@@ -426,14 +464,34 @@
     .city-grid-3col {
         grid-template-columns: 1fr;
     }
+    
     .city-content-3col {
         padding: 1rem;
     }
+    
+    .filter-grid-single-line {
+        grid-template-columns: 1fr;
+    }
+    
+    .filter-group {
+        min-width: 100%;
+    }
+    
     .hero-title {
         font-size: 2rem;
     }
+    
     .hero-section {
         padding: 3rem 0;
+    }
+    
+    .page-numbers {
+        gap: 0.2rem;
+    }
+    
+    .page-link, .current-page {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.8rem;
     }
 }
 </style>
