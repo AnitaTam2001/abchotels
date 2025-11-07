@@ -2,6 +2,7 @@
 from django.db import models
 from datetime import date
 
+# hotel/models.py
 class City(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
@@ -13,7 +14,8 @@ class City(models.Model):
 
     class Meta:
         verbose_name_plural = "Cities"
-
+        ordering = ['name']  # Add this line for default ordering
+        
 class RoomType(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()

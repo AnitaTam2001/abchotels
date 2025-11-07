@@ -10,9 +10,13 @@ from .models import City
 # hotel/views.py
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+# hotel/views.py
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 def room_list(request):
-    cities = City.objects.all()
-    all_cities = City.objects.all()  # For the filter dropdown
+    # Order cities by name in ascending order
+    cities = City.objects.all().order_by('name')
+    all_cities = City.objects.all().order_by('name')  # For the filter dropdown
 
     # Get filter parameters
     selected_city = request.GET.get('city', '')
@@ -50,6 +54,7 @@ def room_list(request):
     }
 
     return render(request, 'room_list.html', context)
+
 
 def register(request):
     """
