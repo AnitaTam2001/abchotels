@@ -7,6 +7,49 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .forms import CustomUserCreationForm
 from .models import City
+# hotel/views.py
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+def room_list(request):
+    cities = City.objects.all()
+    all_cities = City.objects.all()  # For the filter dropdown
+
+    # Get filter parameters
+    selected_city = request.GET.get('city', '')
+    selected_check_in = request.GET.get('check_in', '')
+    selected_check_out = request.GET.get('check_out', '')
+    selected_guests = request.GET.get('guests', '')
+    selected_rooms = request.GET.get('rooms', '')
+
+    # Apply filters
+    if selected_city:
+        cities = cities.filter(name__icontains=selected_city)
+
+    # Pagination - 12 items per page
+    paginator = Paginator(cities, 12)
+    page_number = request.GET.get('page')
+    
+    try:
+        paginated_cities = paginator.page(page_number)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page
+        paginated_cities = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range, deliver last page of results
+        paginated_cities = paginator.page(paginator.num_pages)
+
+    context = {
+        'cities': paginated_cities,  # Use paginated queryset
+        'all_cities': all_cities,
+        'selected_city': selected_city,
+        'selected_check_in': selected_check_in,
+        'selected_check_out': selected_check_out,
+        'selected_guests': selected_guests,
+        'selected_rooms': selected_rooms,
+        'paginator': paginator,  # Add paginator to context
+    }
+
+    return render(request, 'room_list.html', context)
 
 def register(request):
     """
@@ -203,34 +246,3 @@ def why_work_with_us(request):
 def room_detail(request, room_type_id):
     """Room type detail page"""
     return render(request, 'room_detail.html')
-
-# hotel/views.py
-from django.shortcuts import render
-from .models import City  # Add this import
-
-def room_list(request):
-    cities = City.objects.all()
-    all_cities = City.objects.all()  # For the filter dropdown
-    
-    # Get filter parameters
-    selected_city = request.GET.get('city', '')
-    selected_check_in = request.GET.get('check_in', '')
-    selected_check_out = request.GET.get('check_out', '')
-    selected_guests = request.GET.get('guests', '')
-    selected_rooms = request.GET.get('rooms', '')
-    
-    # Apply filters
-    if selected_city:
-        cities = cities.filter(name__icontains=selected_city)
-    
-    context = {
-        'cities': cities,
-        'all_cities': all_cities,
-        'selected_city': selected_city,
-        'selected_check_in': selected_check_in,
-        'selected_check_out': selected_check_out,
-        'selected_guests': selected_guests,
-        'selected_rooms': selected_rooms,
-    }
-    
-    return render(request, 'room_list.html', context)
