@@ -1,19 +1,19 @@
 ID,Name,Description,Is Active,Image Filename
-1,New York,Experience the vibrant energy of New York City with our luxury hotels,True,cities/new_york.jpg
-2,London,Discover historic charm meets modern luxury in the heart of London,True,cities/london.jpg
-3,Paris,Immerse yourself in the romance and elegance of Paris,True,cities/paris.jpg
-4,Tokyo,Experience the perfect blend of traditional culture and cutting-edge technology in Tokyo,True,cities/tokyo.jpg
-5,Dubai,Luxurious desert city with stunning architecture and world-class shopping,True,cities/dubai.jpg
-6,Singapore,Enjoy world-class luxury in the garden city,True,cities/singapore.jpg
-7,Sydney,Wake up to breathtaking harbor views in Sydney,True,cities/sydney.jpg
-8,Rome,Step into history with our luxury hotels in the eternal city,True,cities/rome.jpg
-9,Barcelona,Enjoy Mediterranean charm and Gaudí architecture in vibrant Barcelona,True,cities/barcelona.jpg
-10,Hong Kong,Dynamic financial hub with stunning skyline and mountain hikes,True,cities/hong_kong.jpg
-11,Los Angeles,Live the California dream in Los Angeles,True,cities/los_angeles.jpg
-12,Miami,Experience tropical luxury and art deco glamour in Miami,True,cities/miami.jpg
-13,Las Vegas,Indulge in ultimate luxury on the Las Vegas Strip,True,cities/las_vegas.jpg
-14,Chicago,Discover architectural marvels and deep-dish charm in Chicago,True,cities/chicago.jpg
-15,San Francisco,Experience the iconic hills and bay views of San Francisco,True,cities/san_francisco.jpg
-16,Amsterdam,Explore charming canals and historic architecture in Amsterdam,True,cities/amsterdam.jpg
-17,Bangkok,Vibrant city with rich cultural heritage and amazing street food,True,cities/bangkok.jpg
-18,Sydney,Wake up to breathtaking harbor views in Sydney,True,cities/sydney.jpg
+1,New York,"The vibrant heart of America with iconic landmarks",true,cities/new_york.jpg
+2,London,"Historic capital with royal palaces and modern attractions",true,cities/london.jpg
+3,Paris,"City of Light with romantic ambiance and art",true,cities/paris.jpg
+4,Tokyo,"Bustling metropolis blending tradition and technology",true,cities/tokyo.jpg
+5,Dubai,"Luxury destination with stunning architecture",true,cities/dubai.jpg
+6,Singapore,"Clean, green city with diverse cultures",true,cities/singapore.jpg
+7,Sydney,"Harbor city with iconic opera house and beaches",true,cities/sydney.jpg
+8,Rome,"Eternal city with ancient history and cuisine",true,cities/rome.jpg
+9,Barcelona,"Artistic city with unique architecture and beaches",true,cities/barcelona.jpg
+10,Bangkok,"Vibrant city with temples and street food",true,cities/bangkok.jpg
+11,Los Angeles,"Entertainment capital with sunny beaches",true,cities/los_angeles.jpg
+12,Amsterdam,"Canal city with museums and cycling culture",true,cities/amsterdam.jpg
+13,Istanbul,"Cross-continental city rich in history",true,cities/istanbul.jpg
+14,Hong Kong,"Skyscraper-filled city with mountain views",true,cities/hong_kong.jpg
+15,Miami,"Art deco beauty with vibrant nightlife",true,cities/miami.jpg
+16,Prague,"Medieval charm with stunning architecture",true,cities/prague.jpg
+17,Vienna,"Imperial city of music and coffee houses",true,cities/vienna.jpg
+18,Kyoto,"Traditional Japanese city with temples and gardens",true,cities/kyoto.jpg
