@@ -40,9 +40,30 @@ class RoomTypeAdmin(admin.ModelAdmin):
     image_preview_large.short_description = 'Image Preview'
 
 class RoomAdmin(admin.ModelAdmin):
-    list_display = ['id', 'city', 'room_type', 'is_available']
-    list_filter = ['room_type', 'is_available']
+    list_display = ['id', 'city', 'room_type', 'price_per_night', 'capacity', 'is_available', 'image_preview']
+    list_filter = ['room_type', 'is_available', 'city']  # Removed capacity, added city
     search_fields = ['city__name', 'room_type__name']
+    readonly_fields = ['image_preview_large']
+
+    def price_per_night(self, obj):
+        return f"${obj.room_type.price_per_night}"
+    price_per_night.short_description = 'Price Per Night'
+
+    def capacity(self, obj):
+        return obj.room_type.capacity
+    capacity.short_description = 'Capacity'
+
+    def image_preview(self, obj):
+        if obj.room_type.image:
+            return format_html('<img src="{}" style="max-height: 50px; max-width: 50px;" />', obj.room_type.image.url)
+        return "No image"
+    image_preview.short_description = 'Room Image'
+
+    def image_preview_large(self, obj):
+        if obj.room_type.image:
+            return format_html('<img src="{}" style="max-height: 200px;" />', obj.room_type.image.url)
+        return "No image"
+    image_preview_large.short_description = 'Room Image Preview'
 
 class BookingAdmin(admin.ModelAdmin):
     list_display = ['id', 'guest_name', 'room', 'check_in', 'check_out', 'status']

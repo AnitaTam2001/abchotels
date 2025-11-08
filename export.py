@@ -1,4 +1,4 @@
-# export.py (place this in your project root directory)
+# export.py (updated for simplified room format)
 import os
 import sys
 import django
@@ -9,7 +9,7 @@ sys.path.append('/Users/anita/abchotels')
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'abchotels.settings')
 django.setup()
 
-from hotel.models import City, RoomType, Department
+from hotel.models import City, RoomType, Room, Department
 
 EXPORTS_FOLDER = 'exports'
 
@@ -78,6 +78,33 @@ def export_roomtype():
     print(f"✅ Exported {room_types.count()} room types to {filename}")
     return filename
 
+def export_room():
+    """
+    Export all Room data to CSV (updated for simplified format)
+    """
+    ensure_folder_exists(EXPORTS_FOLDER)
+    filename = os.path.join(EXPORTS_FOLDER, 'export_room.csv')
+    
+    with open(filename, 'w', newline='', encoding='utf-8') as file:
+        writer = csv.writer(file)
+        writer.writerow(['ID', 'City ID', 'Room Type ID', 'Is Available', 'View Type', 'Price Per Night', 'Capacity', 'RoomType Image'])
+        
+        rooms = Room.objects.all().select_related('city', 'room_type')
+        for room in rooms:
+            writer.writerow([
+                room.id,
+                room.city.id if room.city else '',
+                room.room_type.id if room.room_type else '',
+                room.is_available,
+                room.view_type,
+                room.price_per_night,
+                room.capacity,
+                room.room_type_image
+            ])
+    
+    print(f"✅ Exported {rooms.count()} rooms to {filename}")
+    return filename
+
 def export_department():
     """
     Export all Department data to CSV
@@ -102,7 +129,7 @@ def export_department():
 
 def export_all():
     """
-    Export all data (city, roomtype, department) to separate CSV files
+    Export all data (city, roomtype, room, department) to separate CSV files
     """
     ensure_folder_exists(EXPORTS_FOLDER)
     
@@ -112,6 +139,7 @@ def export_all():
     files = [
         export_city(),
         export_roomtype(),
+        export_room(),
         export_department()
     ]
     
@@ -124,16 +152,18 @@ def show_database_summary():
     print(f"   Cities: {City.objects.count()}")
     print(f"   Departments: {Department.objects.count()}")
     print(f"   Room Types: {RoomType.objects.count()}")
+    print(f"   Rooms: {Room.objects.count()}")
 
 def run_export(export_type='all'):
     """
     Run export from command line
     Usage: python export.py [export_type]
-    export_type: city, roomtype, department, all
+    export_type: city, roomtype, room, department, all
     """
     exports = {
         'city': export_city,
         'roomtype': export_roomtype,
+        'room': export_room,
         'department': export_department,
         'all': export_all
     }
@@ -150,7 +180,7 @@ def run_export(export_type='all'):
             print(f"✅ Export completed: {result}")
     else:
         print(f"❌ Invalid export type: {export_type}")
-        print("   Available types: city, roomtype, department, all")
+        print("   Available types: city, roomtype, room, department, all")
 
 def main():
     """Main program loop"""
@@ -164,26 +194,29 @@ def main():
         print("="*50)
         print("1. Export City")
         print("2. Export Room Type")
-        print("3. Export Department")
-        print("4. Export All")
-        print("5. Exit")
+        print("3. Export Room")
+        print("4. Export Department")
+        print("5. Export All")
+        print("6. Exit")
         print("="*50)
 
-        choice = input("\nSelect option (1-5): ").strip()
+        choice = input("\nSelect option (1-6): ").strip()
         
         if choice == '1':
             export_city()
         elif choice == '2':
             export_roomtype()
         elif choice == '3':
-            export_department()
+            export_room()
         elif choice == '4':
-            export_all()
+            export_department()
         elif choice == '5':
+            export_all()
+        elif choice == '6':
             print("👋 Thank you for using ABC Hotels Export Manager!")
             break
         else:
-            print("❌ Invalid choice! Please select 1-5.")
+            print("❌ Invalid choice! Please select 1-6.")
 
         input("\nPress Enter to continue...")
 
