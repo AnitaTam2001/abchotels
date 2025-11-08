@@ -4,7 +4,7 @@ from django.utils.html import format_html
 from .models import City, RoomType, Room, Booking, FAQ, Department, JobListing, JobApplication
 
 class CityAdmin(admin.ModelAdmin):
-    list_display = ['name', 'is_active', 'image_preview']
+    list_display = ['id', 'name', 'is_active', 'image_preview']  # Added 'id'
     list_filter = ['is_active']
     search_fields = ['name']
     readonly_fields = ['image_preview_large']
@@ -22,7 +22,7 @@ class CityAdmin(admin.ModelAdmin):
     image_preview_large.short_description = 'Image Preview'
 
 class RoomTypeAdmin(admin.ModelAdmin):
-    list_display = ['name', 'price_per_night', 'capacity', 'image_preview']
+    list_display = ['id', 'name', 'price_per_night', 'capacity', 'image_preview']  # Added 'id'
     list_filter = ['capacity']
     search_fields = ['name']
     readonly_fields = ['image_preview_large']
@@ -41,8 +41,8 @@ class RoomTypeAdmin(admin.ModelAdmin):
 
 class RoomAdmin(admin.ModelAdmin):
     list_display = ['id', 'city', 'room_type', 'price_per_night', 'capacity', 'is_available', 'image_preview']
-    list_filter = ['room_type', 'is_available', 'city']  # Removed capacity, added city
-    search_fields = ['city__name', 'room_type__name']
+    list_filter = ['room_type', 'is_available', 'city']
+    search_fields = ['city__name', 'room_type__name']  # Fixed: changed underscore to double underscore for related field lookup
     readonly_fields = ['image_preview_large']
 
     def price_per_night(self, obj):
@@ -72,24 +72,24 @@ class BookingAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
 
 class FAQAdmin(admin.ModelAdmin):
-    list_display = ['question', 'category', 'order', 'is_active']
+    list_display = ['id', 'question', 'category', 'order', 'is_active']  # Added 'id'
     list_filter = ['category', 'is_active']
     search_fields = ['question', 'answer']
     list_editable = ['order', 'is_active']
 
 class DepartmentAdmin(admin.ModelAdmin):
-    list_display = ['name', 'description']
+    list_display = ['id', 'name', 'description']  # Added 'id'
     search_fields = ['name']
 
 class JobListingAdmin(admin.ModelAdmin):
-    list_display = ['title', 'department', 'job_type', 'experience_level', 'is_active', 'posted_date']
+    list_display = ['id', 'title', 'department', 'job_type', 'experience_level', 'is_active', 'posted_date']  # Added 'id'
     list_filter = ['department', 'job_type', 'experience_level', 'is_active', 'posted_date']
     list_editable = ['is_active']
     search_fields = ['title', 'description']
     date_hierarchy = 'posted_date'
 
 class JobApplicationAdmin(admin.ModelAdmin):
-    list_display = ['first_name', 'last_name', 'job', 'status', 'applied_date']
+    list_display = ['id', 'first_name', 'last_name', 'job', 'status', 'applied_date']  # Added 'id'
     list_filter = ['status', 'job', 'applied_date']
     list_editable = ['status']
     search_fields = ['first_name', 'last_name', 'email']
