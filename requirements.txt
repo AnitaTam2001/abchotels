@@ -52,4 +52,4 @@ django-anymail==10.1
 django-debug-toolbar==4.2.0
 ipdb==0.13.13
 
-# Environment-specific requirements
+Pillow>=9.0.0

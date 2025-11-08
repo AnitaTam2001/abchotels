@@ -1,22 +1,11 @@
 # import_roomtype.csv
 ID,Name,Description,Price Per Night,Capacity,Image Filename
-1,Standard King,Comfortable king room with modern amenities,159.00,2,standard_king.png
-2,Standard Twin,"Two single beds, perfect for friends traveling together",149.00,2,standard_twin.png
-3,Deluxe King,Enhanced comfort with premium bedding and sitting area,199.00,2,deluxe_king.png
-4,Deluxe Suite,Spacious suite with separate living area,299.00,3,deluxe_suite.png
-5,Executive King,Business-focused with enhanced workspace,249.00,2,executive_king.png
-6,Executive Suite,Ultimate business accommodation,399.00,3,executive_suite.png
-7,Presidential Suite,Most luxurious accommodation,699.00,4,presidential_suite.png
-8,Family Suite,Perfect for families with separate bedrooms,349.00,4,family_suite.png
-9,Honeymoon Suite,Romantic suite for special occasions,449.00,2,honeymoon_suite.png
-10,Accessible King,Wheelchair accessible room with king bed,159.00,2,accessible_king.png
-11,Junior Suite,Small suite with separate seating area,279.00,2,junior_suite.png
-12,Corner King,Corner room with extra windows and natural light,189.00,2,corner_king.png
-13,City View King,King room with views of the city skyline,219.00,2,city_view_king.png
-14,Park View King,King room overlooking the city park,239.00,2,park_view_king.png
-15,River View Suite,Suite with views of the river,459.00,3,river_view_suite.png
-16,Ocean View King,King room with ocean or sea views,329.00,2,ocean_view_king.png
-17,Ocean Front Suite,Suite directly facing the ocean,599.00,4,ocean_front_suite.png
-18,Garden View Twin,Twin room with garden views,169.00,2,garden_view_twin.png
-19,Pool View King,King room with pool access or views,269.00,2,pool_view_king.png
-20,Executive Corner Suite,Corner executive suite with panoramic views,499.00,3,executive_corner_suite.png
+1,Standard King,Comfortable king room with modern amenities,159.00,2,rooms/standard_king.png
+2,Standard Twin,Two single beds perfect for friends traveling together,149.00,2,rooms/standard_twin.png
+3,Deluxe King,Enhanced comfort with premium bedding and sitting area,199.00,2,rooms/deluxe_king.png
+4,Deluxe Suite,Spacious suite with separate living area,299.00,3,rooms/deluxe_suite.png
+5,Executive King,Business-focused with enhanced workspace,249.00,2,rooms/executive_king.png
+6,Executive Suite,Ultimate business accommodation,399.00,3,rooms/executive_suite.png
+7,Presidential Suite,Most luxurious accommodation,699.00,4,rooms/presidential_suite.png
+8,Family Suite,Perfect for families with separate bedrooms,349.00,4,rooms/family_suite.png
+9,Honeymoon Suite,Romantic suite for special occasions,449.00,2,rooms/honeymoon_suite.png

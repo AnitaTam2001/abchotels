@@ -1,101 +1,19 @@
-# import_city.csv
 ID,Name,Description,Is Active,Image Filename
-1,New York,Experience the vibrant energy of New York City with our luxury hotels,True,new_york.jpg
-2,London,Discover historic charm meets modern luxury in the heart of London,True,london.jpg
-3,Paris,Immerse yourself in the romance and elegance of Paris,True,paris.jpg
-4,Tokyo,Experience the perfect blend of traditional culture and cutting-edge technology in Tokyo,True,tokyo.jpg
-5,Dubai,Luxurious desert city with stunning architecture and world-class shopping,True,dubai.jpg
-6,Singapore,Enjoy world-class luxury in the garden city,True,singapore.jpg
-7,Sydney,Wake up to breathtaking harbor views in Sydney,True,sydney.jpg
-8,Rome,Step into history with our luxury hotels in the eternal city,True,rome.jpg
-9,Barcelona,Enjoy Mediterranean charm and Gaudí architecture in vibrant Barcelona,True,barcelona.jpg
-10,Hong Kong,Dynamic financial hub with stunning skyline and mountain hikes,True,hong_kong.jpg
-11,Istanbul,City straddling two continents with rich history and stunning mosques,True,istanbul.jpg
-12,Los Angeles,Live the California dream in Los Angeles,True,los_angeles.jpg
-13,Miami,Experience tropical luxury and art deco glamour in Miami,True,miami.jpg
-14,Las Vegas,Indulge in ultimate luxury on the Las Vegas Strip,True,las_vegas.jpg
-15,Chicago,Discover architectural marvels and deep-dish charm in Chicago,True,chicago.jpg
-16,San Francisco,Experience the iconic hills and bay views of San Francisco,True,san_francisco.jpg
-17,Amsterdam,Explore charming canals and historic architecture in Amsterdam,True,amsterdam.jpg
-18,Vienna,Immerse yourself in classical music and imperial history in Vienna,True,vienna.jpg
-19,Prague,Discover the fairy-tale beauty of Prague,True,prague.jpg
-20,Bangkok,Vibrant city with rich cultural heritage and amazing street food,True,bangkok.jpg
-21,Beijing,Ancient capital with modern marvels and rich history,True,beijing.jpg
-22,Shanghai,Modern metropolis blending traditional and contemporary culture,True,shanghai.jpg
-23,Seoul,High-tech city with vibrant K-pop culture and historic palaces,True,seoul.jpg
-24,Toronto,Multicultural city with stunning waterfront and diverse neighborhoods,True,toronto.jpg
-25,Vancouver,Beautiful coastal city surrounded by mountains and ocean,True,vancouver.jpg
-26,Berlin,Creative capital with vibrant art scene and historic landmarks,True,berlin.jpg
-27,Madrid,Vibrant Spanish capital known for art and nightlife,True,madrid.jpg
-28,Milan,Fashion capital with incredible architecture and design,True,milan.jpg
-29,Athens,Ancient city with historic ruins and Mediterranean charm,True,athens.jpg
-30,Cairo,Historic city with ancient pyramids and rich cultural heritage,True,cairo.jpg
-31,Moscow,Grand city with iconic architecture and rich history,True,moscow.jpg
-32,St Petersburg,Imperial city with stunning palaces and cultural treasures,True,st_petersburg.jpg
-33,Delhi,Historic city blending ancient traditions with modern growth,True,delhi.jpg
-34,Mumbai,Bustling financial hub with Bollywood glamour,True,mumbai.jpg
-35,Bangkok,Vibrant city with ornate temples and bustling street life,True,bangkok.jpg
-36,Bali,Tropical paradise with beautiful beaches and spiritual culture,True,bali.jpg
-37,Phuket,Island paradise with stunning beaches and luxury resorts,True,phuket.jpg
-38,Cape Town,Beautiful coastal city with stunning mountain scenery,True,cape_town.jpg
-39,Marrakech,Exotic city with vibrant markets and historic architecture,True,marrakech.jpg
-40,Rio de Janeiro,Vibrant city with stunning beaches and carnival spirit,True,rio.jpg
-41,Buenos Aires,Paris of South America with tango and European architecture,True,buenos_aires.jpg
-42,Santiago,Modern city surrounded by Andes mountains and vineyards,True,santiago.jpg
-43,Mexico City,Vibrant capital with ancient ruins and modern art,True,mexico_city.jpg
-44,Montreal,European charm in North America with French culture,True,montreal.jpg
-45,Boston,Historic city with academic excellence and revolutionary heritage,True,boston.jpg
-46,Washington DC,Capital city with iconic monuments and political history,True,washington_dc.jpg
-47,Seattle,Innovative city with coffee culture and tech industry,True,seattle.jpg
-48,Austin,Live music capital with vibrant food scene and tech growth,True,austin.jpg
-49,Nashville,Music city with country roots and southern hospitality,True,nashville.jpg
-50,New Orleans,Cultural melting pot with jazz heritage and unique cuisine,True,new_orleans.jpg
-51,Orlando,Family-friendly destination with world-class theme parks,True,orlando.jpg
-52,Honolulu,Tropical paradise with stunning beaches and aloha spirit,True,honolulu.jpg
-53,Las Vegas,Entertainment capital with luxury resorts and nightlife,True,las_vegas.jpg
-54,San Diego,Perfect weather with beautiful beaches and family attractions,True,san_diego.jpg
-55,Phoenix,Desert city with luxury resorts and outdoor activities,True,phoenix.jpg
-56,Denver,Mile-high city with outdoor adventure and craft beer scene,True,denver.jpg
-57,Dallas,Modern metropolis with western heritage and business centers,True,dallas.jpg
-58,Houston,Space city with diverse culture and energy industry,True,houston.jpg
-59,Atlanta,Southern hub with rich history and modern development,True,atlanta.jpg
-60,Philadelphia,Historic city with American revolution heritage,True,philadelphia.jpg
-61,Detroit,Revitalizing city with automotive history and music legacy,True,detroit.jpg
-62,Minneapolis,Twin cities with lakes, True,minneapolis.jpg
-63,Portland,Creative city with food trucks and outdoor lifestyle,True,portland.jpg
-64,Salt Lake City,Mountain city with outdoor recreation and winter sports,True,salt_lake_city.jpg
-65,Kansas City,City of fountains with jazz heritage and barbecue,True,kansas_city.jpg
-66,St Louis,Gateway to the west with iconic arch and baseball,True,st_louis.jpg
-67,Charlotte,Financial hub with southern charm and growing skyline,True,charlotte.jpg
-68,Raleigh,Research triangle with universities and tech companies,True,raleigh.jpg
-69,Miami Beach,Art deco district with beaches and nightlife,True,miami_beach.jpg
-70,Key West,Tropical island with laid-back vibe and historic charm,True,key_west.jpg
-71,Santa Barbara,American Riviera with Spanish architecture and vineyards,True,santa_barbara.jpg
-72,Napa Valley,World-renowned wine region with luxury resorts,True,napa_valley.jpg
-73,Carmel,Quaint village with fairytale architecture and coastal beauty,True,carmel.jpg
-74,Sedona,Red rock formations with spiritual energy and luxury spas,True,sedona.jpg
-75,Scottsdale,Desert luxury with world-class golf and resorts,True,scottsdale.jpg
-76,Palm Springs,Mid-century modern oasis with pools and mountains,True,palm_springs.jpg
-77,Jackson Hole,Mountain town with luxury lodges and wildlife,True,jackson_hole.jpg
-78,Park City,Ski resort town with Sundance film festival,True,park_city.jpg
-79,Aspen,World-class ski destination with luxury shopping,True,aspen.jpg
-81,Lake Tahoe,Alpine lake with year-round recreation and casinos,True,lake_tahoe.jpg
-82,Monterey,Coastal beauty with famous aquarium and whale watching,True,monterey.jpg
-83,Santa Fe,Artistic city with adobe architecture and cultural heritage,True,santa_fe.jpg
-84,Taos,Mountain town with artistic community and ski valley,True,taos.jpg
-85,Gatlinburg,Gateway to Smoky Mountains with family attractions,True,gatlinburg.jpg
-86,Branson,Family entertainment with shows and theme parks,True,branson.jpg
-87,Myrtle Beach,East coast beach destination with golf and entertainment,True,myrtle_beach.jpg
-88,Virginia Beach,Coastal city with boardwalk and naval heritage,True,virginia_beach.jpg
-89,Charleston,Historic southern city with charm and cuisine,True,charleston.jpg
-90,Savannah,Historic district with Spanish moss and southern grace,True,savannah.jpg
-91,San Antonio,River Walk city with Alamo history and Tex-Mex culture,True,san_antonio.jpg
-92,El Paso,Border city with Mexican influence and mountain views,True,el_paso.jpg
-93,Albuquerque,High desert city with hot air balloons and Route 66,True,albuquerque.jpg
-94,Tucson,Desert city with Mexican heritage and mountain parks,True,tucson.jpg
-95,Colorado Springs,Garden of the Gods with military presence and outdoor activities,True,colorado_springs.jpg
-96,Boulder,College town with outdoor recreation and tech companies,True,boulder.jpg
-97,Fort Collins,Craft beer capital with historic downtown,True,fort_collins.jpg
-98,Boise,Riverside city with growing tech scene and outdoor access,True,boise.jpg
-99,Spokane,Washington city with waterfalls and outdoor recreation,True,spokane.jpg
-100,Tacoma,Waterfront city with glass art and mountain views,True,tacoma.jpg
+1,New York,Experience the vibrant energy of New York City with our luxury hotels,True,cities/new_york.jpg
+2,London,Discover historic charm meets modern luxury in the heart of London,True,cities/london.jpg
+3,Paris,Immerse yourself in the romance and elegance of Paris,True,cities/paris.jpg
+4,Tokyo,Experience the perfect blend of traditional culture and cutting-edge technology in Tokyo,True,cities/tokyo.jpg
+5,Dubai,Luxurious desert city with stunning architecture and world-class shopping,True,cities/dubai.jpg
+6,Singapore,Enjoy world-class luxury in the garden city,True,cities/singapore.jpg
+7,Sydney,Wake up to breathtaking harbor views in Sydney,True,cities/sydney.jpg
+8,Rome,Step into history with our luxury hotels in the eternal city,True,cities/rome.jpg
+9,Barcelona,Enjoy Mediterranean charm and Gaudí architecture in vibrant Barcelona,True,cities/barcelona.jpg
+10,Hong Kong,Dynamic financial hub with stunning skyline and mountain hikes,True,cities/hong_kong.jpg
+11,Los Angeles,Live the California dream in Los Angeles,True,cities/los_angeles.jpg
+12,Miami,Experience tropical luxury and art deco glamour in Miami,True,cities/miami.jpg
+13,Las Vegas,Indulge in ultimate luxury on the Las Vegas Strip,True,cities/las_vegas.jpg
+14,Chicago,Discover architectural marvels and deep-dish charm in Chicago,True,cities/chicago.jpg
+15,San Francisco,Experience the iconic hills and bay views of San Francisco,True,cities/san_francisco.jpg
+16,Amsterdam,Explore charming canals and historic architecture in Amsterdam,True,cities/amsterdam.jpg
+17,Bangkok,Vibrant city with rich cultural heritage and amazing street food,True,cities/bangkok.jpg
+18,Sydney,Wake up to breathtaking harbor views in Sydney,True,cities/sydney.jpg

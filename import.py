@@ -1,4 +1,4 @@
-# import.py (fixed for missing room types and department CSV)
+# import.py (with corrected image paths)
 import os
 import sys
 import django
@@ -10,9 +10,72 @@ sys.path.append('/Users/anita/abchotels')
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'abchotels.settings')
 django.setup()
 
-from hotel.models import City, RoomType, Room, Department
+from hotel.models import City, RoomType, Room, Department, Booking, FAQ, JobListing, JobApplication
 
 CSV_FOLDER = 'csv'  # Folder where CSV files are located
+
+def clean_all_data():
+    """
+    Delete all data from all models to start fresh
+    """
+    print("🧹 Cleaning all data from database...")
+    print("=" * 50)
+    
+    try:
+        # Store counts before deletion
+        city_count = City.objects.count()
+        roomtype_count = RoomType.objects.count()
+        room_count = Room.objects.count()
+        department_count = Department.objects.count()
+        booking_count = Booking.objects.count()
+        faq_count = FAQ.objects.count()
+        joblisting_count = JobListing.objects.count()
+        jobapplication_count = JobApplication.objects.count()
+        
+        # Delete in correct order to respect foreign key constraints
+        print("🗑️  Deleting bookings...")
+        Booking.objects.all().delete()
+        
+        print("🗑️  Deleting job applications...")
+        JobApplication.objects.all().delete()
+        
+        print("🗑️  Deleting job listings...")
+        JobListing.objects.all().delete()
+        
+        print("🗑️  Deleting FAQs...")
+        FAQ.objects.all().delete()
+        
+        print("🗑️  Deleting rooms...")
+        Room.objects.all().delete()
+        
+        print("🗑️  Deleting room types...")
+        RoomType.objects.all().delete()
+        
+        print("🗑️  Deleting departments...")
+        Department.objects.all().delete()
+        
+        print("🗑️  Deleting cities...")
+        City.objects.all().delete()
+        
+        print("=" * 50)
+        print("✅ All data cleaned successfully!")
+        print(f"📊 Records deleted:")
+        print(f"   Cities: {city_count}")
+        print(f"   Room Types: {roomtype_count}")
+        print(f"   Rooms: {room_count}")
+        print(f"   Departments: {department_count}")
+        print(f"   Bookings: {booking_count}")
+        print(f"   FAQs: {faq_count}")
+        print(f"   Job Listings: {joblisting_count}")
+        print(f"   Job Applications: {jobapplication_count}")
+        
+        return True
+        
+    except Exception as e:
+        print(f"❌ Error cleaning data: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
 
 def ensure_folder_exists(folder_name):
     """Create folder if it doesn't exist"""
@@ -60,26 +123,26 @@ def create_missing_roomtypes():
     
     # Extended room types data for IDs 21-40
     extended_roomtypes = [
-        (21, "Family Connector", "Connecting rooms perfect for families", 598.00, 6, "family_connector.png"),
-        (22, "Presidential Corner", "Corner presidential suite with panoramic views", 899.00, 4, "presidential_corner.png"),
-        (23, "Royal Suite", "Ultimate luxury with royal treatment", 1299.00, 4, "royal_suite.png"),
-        (24, "Panoramic Suite", "Suite with breathtaking panoramic city views", 759.00, 3, "panoramic_suite.png"),
-        (25, "Bi-Level Suite", "Two-level suite with separate living areas", 899.00, 4, "bi_level_suite.png"),
-        (26, "Penthouse Suite", "Top-floor penthouse with exclusive amenities", 1199.00, 4, "penthouse_suite.png"),
-        (27, "Artist Loft", "Creative space with artistic decor", 429.00, 2, "artist_loft.png"),
-        (28, "Wellness Room", "Room focused on health and wellness features", 329.00, 2, "wellness_room.png"),
-        (29, "Quiet Zone King", "Soundproof room for maximum tranquility", 179.00, 2, "quiet_zone_king.png"),
-        (30, "Allergy Free King", "Hypoallergenic room for sensitive guests", 199.00, 2, "allergy_free_king.png"),
-        (31, "Pet Friendly King", "Room designed for guests with pets", 189.00, 2, "pet_friendly_king.png"),
-        (32, "Extended Stay Suite", "Suite with kitchenette for long-term stays", 379.00, 3, "extended_stay_suite.png"),
-        (33, "Club Level King", "King room with exclusive club access", 319.00, 2, "club_level_king.png"),
-        (34, "Club Level Suite", "Suite with exclusive club level privileges", 549.00, 3, "club_level_suite.png"),
-        (35, "Terrace Suite", "Suite with private outdoor terrace", 679.00, 3, "terrace_suite.png"),
-        (36, "Courtyard View King", "King room overlooking peaceful courtyard", 159.00, 2, "courtyard_view_king.png"),
-        (37, "Historic Room", "Room preserving historical architectural elements", 229.00, 2, "historic_room.png"),
-        (38, "Modern Loft", "Contemporary loft-style accommodation", 389.00, 2, "modern_loft.png"),
-        (39, "Traditional Room", "Classic decor with traditional furnishings", 169.00, 2, "traditional_room.png"),
-        (40, "Contemporary King", "Modern king room with sleek design", 209.00, 2, "contemporary_king.png")
+        (21, "Family Connector", "Connecting rooms perfect for families", 598.00, 6, "rooms/family_connector.png"),
+        (22, "Presidential Corner", "Corner presidential suite with panoramic views", 899.00, 4, "rooms/presidential_corner.png"),
+        (23, "Royal Suite", "Ultimate luxury with royal treatment", 1299.00, 4, "rooms/royal_suite.png"),
+        (24, "Panoramic Suite", "Suite with breathtaking panoramic city views", 759.00, 3, "rooms/panoramic_suite.png"),
+        (25, "Bi-Level Suite", "Two-level suite with separate living areas", 899.00, 4, "rooms/bi_level_suite.png"),
+        (26, "Penthouse Suite", "Top-floor penthouse with exclusive amenities", 1199.00, 4, "rooms/penthouse_suite.png"),
+        (27, "Artist Loft", "Creative space with artistic decor", 429.00, 2, "rooms/artist_loft.png"),
+        (28, "Wellness Room", "Room focused on health and wellness features", 329.00, 2, "rooms/wellness_room.png"),
+        (29, "Quiet Zone King", "Soundproof room for maximum tranquility", 179.00, 2, "rooms/quiet_zone_king.png"),
+        (30, "Allergy Free King", "Hypoallergenic room for sensitive guests", 199.00, 2, "rooms/allergy_free_king.png"),
+        (31, "Pet Friendly King", "Room designed for guests with pets", 189.00, 2, "rooms/pet_friendly_king.png"),
+        (32, "Extended Stay Suite", "Suite with kitchenette for long-term stays", 379.00, 3, "rooms/extended_stay_suite.png"),
+        (33, "Club Level King", "King room with exclusive club access", 319.00, 2, "rooms/club_level_king.png"),
+        (34, "Club Level Suite", "Suite with exclusive club level privileges", 549.00, 3, "rooms/club_level_suite.png"),
+        (35, "Terrace Suite", "Suite with private outdoor terrace", 679.00, 3, "rooms/terrace_suite.png"),
+        (36, "Courtyard View King", "King room overlooking peaceful courtyard", 159.00, 2, "rooms/courtyard_view_king.png"),
+        (37, "Historic Room", "Room preserving historical architectural elements", 229.00, 2, "rooms/historic_room.png"),
+        (38, "Modern Loft", "Contemporary loft-style accommodation", 389.00, 2, "rooms/modern_loft.png"),
+        (39, "Traditional Room", "Classic decor with traditional furnishings", 169.00, 2, "rooms/traditional_room.png"),
+        (40, "Contemporary King", "Modern king room with sleek design", 209.00, 2, "rooms/contemporary_king.png")
     ]
     
     created_count = 0
@@ -102,7 +165,7 @@ def create_missing_roomtypes():
 
 def import_city(filename):
     """
-    Import City data from CSV
+    Import City data from CSV with corrected image paths
     """
     try:
         filepath = os.path.join(CSV_FOLDER, filename)
@@ -117,11 +180,17 @@ def import_city(filename):
             
             for row in reader:
                 city_id = row['ID']
+                
+                # Handle image path - ensure it's in cities folder
+                image_filename = row['Image Filename'] if row['Image Filename'] else None
+                if image_filename and not image_filename.startswith('cities/'):
+                    image_filename = f"cities/{image_filename}"
+                
                 defaults = {
                     'name': row['Name'],
                     'description': row['Description'],
                     'is_active': row['Is Active'].lower() == 'true',
-                    'image': row['Image Filename'] if row['Image Filename'] else None
+                    'image': image_filename
                 }
                 
                 city, created = City.objects.update_or_create(
@@ -145,7 +214,7 @@ def import_city(filename):
 
 def import_roomtype(filename):
     """
-    Import RoomType data from CSV
+    Import RoomType data from CSV with corrected image paths
     """
     try:
         filepath = os.path.join(CSV_FOLDER, filename)
@@ -160,12 +229,18 @@ def import_roomtype(filename):
             
             for row in reader:
                 roomtype_id = row['ID']
+                
+                # Handle image path - ensure it's in rooms folder
+                image_filename = row['Image Filename'] if row['Image Filename'] else None
+                if image_filename and not image_filename.startswith('rooms/'):
+                    image_filename = f"rooms/{image_filename}"
+                
                 defaults = {
                     'name': row['Name'],
                     'description': row['Description'],
                     'price_per_night': float(row['Price Per Night']),
                     'capacity': int(row['Capacity']),
-                    'image': row['Image Filename'] if row['Image Filename'] else None
+                    'image': image_filename
                 }
                 
                 roomtype, created = RoomType.objects.update_or_create(
@@ -371,6 +446,10 @@ def import_all():
         records = import_function(filename)
         total_records += records
     
+    # Create missing room types if needed
+    print(f"\n🔧 Checking for missing room types...")
+    create_missing_roomtypes()
+    
     print(f"\n🎉 Import completed! {total_records} total records processed.")
     
     # Display final counts
@@ -450,44 +529,47 @@ def main():
         print("="*50)
         show_csv_files()
         print("="*50)
-        print("1. Import City")
-        print("2. Import Room Type")
-        print("3. Import Room")
-        print("4. Import Department")
-        print("5. Import All")
-        print("6. Check CSV Files")
-        print("7. Debug CSV Files")
-        print("8. Fix Department CSV")
-        print("9. Create Missing Room Types (21-40)")
-        print("10. Exit")
+        print("1. Clean All Data (Start Fresh)")
+        print("2. Import City")
+        print("3. Import Room Type")
+        print("4. Import Room")
+        print("5. Import Department")
+        print("6. Import All")
+        print("7. Check CSV Files")
+        print("8. Debug CSV Files")
+        print("9. Fix Department CSV")
+        print("10. Create Missing Room Types (21-40)")
+        print("11. Exit")
         print("="*50)
 
-        choice = input("\nSelect option (1-10): ").strip()
+        choice = input("\nSelect option (1-11): ").strip()
         
         if choice == '1':
-            import_city("import_city.csv")
+            clean_all_data()
         elif choice == '2':
-            import_roomtype("import_roomtype.csv")
+            import_city("import_city.csv")
         elif choice == '3':
-            import_room("import_room.csv")
+            import_roomtype("import_roomtype.csv")
         elif choice == '4':
-            import_department("import_department.csv")
+            import_room("import_room.csv")
         elif choice == '5':
-            import_all()
+            import_department("import_department.csv")
         elif choice == '6':
-            check_csv_files()
+            import_all()
         elif choice == '7':
+            check_csv_files()
+        elif choice == '8':
             filename = input("Enter CSV filename to debug: ").strip()
             debug_csv_file(filename)
-        elif choice == '8':
-            create_department_csv()
         elif choice == '9':
-            create_missing_roomtypes()
+            create_department_csv()
         elif choice == '10':
+            create_missing_roomtypes()
+        elif choice == '11':
             print("👋 Thank you for using ABC Hotels Import Manager!")
             break
         else:
-            print("❌ Invalid choice! Please select 1-10.")
+            print("❌ Invalid choice! Please select 1-11.")
 
         input("\nPress Enter to continue...")
 
@@ -501,6 +583,9 @@ if __name__ == "__main__":
             debug_csv_file(sys.argv[2])
         else:
             print("Usage: python import.py debug <filename>")
+    elif len(sys.argv) > 1 and sys.argv[1] == 'clean':
+        # Clean mode
+        clean_all_data()
     else:
         # Interactive mode
         main()
