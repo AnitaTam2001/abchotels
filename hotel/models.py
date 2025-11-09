@@ -12,27 +12,6 @@ class City(models.Model):
     def __str__(self):
         return self.name
 
-class RoomType(models.Model):  # MOVED BEFORE Room
-    name = models.CharField(max_length=100, unique=True)
-    description = models.TextField()
-    price_per_night = models.DecimalField(max_digits=8, decimal_places=2)
-    capacity = models.PositiveIntegerField()
-    image = models.ImageField(upload_to='rooms/', null=True, blank=True)
-
-    def __str__(self):
-        return f"{self.name} - ${self.price_per_night} (ID: {self.id})"
-
-    class Meta:
-        ordering = ['name']
-
-class Room(models.Model):
-    city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='rooms')
-    room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE)  # Now RoomType is defined
-    is_available = models.BooleanField(default=True)
-
-    def __str__(self):
-        return f"{self.room_type.name} - {self.city.name}"
-
 class Department(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
@@ -43,13 +22,34 @@ class Department(models.Model):
     class Meta:
         ordering = ['name']
 
+class RoomType(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField()
+    price_per_night = models.DecimalField(max_digits=8, decimal_places=2)
+    capacity = models.PositiveIntegerField()
+    image = models.ImageField(upload_to='rooms/', null=True, blank=True)
+
+    def __str__(self):
+        return self.name  # Changed to show only name
+
+    class Meta:
+        ordering = ['name']
+
+class Room(models.Model):
+    city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='rooms')
+    room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE)
+    is_available = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.room_type.name} - {self.city.name}"
+
 class Booking(models.Model):
     STATUS_CHOICES = [
         ('pending', 'Pending'),
         ('confirmed', 'Confirmed'),
         ('checked_in', 'Checked In'),
         ('checked_out', 'Checked Out'),
-        ('cancelled', 'Cancelled')
+        ('cancelled', 'Cancelled'),
     ]
 
     guest_name = models.CharField(max_length=100)
@@ -131,7 +131,7 @@ class JobApplication(models.Model):
         ('hired', 'Hired'),
     ]
 
-    job = models.ForeignKey(JobListing, on_delete=models.CASCADE, related_name='applications')  # Fixed typo: JobListing not lobListing
+    job = models.ForeignKey(JobListing, on_delete=models.CASCADE, related_name='applications')
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField()

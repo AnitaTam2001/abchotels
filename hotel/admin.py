@@ -1,46 +1,50 @@
-# hotel/admin.py (UPDATED VERSION)
+# hotel/admin.py
 from django.contrib import admin
 from django.utils.html import format_html
 from django import forms
-from .models import City, RoomType, Room, Booking, FAQ, Department, JobListing, JobApplication
+from .models import City, Department, RoomType, Room, Booking, FAQ, JobListing, JobApplication
 
 class CityAdminForm(forms.ModelForm):
     class Meta:
         model = City
         fields = '__all__'
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Make name field more prominent
         self.fields['name'].widget.attrs.update({'style': 'width: 80%; font-size: 14px;'})
         self.fields['description'].widget.attrs.update({'rows': 3})
 
 class CityAdmin(admin.ModelAdmin):
     form = CityAdminForm
     list_display = ['id', 'name', 'is_active', 'image_preview']
-    list_display_links = ['id', 'name']  # Make both ID and name clickable
+    list_display_links = ['id', 'name']
     list_filter = ['is_active']
     search_fields = ['name']
     readonly_fields = ['image_preview_large']
     list_per_page = 20
-    
+
     def image_preview(self, obj):
         if obj.image:
             return format_html('<img src="{}" style="max-height: 50px; max-width: 50px; border-radius: 4px;" />', obj.image.url)
         return "No image"
     image_preview.short_description = 'Preview'
-    
+
     def image_preview_large(self, obj):
         if obj.image:
             return format_html('<img src="{}" style="max-height: 200px; border-radius: 8px;" />', obj.image.url)
         return "No image"
     image_preview_large.short_description = 'Image Preview'
 
+class DepartmentAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'description']
+    search_fields = ['name']
+    list_per_page = 20
+
 class RoomTypeAdminForm(forms.ModelForm):
     class Meta:
         model = RoomType
         fields = '__all__'
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['name'].widget.attrs.update({'style': 'width: 80%; font-size: 14px;'})
@@ -50,18 +54,18 @@ class RoomTypeAdminForm(forms.ModelForm):
 class RoomTypeAdmin(admin.ModelAdmin):
     form = RoomTypeAdminForm
     list_display = ['id', 'name', 'price_per_night', 'capacity', 'image_preview']
-    list_display_links = ['id', 'name']  # Make both ID and name clickable
+    list_display_links = ['id', 'name']
     list_filter = ['capacity']
     search_fields = ['name']
     readonly_fields = ['image_preview_large']
     list_per_page = 20
-    
+
     def image_preview(self, obj):
         if obj.image:
             return format_html('<img src="{}" style="max-height: 50px; max-width: 50px; border-radius: 4px;" />', obj.image.url)
         return "No image"
     image_preview.short_description = 'Preview'
-    
+
     def image_preview_large(self, obj):
         if obj.image:
             return format_html('<img src="{}" style="max-height: 200px; border-radius: 8px;" />', obj.image.url)
@@ -72,44 +76,43 @@ class RoomAdminForm(forms.ModelForm):
     class Meta:
         model = Room
         fields = '__all__'
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Improve dropdown styling
         self.fields['city'].widget.attrs.update({'style': 'width: 300px;'})
         self.fields['room_type'].widget.attrs.update({'style': 'width: 300px;'})
 
 class RoomAdmin(admin.ModelAdmin):
     form = RoomAdminForm
-    list_display = ['id', 'city', 'room_type', 'price_per_night', 'capacity', 'is_available', 'image_preview']
-    list_display_links = ['id', 'city']  # Make ID and city clickable
+    list_display = ['id', 'city', 'room_type', 'price_per_night', 'capacity', 'is_available', 'room_image_preview']
+    list_display_links = ['id', 'city']
     list_filter = ['room_type', 'is_available', 'city']
     search_fields = ['city__name', 'room_type__name']
-    readonly_fields = ['image_preview_large']
+    readonly_fields = ['room_image_preview_large']
     list_per_page = 20
-    list_select_related = ['city', 'room_type']  # Optimize database queries
-    
+    list_select_related = ['city', 'room_type']
+
     def price_per_night(self, obj):
         return f"${obj.room_type.price_per_night}"
     price_per_night.short_description = 'Price Per Night'
     price_per_night.admin_order_field = 'room_type__price_per_night'
-    
+
     def capacity(self, obj):
         return obj.room_type.capacity
     capacity.short_description = 'Capacity'
     capacity.admin_order_field = 'room_type__capacity'
-    
-    def image_preview(self, obj):
+
+    def room_image_preview(self, obj):
         if obj.room_type.image:
             return format_html('<img src="{}" style="max-height: 50px; max-width: 50px; border-radius: 4px;" />', obj.room_type.image.url)
         return "No image"
-    image_preview.short_description = 'Room Image'
-    
-    def image_preview_large(self, obj):
+    room_image_preview.short_description = 'Room Image'
+
+    def room_image_preview_large(self, obj):
         if obj.room_type.image:
             return format_html('<img src="{}" style="max-height: 200px; border-radius: 8px;" />', obj.room_type.image.url)
         return "No image"
-    image_preview_large.short_description = 'Room Image Preview'
+    room_image_preview_large.short_description = 'Room Image Preview'
 
 class BookingAdmin(admin.ModelAdmin):
     list_display = ['id', 'guest_name', 'room', 'check_in', 'check_out', 'status']
@@ -124,11 +127,6 @@ class FAQAdmin(admin.ModelAdmin):
     list_filter = ['category', 'is_active']
     search_fields = ['question', 'answer']
     list_editable = ['order', 'is_active']
-    list_per_page = 20
-
-class DepartmentAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'description']
-    search_fields = ['name']
     list_per_page = 20
 
 class JobListingAdmin(admin.ModelAdmin):
@@ -152,10 +150,10 @@ class JobApplicationAdmin(admin.ModelAdmin):
 
 # Register models
 admin.site.register(City, CityAdmin)
+admin.site.register(Department, DepartmentAdmin)
 admin.site.register(RoomType, RoomTypeAdmin)
 admin.site.register(Room, RoomAdmin)
 admin.site.register(Booking, BookingAdmin)
 admin.site.register(FAQ, FAQAdmin)
-admin.site.register(Department, DepartmentAdmin)
 admin.site.register(JobListing, JobListingAdmin)
 admin.site.register(JobApplication, JobApplicationAdmin)
