@@ -1,6 +1,4 @@
-# templates/city_detail.html
-def get_city_detail_html():
-    return '''<!-- templates/city_detail.html -->
+<!-- templates/city_detail.html -->
 {% extends 'base.html' %}
 {% load static %}
 
@@ -11,41 +9,43 @@ def get_city_detail_html():
         <div style="position: relative; margin-bottom: 3rem;">
             <div style="height: 400px; overflow: hidden; border-radius: 15px;">
                 {% if city.name == 'New York' %}
-                <img src="{% static 'images/cities/new_york.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                <img src="{% static 'cities/new_york.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
                 {% elif city.name == 'London' %}
-                <img src="{% static 'images/cities/london.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                <img src="{% static 'cities/london.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
                 {% elif city.name == 'Paris' %}
-                <img src="{% static 'images/cities/paris.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                <img src="{% static 'cities/paris.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
                 {% elif city.name == 'Tokyo' %}
-                <img src="{% static 'images/cities/tokyo.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                <img src="{% static 'cities/tokyo.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
                 {% elif city.name == 'Singapore' %}
-                <img src="{% static 'images/cities/singapore.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                <img src="{% static 'cities/singapore.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
                 {% elif city.name == 'Sydney' %}
-                <img src="{% static 'images/cities/sydney.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                <img src="{% static 'cities/sydney.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
                 {% elif city.name == 'Rome' %}
-                <img src="{% static 'images/cities/rome.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                <img src="{% static 'cities/rome.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
                 {% elif city.name == 'Barcelona' %}
-                <img src="{% static 'images/cities/barcelona.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                <img src="{% static 'cities/barcelona.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                {% elif city.name == 'Bangkok' %}
+                <img src="{% static 'cities/bangkok.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
                 {% elif city.name == 'Los Angeles' %}
-                <img src="{% static 'images/cities/los_angeles.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                {% elif city.name == 'Miami' %}
-                <img src="{% static 'images/cities/miami.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                {% elif city.name == 'Las Vegas' %}
-                <img src="{% static 'images/cities/las_vegas.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                {% elif city.name == 'Chicago' %}
-                <img src="{% static 'images/cities/chicago.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                {% elif city.name == 'San Francisco' %}
-                <img src="{% static 'images/cities/san_francisco.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                <img src="{% static 'cities/los_angeles.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
                 {% elif city.name == 'Amsterdam' %}
-                <img src="{% static 'images/cities/amsterdam.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                {% elif city.name == 'Vienna' %}
-                <img src="{% static 'images/cities/vienna.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                {% elif city.name == 'Prague' %}
-                <img src="{% static 'images/cities/prague.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                <img src="{% static 'cities/amsterdam.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                {% elif city.name == 'Istanbul' %}
+                <img src="{% static 'cities/istanbul.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
                 {% elif city.name == 'Hong Kong' %}
-                <img src="{% static 'images/cities/hong_kong.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                <img src="{% static 'cities/hong_kong.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                {% elif city.name == 'Miami' %}
+                <img src="{% static 'cities/miami.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                {% elif city.name == 'Prague' %}
+                <img src="{% static 'cities/prague.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                {% elif city.name == 'Vienna' %}
+                <img src="{% static 'cities/vienna.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                {% elif city.name == 'Kyoto' %}
+                <img src="{% static 'cities/kyoto.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                {% elif city.name == 'Dubai' %}
+                <img src="{% static 'cities/dubai.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
                 {% else %}
-                <img src="{% static 'images/cities/default.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                <img src="{% static 'cities/default.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
                 {% endif %}
             </div>
             <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.7)); padding: 2rem; color: white;">
@@ -101,7 +101,7 @@ def get_city_detail_html():
                         <label class="filter-label" style="font-weight: bold; margin-bottom: 0.5rem; color: #2c3e50; font-size: 0.9rem;">Rooms</label>
                         <select name="rooms" class="filter-select" style="padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px; font-size: 0.9rem; width: 100%;">
                             <option value="">Any</option>
-                            <option value="1" {% if selected_rooms == "1" %}selected{% endif %}>1 Room</option>
+                            <option value="1" {% if selected_rooms == "1" %}selected{% endif %}>1 Rooms</option>
                             <option value="2" {% if selected_rooms == "2" %}selected{% endif %}>2 Rooms</option>
                             <option value="3" {% if selected_rooms == "3" %}selected{% endif %}>3 Rooms</option>
                             <option value="4" {% if selected_rooms == "4" %}selected{% endif %}>4+ Rooms</option>
@@ -110,7 +110,7 @@ def get_city_detail_html():
 
                     <!-- Buttons -->
                     <div class="filter-group button-group" style="display: flex; gap: 0.5rem; min-width: 200px;">
-                        <button type="submit" class="filter-btn" style="background: #e74c3c; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 5px; cursor: pointer; font-size: 0.9rem; transition: background 0.3s; flex: 1;">
+                        <button type="submit" class="filter-btn" style="background: #c74c3c; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 5px; cursor: pointer; font-size: 0.9rem; transition: background 0.3s; flex: 1;">
                             Search Rooms
                         </button>
                         <a href="{% url 'city_detail' city.id %}" class="btn clear-btn" style="background: #95a5a6; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 5px; border: none; cursor: pointer; font-size: 0.9rem; transition: background 0.3s; text-align: center; display: inline-block; flex: 1;">
@@ -124,31 +124,32 @@ def get_city_detail_html():
         <!-- Available Rooms Section -->
         <div style="margin-bottom: 3rem;">
             <h2 style="margin-bottom: 2rem; color: #2c3e50;">Available Room Types in {{ city.name }}</h2>
+
             {% if room_types %}
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem;">
                 {% for room_type in room_types %}
                 <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid #f0f0f0;">
                     <div style="height: 200px; overflow: hidden;">
-                        {% if room_type.name == 'Standard King' %}
-                        <img src="{% static 'images/rooms/standard_king.png' %}" alt="{{ room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                        {% elif room_type.name == 'Standard Twin' %}
-                        <img src="{% static 'images/rooms/standard_twin.png' %}" alt="{{ room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                        {% elif room_type.name == 'Deluxe King' %}
-                        <img src="{% static 'images/rooms/deluxe_king.png' %}" alt="{{ room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                        {% elif room_type.name == 'Deluxe Suite' %}
-                        <img src="{% static 'images/rooms/deluxe_suite.png' %}" alt="{{ room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                        {% elif room_type.name == 'Executive King' %}
-                        <img src="{% static 'images/rooms/executive_king.png' %}" alt="{{ room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                        {% elif room_type.name == 'Executive Suite' %}
-                        <img src="{% static 'images/rooms/executive_suite.png' %}" alt="{{ room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                        {% elif room_type.name == 'Presidential Suite' %}
-                        <img src="{% static 'images/rooms/presidential_suite.png' %}" alt="{{ room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                        {% elif room_type.name == 'Family Suite' %}
-                        <img src="{% static 'images/rooms/family_suite.png' %}" alt="{{ room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                        {% elif room_type.name == 'Honeymoon Suite' %}
-                        <img src="{% static 'images/rooms/honeymoon_suite.png' %}" alt="{{ room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% if room_type.name == 'Accessible King' %}
+                        <img src="{% static 'rooms/accessible_king.jpg' %}" alt="{{ room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% elif room_type.name == 'Junior Suite' %}
+                        <img src="{% static 'rooms/junior_suite.jpg' %}" alt="{{ room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% elif room_type.name == 'Pool View King' %}
+                        <img src="{% static 'rooms/junior_suite.jpg' %}" alt="{{ room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% elif room_type.name == 'City View Twin' %}
+                        <img src="{% static 'rooms/cityview_twin.jpg' %}" alt="{{ room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% elif room_type.name == 'Corner Suite' %}
+                        <img src="{% static 'rooms/corner_suite.jpg' %}" alt="{{ room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% elif room_type.name == 'Studio King' %}
+                        <img src="{% static 'rooms/studio_king.jpg' %}" alt="{{ room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% elif room_type.name == 'Connecting Family' %}
+                        <img src="{% static 'rooms/connecting_family.jpg' %}" alt="{{ room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% elif room_type.name == 'Garden View Queen' %}
+                        <img src="{% static 'rooms/garden_queen.jpg' %}" alt="{{ room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% elif room_type.name == 'Penthouse Suite' %}
+                        <img src="{% static 'rooms/penthouse_suite.jpg' %}" alt="{{ room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
                         {% else %}
-                        <img src="{% static 'images/rooms/standard_king.png' %}" alt="{{ room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        <img src="{% static 'rooms/accessible_king.jpg' %}" alt="{{ room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
                         {% endif %}
                     </div>
                     <div style="padding: 1.5rem;">
@@ -161,7 +162,7 @@ def get_city_detail_html():
                             </div>
                             <div style="color: #666;">{{ room_type.capacity }} person{{ room_type.capacity|pluralize }}</div>
                         </div>
-                        <a href="{% url 'room_detail' room_type.id %}" class="btn" style="width: 100%; text-align: center; background: #3498db; color: white; padding: 12px; border-radius: 6px; text-decoration: none; display: block;">
+                        <a href="{% url 'room_type_detail' room_type.id %}" class="btn" style="width: 100%; text-align: center; background: #3498db; color: white; padding: 12px; border-radius: 6px; text-decoration: none; display: block;">
                             View Available Rooms
                         </a>
                     </div>
@@ -188,7 +189,7 @@ def get_city_detail_html():
         background-color: #c0392b !important;
     }
     .clear-btn:hover {
-        background-color: #7f8c8d !important;
+        background-color: #778c8d !important;
     }
 </style>
-{% endblock %}'''
+{% endblock %}

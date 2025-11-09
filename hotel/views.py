@@ -12,7 +12,7 @@ from .models import City, RoomType, Room, Booking, FAQ, JobListing
 
 def home(request):
     featured_cities = City.objects.filter(is_active=True).annotate(
-        room_count=Count('rooms', filter=Q(rooms__is_available=True))  # Changed 'room' to 'rooms'
+        room_count=Count('rooms', filter=Q(rooms__is_available=True))
     )[:3]
     context = {
         'featured_cities': featured_cities,
@@ -20,8 +20,8 @@ def home(request):
     return render(request, 'home.html', context)
 
 def room_list(request):
-    # Get all active cities for the filter dropdown
-    all_cities = City.objects.filter(is_active=True)
+    # Get all active cities for the filter dropdown - ORDER BY NAME ASCENDING
+    all_cities = City.objects.filter(is_active=True).order_by('name')  # Added order_by
 
     # Get filter parameters
     selected_city = request.GET.get('city', '')
@@ -39,9 +39,9 @@ def room_list(request):
 
     # Annotate with room count and starting price
     cities = cities.annotate(
-        room_count=Count('rooms', filter=Q(rooms__is_available=True)),  # Changed 'room' to 'rooms'
-        starting_price=Min('rooms__room_type__price_per_night')  # Changed 'room' to 'rooms'
-    ).order_by('name')
+        room_count=Count('rooms', filter=Q(rooms__is_available=True)),
+        starting_price=Min('rooms__room_type__price_per_night')
+    ).order_by('name')  # This ensures the main results are also ordered by name
 
     # Filter by minimum room count if specified
     if selected_rooms:
@@ -55,7 +55,7 @@ def room_list(request):
 
     context = {
         'cities': cities_page,
-        'all_cities': all_cities,
+        'all_cities': all_cities,  # This will now be in alphabetical order
         'selected_city': selected_city,
         'selected_check_in': selected_check_in,
         'selected_check_out': selected_check_out,
@@ -75,20 +75,20 @@ def city_detail(request, city_id):
 
     # Get available room types for this city
     room_types = RoomType.objects.filter(
-        rooms__city=city,  # Changed 'room' to 'rooms'
-        rooms__is_available=True  # Changed 'room' to 'rooms'
+        room__city=city,
+        room__is_available=True
     ).distinct()
 
     # Apply room type filters based on capacity
     if selected_guests:
         room_types = room_types.filter(capacity__gte=int(selected_guests))
 
-    # Get other cities for the "Explore Other Destinations" section
+    # Get other cities for the "Explore Other Destinations" section - ORDER BY NAME
     other_cities = City.objects.filter(
         is_active=True
     ).exclude(id=city_id).annotate(
-        room_count=Count('rooms', filter=Q(rooms__is_available=True))  # Changed 'room' to 'rooms'
-    )[:6]  # Limit to 6 cities
+        room_count=Count('rooms', filter=Q(rooms__is_available=True))
+    ).order_by('name')[:6]  # Added order_by
 
     context = {
         'city': city,
@@ -119,13 +119,13 @@ def room_type_detail(request, room_type_id):
 
 def room_detail(request, room_id):
     room = get_object_or_404(Room, id=room_id, is_available=True)
-    
+
     # Get similar rooms for recommendations
     similar_rooms = Room.objects.filter(
         room_type=room.room_type,
         is_available=True
     ).exclude(id=room_id)[:4]
-    
+
     context = {
         'room': room,
         'similar_rooms': similar_rooms,
@@ -169,7 +169,6 @@ def booking_form(request, room_id):
                     total_price=total_price,
                     status='pending'
                 )
-
                 # Mark room as unavailable
                 room.is_available = False
                 room.save()
