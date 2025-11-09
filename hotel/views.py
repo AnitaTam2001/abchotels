@@ -12,9 +12,8 @@ from .models import City, RoomType, Room, Booking, FAQ, JobListing
 
 def home(request):
     featured_cities = City.objects.filter(is_active=True).annotate(
-        room_count=Count('room', filter=Q(room__is_available=True))
+        room_count=Count('rooms', filter=Q(rooms__is_available=True))  # Changed 'room' to 'rooms'
     )[:3]
-    
     context = {
         'featured_cities': featured_cities,
     }
@@ -23,37 +22,37 @@ def home(request):
 def room_list(request):
     # Get all active cities for the filter dropdown
     all_cities = City.objects.filter(is_active=True)
-    
+
     # Get filter parameters
     selected_city = request.GET.get('city', '')
     selected_check_in = request.GET.get('check_in', '')
     selected_check_out = request.GET.get('check_out', '')
     selected_guests = request.GET.get('guests', '')
     selected_rooms = request.GET.get('rooms', '')
-    
+
     # Start with all active cities
     cities = City.objects.filter(is_active=True)
-    
+
     # Apply filters
     if selected_city:
         cities = cities.filter(name__icontains=selected_city)
-    
+
     # Annotate with room count and starting price
     cities = cities.annotate(
-        room_count=Count('room', filter=Q(room__is_available=True)),
-        starting_price=Min('room__room_type__price_per_night')
+        room_count=Count('rooms', filter=Q(rooms__is_available=True)),  # Changed 'room' to 'rooms'
+        starting_price=Min('rooms__room_type__price_per_night')  # Changed 'room' to 'rooms'
     ).order_by('name')
-    
+
     # Filter by minimum room count if specified
     if selected_rooms:
         min_rooms = int(selected_rooms)
         cities = cities.filter(room_count__gte=min_rooms)
-    
+
     # Pagination
     paginator = Paginator(cities, 12)  # Show 12 cities per page
     page_number = request.GET.get('page')
     cities_page = paginator.get_page(page_number)
-    
+
     context = {
         'cities': cities_page,
         'all_cities': all_cities,
@@ -63,35 +62,34 @@ def room_list(request):
         'selected_guests': selected_guests,
         'selected_rooms': selected_rooms,
     }
-    
     return render(request, 'room_list.html', context)
 
 def city_detail(request, city_id):
     city = get_object_or_404(City, id=city_id, is_active=True)
-    
+
     # Get filter parameters for the city-specific filter
     selected_check_in = request.GET.get('check_in', '')
     selected_check_out = request.GET.get('check_out', '')
     selected_guests = request.GET.get('guests', '')
     selected_rooms = request.GET.get('rooms', '')
-    
+
     # Get available room types for this city
     room_types = RoomType.objects.filter(
-        room__city=city,
-        room__is_available=True
+        rooms__city=city,  # Changed 'room' to 'rooms'
+        rooms__is_available=True  # Changed 'room' to 'rooms'
     ).distinct()
-    
+
     # Apply room type filters based on capacity
     if selected_guests:
         room_types = room_types.filter(capacity__gte=int(selected_guests))
-    
+
     # Get other cities for the "Explore Other Destinations" section
     other_cities = City.objects.filter(
         is_active=True
     ).exclude(id=city_id).annotate(
-        room_count=Count('room', filter=Q(room__is_available=True))
+        room_count=Count('rooms', filter=Q(rooms__is_available=True))  # Changed 'room' to 'rooms'
     )[:6]  # Limit to 6 cities
-    
+
     context = {
         'city': city,
         'room_types': room_types,
@@ -102,29 +100,42 @@ def city_detail(request, city_id):
         'selected_rooms': selected_rooms,
         'today': date.today().isoformat(),
     }
-    
     return render(request, 'city_detail.html', context)
 
-def room_detail(request, room_type_id):
+def room_type_detail(request, room_type_id):
     room_type = get_object_or_404(RoomType, id=room_type_id)
-    
+
     # Get available rooms of this type
     available_rooms = Room.objects.filter(
         room_type=room_type,
         is_available=True
     )
-    
     context = {
         'room_type': room_type,
         'available_rooms': available_rooms,
         'today': date.today().isoformat(),
     }
+    return render(request, 'room_type_detail.html', context)
+
+def room_detail(request, room_id):
+    room = get_object_or_404(Room, id=room_id, is_available=True)
     
+    # Get similar rooms for recommendations
+    similar_rooms = Room.objects.filter(
+        room_type=room.room_type,
+        is_available=True
+    ).exclude(id=room_id)[:4]
+    
+    context = {
+        'room': room,
+        'similar_rooms': similar_rooms,
+        'today': date.today().isoformat(),
+    }
     return render(request, 'room_detail.html', context)
 
 def booking_form(request, room_id):
     room = get_object_or_404(Room, id=room_id, is_available=True)
-    
+
     if request.method == 'POST':
         # Process booking form
         guest_name = request.POST.get('guest_name')
@@ -132,12 +143,12 @@ def booking_form(request, room_id):
         guest_phone = request.POST.get('guest_phone')
         check_in = request.POST.get('check_in')
         check_out = request.POST.get('check_out')
-        
+
         # Validate dates
         try:
             check_in_date = datetime.strptime(check_in, '%Y-%m-%d').date()
             check_out_date = datetime.strptime(check_out, '%Y-%m-%d').date()
-            
+
             if check_in_date >= check_out_date:
                 messages.error(request, 'Check-out date must be after check-in date.')
             elif check_in_date < date.today():
@@ -146,7 +157,7 @@ def booking_form(request, room_id):
                 # Calculate total price
                 nights = (check_out_date - check_in_date).days
                 total_price = room.room_type.price_per_night * nights
-                
+
                 # Create booking
                 booking = Booking.objects.create(
                     guest_name=guest_name,
@@ -158,22 +169,21 @@ def booking_form(request, room_id):
                     total_price=total_price,
                     status='pending'
                 )
-                
+
                 # Mark room as unavailable
                 room.is_available = False
                 room.save()
-                
+
                 messages.success(request, f'Booking confirmed! Your booking reference is #{booking.id}')
                 return redirect('home')
-                
+
         except ValueError:
             messages.error(request, 'Invalid date format.')
-    
+
     context = {
         'room': room,
         'today': date.today().isoformat(),
     }
-    
     return render(request, 'booking_form.html', context)
 
 def about(request):
@@ -185,11 +195,11 @@ def contact(request):
         name = request.POST.get('name')
         email = request.POST.get('email')
         message = request.POST.get('message')
-        
+
         # Here you would typically send an email
         messages.success(request, 'Thank you for your message! We will get back to you soon.')
         return redirect('contact')
-    
+
     return render(request, 'contact.html')
 
 def faq(request):
@@ -215,7 +225,7 @@ def job_detail(request, job_id):
 
 def job_application(request, job_id):
     job = get_object_or_404(JobListing, id=job_id, is_active=True)
-    
+
     if request.method == 'POST':
         # Process job application form
         first_name = request.POST.get('first_name')
@@ -223,11 +233,11 @@ def job_application(request, job_id):
         email = request.POST.get('email')
         phone = request.POST.get('phone')
         cover_letter = request.POST.get('cover_letter')
-        
+
         # Here you would typically save the application and handle file uploads
         messages.success(request, f'Thank you for applying to {job.title}! We will review your application.')
         return redirect('careers')
-    
+
     context = {
         'job': job,
     }
@@ -279,7 +289,7 @@ def dashboard(request):
         bookings = Booking.objects.filter(guest_email=request.user.email)
     else:
         bookings = []
-    
+
     context = {
         'bookings': bookings,
     }

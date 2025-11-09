@@ -7,7 +7,9 @@ from . import views
 urlpatterns = [
     path('', views.home, name='home'),
     path('rooms/', views.room_list, name='room_list'),
-    path('city/<int:city_id>/', views.city_detail, name='city_detail'),
+    path('cities/<int:city_id>/', views.city_detail, name='city_detail'),  # Fixed: changed from city_rooms to city_detail
+    path('room-types/<int:room_type_id>/', views.room_type_detail, name='room_type_detail'),
+    path('rooms/<int:room_id>/', views.room_detail, name='room_detail'),
     path('booking/<int:room_id>/', views.booking_form, name='booking_form'),
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
@@ -20,7 +22,6 @@ urlpatterns = [
     path('login/', views.user_login, name='login'),
     path('logout/', views.user_logout, name='logout'),
     path('profile/', views.profile, name='profile'),
-    path('room-type/<int:room_type_id>/', views.room_detail, name='room_detail'),
     path('dashboard/', views.dashboard, name='dashboard'),
 ]
 
