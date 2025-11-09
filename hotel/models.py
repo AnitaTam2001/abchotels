@@ -39,6 +39,7 @@ class Room(models.Model):
     city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='rooms')
     room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE)
     is_available = models.BooleanField(default=True)
+    image = models.ImageField(upload_to='room_images/', blank=True, null=True, verbose_name='Room Specific Image')
 
     def __str__(self):
         return f"{self.room_type.name} - {self.city.name}"

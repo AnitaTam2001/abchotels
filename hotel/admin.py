@@ -1,4 +1,4 @@
-# hotel/admin.py
+# hote1/admin.py
 from django.contrib import admin
 from django.utils.html import format_html
 from django import forms
@@ -11,7 +11,7 @@ class CityAdminForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['name'].widget.attrs.update({'style': 'width: 80%; font-size: 14px;'})  # Fixed: added missing quote
+        self.fields['name'].widget.attrs.update({'style': 'width: 80%; font-size: 14px;'}) # Fixed: added missing quote
         self.fields['description'].widget.attrs.update({'rows': 3})
 
 class CityAdmin(admin.ModelAdmin):
@@ -47,7 +47,7 @@ class RoomTypeAdminForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['name'].widget.attrs.update({'style': 'width: 80%; font-size: 14px;'})  # Fixed: added missing quote
+        self.fields['name'].widget.attrs.update({'style': 'width: 80%; font-size: 14px;'}) # Fixed: added missing quote
         self.fields['description'].widget.attrs.update({'rows': 3})
         self.fields['price_per_night'].widget.attrs.update({'style': 'width: 150px;'})
 
@@ -79,40 +79,53 @@ class RoomAdminForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['city'].widget.attrs.update({'style': 'width: 300px;'})  # Fixed: added missing quote
-        self.fields['room_type'].widget.attrs.update({'style': 'width: 300px;'})  # Fixed: added missing quote
+        self.fields['city'].widget.attrs.update({'style': 'width: 300px;'}) # Fixed: added missing quote
+        self.fields['room_type'].widget.attrs.update({'style': 'width: 300px;'}) # Fixed: added missing quote
 
 class RoomAdmin(admin.ModelAdmin):
     form = RoomAdminForm
-    list_display = ['id', 'city', 'room_type', 'price_per_night', 'capacity', 'is_available', 'room_image_preview']
+    list_display = ['id', 'city', 'room_type', 'price_per_night', 'capacity', 'is_available', 'room_image_preview', 'room_specific_image_preview']
     list_display_links = ['id', 'city']
     list_filter = ['room_type', 'is_available', 'city']
-    search_fields = ['city__name', 'room_type__name']  # Fixed: changed to __ instead of _
-    readonly_fields = ['room_image_preview_large']
+    search_fields = ['city__name', 'room_type__name'] # Fixed: changed to __
+    readonly_fields = ['room_image_preview_large', 'room_specific_image_preview_large']
     list_per_page = 20
     list_select_related = ['city', 'room_type']
-
+    
     def price_per_night(self, obj):
-        return f"${obj.room_type.price_per_night}"  # Fixed: added closing quote
+        return f"${obj.room_type.price_per_night}" # Fixed: added closing quote
     price_per_night.short_description = 'Price Per Night'
-    price_per_night.admin_order_field = 'room_type__price_per_night'  # Fixed: changed to __
+    price_per_night.admin_order_field = 'room_type__price_per_night' # Fixed: changed to __
 
     def capacity(self, obj):
         return obj.room_type.capacity
     capacity.short_description = 'Capacity'
-    capacity.admin_order_field = 'room_type__capacity'  # Fixed: changed to __
+    capacity.admin_order_field = 'room_type__capacity' # Fixed: changed to __
 
     def room_image_preview(self, obj):
         if obj.room_type.image:
             return format_html('<img src="{}" style="max-height: 50px; max-width: 50px; border-radius: 4px;" />', obj.room_type.image.url)
         return "No image"
-    room_image_preview.short_description = 'Room Image'
+    room_image_preview.short_description = 'Room Type Image'
 
     def room_image_preview_large(self, obj):
         if obj.room_type.image:
             return format_html('<img src="{}" style="max-height: 200px; border-radius: 8px;" />', obj.room_type.image.url)
         return "No image"
-    room_image_preview_large.short_description = 'Room Image Preview'
+    room_image_preview_large.short_description = 'Room Type Image Preview'
+
+    # New methods for room-specific image
+    def room_specific_image_preview(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" style="max-height: 50px; max-width: 50px; border-radius: 4px;" />', obj.image.url)
+        return "No specific image"
+    room_specific_image_preview.short_description = 'Room Specific Image'
+
+    def room_specific_image_preview_large(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" style="max-height: 200px; border-radius: 8px;" />', obj.image.url)
+        return "No specific image"
+    room_specific_image_preview_large.short_description = 'Room Specific Image Preview'
 
 class BookingAdmin(admin.ModelAdmin):
     list_display = ['id', 'guest_name', 'room', 'check_in', 'check_out', 'status']
@@ -120,7 +133,7 @@ class BookingAdmin(admin.ModelAdmin):
     search_fields = ['guest_name', 'guest_email']
     date_hierarchy = 'created_at'
     list_per_page = 20
-    list_select_related = ['room', 'room__city', 'room__room_type']  # Fixed: changed to __
+    list_select_related = ['room', 'room__city', 'room__room_type'] # Fixed: changed to __
 
 class FAQAdmin(admin.ModelAdmin):
     list_display = ['id', 'question', 'category', 'order', 'is_active']
@@ -146,7 +159,7 @@ class JobApplicationAdmin(admin.ModelAdmin):
     readonly_fields = ['applied_date']
     date_hierarchy = 'applied_date'
     list_per_page = 20
-    list_select_related = ['job', 'job__department']  # Fixed: changed to __
+    list_select_related = ['job', 'job__department'] # Fixed: changed to __
 
 # Register models
 admin.site.register(City, CityAdmin)
