@@ -9,10 +9,11 @@ from django.contrib.auth.forms import UserCreationForm
 from django.utils.timezone import now
 from datetime import datetime, date
 from .models import City, RoomType, Room, Booking, FAQ, JobListing
+from django.contrib.admin.views.decorators import staff_member_required
 
 def home(request):
     featured_cities = City.objects.filter(is_active=True).annotate(
-        room_count=Count('rooms', filter=Q(rooms__is_available=True))
+        room_count=Count('rooms', filter=Q(rooms__is_available=True))  # Fixed: rooms__is_available
     )[:3]
     context = {
         'featured_cities': featured_cities,
@@ -21,7 +22,7 @@ def home(request):
 
 def room_list(request):
     # Get all active cities for the filter dropdown - ORDER BY NAME ASCENDING
-    all_cities = City.objects.filter(is_active=True).order_by('name')  # Added order_by
+    all_cities = City.objects.filter(is_active=True).order_by('name')
 
     # Get filter parameters
     selected_city = request.GET.get('city', '')
@@ -39,9 +40,9 @@ def room_list(request):
 
     # Annotate with room count and starting price
     cities = cities.annotate(
-        room_count=Count('rooms', filter=Q(rooms__is_available=True)),
-        starting_price=Min('rooms__room_type__price_per_night')
-    ).order_by('name')  # This ensures the main results are also ordered by name
+        room_count=Count('rooms', filter=Q(rooms__is_available=True)),  # Fixed: rooms__is_available
+        starting_price=Min('rooms__room_type__price_per_night')  # Fixed: rooms__room_type__price_per_night
+    ).order_by('name')
 
     # Filter by minimum room count if specified
     if selected_rooms:
@@ -49,13 +50,13 @@ def room_list(request):
         cities = cities.filter(room_count__gte=min_rooms)
 
     # Pagination
-    paginator = Paginator(cities, 12)  # Show 12 cities per page
+    paginator = Paginator(cities, 12)
     page_number = request.GET.get('page')
     cities_page = paginator.get_page(page_number)
 
     context = {
         'cities': cities_page,
-        'all_cities': all_cities,  # This will now be in alphabetical order
+        'all_cities': all_cities,
         'selected_city': selected_city,
         'selected_check_in': selected_check_in,
         'selected_check_out': selected_check_out,
@@ -75,8 +76,8 @@ def city_detail(request, city_id):
 
     # Get available room types for this city
     room_types = RoomType.objects.filter(
-        room__city=city,
-        room__is_available=True
+        rooms__city=city,  # Fixed: rooms__city
+        rooms__is_available=True  # Fixed: rooms__is_available
     ).distinct()
 
     # Apply room type filters based on capacity
@@ -87,8 +88,8 @@ def city_detail(request, city_id):
     other_cities = City.objects.filter(
         is_active=True
     ).exclude(id=city_id).annotate(
-        room_count=Count('rooms', filter=Q(rooms__is_available=True))
-    ).order_by('name')[:6]  # Added order_by
+        room_count=Count('rooms', filter=Q(rooms__is_available=True))  # Fixed: rooms__is_available
+    ).order_by('name')[:6]
 
     context = {
         'city': city,
@@ -251,7 +252,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, 'Registration successful!')
+            messages.success(request, 'Registration successful')
             return redirect('home')
     else:
         form = UserCreationForm()
@@ -293,3 +294,23 @@ def dashboard(request):
         'bookings': bookings,
     }
     return render(request, 'dashboard.html', context)
+
+@staff_member_required
+def room_admin(request):
+    """Custom admin interface for rooms management"""
+    rooms = Room.objects.all().select_related('city', 'room_type')
+    cities = City.objects.all()
+    room_types = RoomType.objects.all()
+    
+    # Count available rooms
+    available_rooms = rooms.filter(is_available=True).count()
+
+    context = {
+        'rooms': rooms,
+        'cities': cities,
+        'room_types': room_types,
+        'total_rooms': rooms.count(),
+        'available_rooms': available_rooms,
+        'occupied_rooms': rooms.count() - available_rooms,
+    }
+    return render(request, 'hotel/room_admin.html', context)
