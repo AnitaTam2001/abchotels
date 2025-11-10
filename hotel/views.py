@@ -90,6 +90,8 @@ def city_detail(request, city_id):
             # Build redirect URL with all current filters
             redirect_url = f"/cities/{new_city.id}/"
             params = []
+            # Include the selected city in the parameters for the new page
+            params.append(f"city={selected_city}")
             if selected_check_in:
                 params.append(f"check_in={selected_check_in}")
             if selected_check_out:
@@ -137,9 +139,11 @@ def city_detail(request, city_id):
         'selected_check_out': selected_check_out,
         'selected_guests': selected_guests,
         'selected_rooms': selected_rooms,
+        'selected_city': selected_city,  # Make sure this is passed to template
         'today': date.today().isoformat(),
     }
     return render(request, 'city_detail.html', context)
+
 
 
 def room_type_detail(request, room_type_id):
