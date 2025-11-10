@@ -7,8 +7,8 @@
 <!-- Alternative hero section using existing image -->
 <section class="hero-section" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('{% static 'images/cities/new_york.jpg' %}');">
     <div class="container">
-        <h1 class="hero-title">Our Hotel Locations</h1>
-        <p class="hero-subtitle">Discover ABC Hotels in amazing cities around the world</p>
+        <h1 class="hero-title">Find Your Perfect Hotel</h1>
+        <p class="hero-subtitle">Search and book ABC Hotels in amazing cities around the world</p>
     </div>
 </section>
 
@@ -16,13 +16,13 @@
     <div class="container">
         <!-- Filter Section - All on one line -->
         <div class="filter-section">
-            <h3 style="margin-bottom: 1rem;">Find Your Perfect Stay</h3>
+            <h3 style="margin-bottom: 1rem;">Search Hotel Locations</h3>
             <form method="get" action="{% url 'room_list' %}">
                 <div class="filter-grid-single-line">
                     <div class="filter-group">
-                        <label class="filter-label">City</label>
-                        <select name="city" class="filter-select">
-                            <option value="">All Cities</option>
+                        <label class="filter-label">Destination City</label>
+                        <select name="city" class="filter-select" required>
+                            <option value="">Select a City</option>
                             {% for city in all_cities %}
                                 <option value="{{ city.name }}" {% if selected_city == city.name %}selected{% endif %}>
                                     {{ city.name }}
@@ -33,19 +33,19 @@
 
                     <div class="filter-group">
                         <label class="filter-label">Check-in</label>
-                        <input type="date" name="check_in" class="filter-input" value="{{ selected_check_in }}">
+                        <input type="date" name="check_in" class="filter-input" value="{{ selected_check_in }}" min="{{ today }}">
                     </div>
 
                     <div class="filter-group">
                         <label class="filter-label">Check-out</label>
-                        <input type="date" name="check_out" class="filter-input" value="{{ selected_check_out }}">
+                        <input type="date" name="check_out" class="filter-input" value="{{ selected_check_out }}" min="{{ today }}">
                     </div>
 
                     <!-- Updated Guests dropdown with extended options -->
                     <div class="filter-group">
-                        <label class="filter-label">Guests</label>
+                        <label class="filter-label">Guests per Room</label>
                         <select name="guests" class="filter-select">
-                            <option value="">Any</option>
+                            <option value="">Any Number</option>
                             <option value="1" {% if selected_guests == "1" %}selected{% endif %}>1 Guest</option>
                             <option value="2" {% if selected_guests == "2" %}selected{% endif %}>2 Guests</option>
                             <option value="3" {% if selected_guests == "3" %}selected{% endif %}>3 Guests</option>
@@ -58,9 +58,9 @@
                     </div>
 
                     <div class="filter-group">
-                        <label class="filter-label">Rooms</label>
+                        <label class="filter-label">Number of Rooms</label>
                         <select name="rooms" class="filter-select">
-                            <option value="">Any</option>
+                            <option value="">Any Number</option>
                             <option value="1" {% if selected_rooms == "1" %}selected{% endif %}>1 Room</option>
                             <option value="2" {% if selected_rooms == "2" %}selected{% endif %}>2 Rooms</option>
                             <option value="3" {% if selected_rooms == "3" %}selected{% endif %}>3 Rooms</option>
@@ -70,125 +70,69 @@
 
                     <!-- Buttons on the same line -->
                     <div class="filter-group button-group">
-                        <button type="submit" class="filter-btn">Search Rooms</button>
+                        <button type="submit" class="filter-btn">Search Hotels</button>
                         <a href="{% url 'room_list' %}" class="btn clear-btn">Clear Filters</a>
                     </div>
                 </div>
             </form>
         </div>
 
-        <!-- Results Info -->
-        <div class="results-info">
-            <div>
-                <strong>{{ cities.paginator.count }}</strong> cities found
-                {% if selected_city or selected_check_in or selected_check_out or selected_guests or selected_rooms %} with filters{% endif %}
-            </div>
-        </div>
-
-        <!-- City Grid - 3 Columns -->
-        <div class="city-grid-3col">
-            {% for city in cities %}
-                <div class="city-card-3col">
-                    <div class="city-image-3col">
-                        {% if city.image %}
-                            <img src="{{ city.image.url }}" alt="{{ city.name }}">
-                        {% else %}
-                            <!-- LOCAL HOTEL IMAGES FOR EACH CITY -->
-                            {% if "New York" in city.name %}
-                                <img src="{% static 'images/cities/new_york.jpg' %}" alt="ABC New York Hotel">
-                            {% elif "Los Angeles" in city.name %}
-                                <img src="{% static 'images/cities/los_angeles.jpg' %}" alt="ABC Los Angeles Hotel">
-                            {% elif "Chicago" in city.name %}
-                                <img src="{% static 'images/cities/chicago.jpg' %}" alt="ABC Chicago Hotel">
-                            {% elif "Miami" in city.name %}
-                                <img src="{% static 'images/cities/miami.jpg' %}" alt="ABC Miami Hotel">
-                            {% elif "Las Vegas" in city.name %}
-                                <img src="{% static 'images/cities/las_vegas.jpg' %}" alt="ABC Las Vegas Hotel">
-                            {% elif "San Francisco" in city.name %}
-                                <img src="{% static 'images/cities/san_francisco.jpg' %}" alt="ABC San Francisco Hotel">
-                            {% elif "London" in city.name %}
-                                <img src="{% static 'images/cities/london.jpg' %}" alt="ABC London Hotel">
-                            {% elif "Paris" in city.name %}
-                                <img src="{% static 'images/cities/paris.jpg' %}" alt="ABC Paris Hotel">
-                            {% elif "Tokyo" in city.name %}
-                                <img src="{% static 'images/cities/tokyo.jpg' %}" alt="ABC Tokyo Hotel">
-                            {% elif "Dubai" in city.name %}
-                                <img src="{% static 'images/cities/dubai.jpg' %}" alt="ABC Dubai Hotel">
-                            {% elif "Singapore" in city.name %}
-                                <img src="{% static 'images/cities/singapore.jpg' %}" alt="ABC Singapore Hotel">
-                            {% elif "Sydney" in city.name %}
-                                <img src="{% static 'images/cities/sydney.jpg' %}" alt="ABC Sydney Hotel">
-                            {% elif "Toronto" in city.name %}
-                                <img src="{% static 'images/cities/toronto.jpg' %}" alt="ABC Toronto Hotel">
-                            {% elif "Hong Kong" in city.name %}
-                                <img src="{% static 'images/cities/hong_kong.jpg' %}" alt="ABC Hong Kong Hotel">
-                            {% elif "Bangkok" in city.name %}
-                                <img src="{% static 'images/cities/bangkok.jpg' %}" alt="ABC Bangkok Hotel">
-                            {% elif "Berlin" in city.name %}
-                                <img src="{% static 'images/cities/berlin.jpg' %}" alt="ABC Berlin Hotel">
-                            {% elif "Barcelona" in city.name %}
-                                <img src="{% static 'images/cities/barcelona.jpg' %}" alt="ABC Barcelona Hotel">
-                            {% elif "Amsterdam" in city.name %}
-                                <img src="{% static 'images/cities/amsterdam.jpg' %}" alt="ABC Amsterdam Hotel">
-                            {% elif "Istanbul" in city.name %}
-                                <img src="{% static 'images/cities/istanbul.jpg' %}" alt="ABC Istanbul Hotel">
-                            {% elif "Beijing" in city.name %}
-                                <img src="{% static 'images/cities/beijing.jpg' %}" alt="ABC Beijing Hotel">
-                            {% elif "Mumbai" in city.name %}
-                                <img src="{% static 'images/cities/mumbai.jpg' %}" alt="ABC Mumbai Hotel">
-                            {% else %}
-                                <img src="{% static 'images/cities/default.jpg' %}" alt="ABC {{ city.name }} Hotel">
-                            {% endif %}
-                        {% endif %}
-                    </div>
-                    <div class="city-content-3col">
-                        <!-- UPDATED: ABC + City Name + Hotel format -->
-                        <div style="margin-bottom: 0.5rem;">
-                            <h3 class="city-title-3col" style="color: #2c3e50; margin: 0 0 0.2rem 0; font-size: 1.1rem;">ABC {{ city.name }} Hotel</h3>
-                            <p style="color: #666; margin: 0; font-size: 0.9rem;">{{ city.country }}</p>
-                        </div>
-                        <p style="color: #666; margin-bottom: 1rem; line-height: 1.5; font-size: 0.9rem;">{{ city.description|truncatewords:15 }}</p>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                            <div>
-                                <strong style="color: #e74c3c; font-size: 1.2rem;">
-                                    {% if city.starting_price %}
-                                        ${{ city.starting_price }}
+        <!-- Only show cities if no specific city is selected -->
+        {% if not selected_city %}
+            <!-- Popular Destinations Section -->
+            <div style="margin-top: 3rem;">
+                <h2 style="text-align: center; margin-bottom: 2rem; color: #2c3e50;">Popular Destinations</h2>
+                <div class="city-grid-3col">
+                    {% for city in cities|slice:":6" %}
+                        <div class="city-card-3col">
+                            <div class="city-image-3col">
+                                {% if city.image %}
+                                    <img src="{{ city.image.url }}" alt="{{ city.name }}">
+                                {% else %}
+                                    <!-- Fallback images for popular cities -->
+                                    {% if "New York" in city.name %}
+                                        <img src="{% static 'images/cities/new_york.jpg' %}" alt="ABC New York Hotel">
+                                    {% elif "London" in city.name %}
+                                        <img src="{% static 'images/cities/london.jpg' %}" alt="ABC London Hotel">
+                                    {% elif "Paris" in city.name %}
+                                        <img src="{% static 'images/cities/paris.jpg' %}" alt="ABC Paris Hotel">
+                                    {% elif "Tokyo" in city.name %}
+                                        <img src="{% static 'images/cities/tokyo.jpg' %}" alt="ABC Tokyo Hotel">
+                                    {% elif "Dubai" in city.name %}
+                                        <img src="{% static 'images/cities/dubai.jpg' %}" alt="ABC Dubai Hotel">
+                                    {% elif "Singapore" in city.name %}
+                                        <img src="{% static 'images/cities/singapore.jpg' %}" alt="ABC Singapore Hotel">
                                     {% else %}
-                                        ${% cycle '159' '179' '199' '219' '239' '259' '279' '299' '319' '339' '359' '379' '399' '419' '439' %}
+                                        <img src="{% static 'images/cities/default.jpg' %}" alt="ABC {{ city.name }} Hotel">
                                     {% endif %}
-                                </strong>
-                                <span style="color: #666; font-size: 0.8rem;"> /night</span>
+                                {% endif %}
                             </div>
-                            <div>
-                                <div style="color: #666; font-size: 0.8rem;">
-                                    <strong>{{ city.room_count }}</strong> rooms available
+                            <div class="city-content-3col">
+                                <h3 class="city-title-3col" style="color: #2c3e50; margin: 0 0 0.2rem 0; font-size: 1.1rem;">ABC {{ city.name }} Hotel</h3>
+                                <p style="color: #666; margin: 0; font-size: 0.9rem;">{{ city.country }}</p>
+                                <p style="color: #666; margin-bottom: 1rem; line-height: 1.5; font-size: 0.9rem;">{{ city.description|truncatewords:15 }}</p>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                    <div>
+                                        <strong style="color: #e74c3c; font-size: 1.2rem;">
+                                            {% if city.starting_price %}
+                                                ${{ city.starting_price }}
+                                            {% else %}
+                                                $199
+                                            {% endif %}
+                                        </strong>
+                                        <span style="color: #666; font-size: 0.8rem;"> /night</span>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; font-size: 0.8rem;">
+                                            <strong>{{ city.room_count }}</strong> rooms
+                                        </div>
+                                    </div>
                                 </div>
+                                <a href="{% url 'city_detail' city.id %}" class="btn" style="width: 100%; text-align: center; padding: 0.6rem; font-size: 0.9rem;">
+                                    View Hotel
+                                </a>
                             </div>
                         </div>
-                        <!-- FIXED: View Hotel button with all parameters -->
-                        <a href="{% url 'city_detail' city.id %}?{% if selected_city %}city={{ selected_city }}&{% endif %}{% if selected_check_in %}check_in={{ selected_check_in }}&{% endif %}{% if selected_check_out %}check_out={{ selected_check_out }}&{% endif %}{% if selected_guests %}guests={{ selected_guests }}&{% endif %}{% if selected_rooms %}rooms={{ selected_rooms }}{% endif %}" class="btn" style="width: 100%; text-align: center; padding: 0.6rem; font-size: 0.9rem;">
-                            View Hotel
-                        </a>
-                    </div>
-                </div>
-            {% empty %}
-                <div style="text-align: center; grid-column: 1 / -1; padding: 3rem;">
-                    <h3>No cities found matching your criteria.</h3>
-                    <p>Please try different filter options.</p>
-                </div>
-            {% endfor %}
-        </div>
-
-        <!-- Simple Pagination - Only Page Numbers -->
-        {% if cities.paginator.num_pages > 1 %}
-            <div class="simple-pagination">
-                <div class="page-numbers">
-                    {% for num in cities.paginator.page_range %}
-                        {% if cities.number == num %}
-                            <span class="current-page">{{ num }}</span>
-                        {% else %}
-                            <a href="?page={{ num }}{% if selected_city %}&city={{ selected_city }}{% endif %}{% if selected_check_in %}&check_in={{ selected_check_in }}{% endif %}{% if selected_check_out %}&check_out={{ selected_check_out }}{% endif %}{% if selected_guests %}&guests={{ selected_guests }}{% endif %}{% if selected_rooms %}&rooms={{ selected_rooms }}{% endif %}" class="page-link">{{ num }}</a>
-                        {% endif %}
                     {% endfor %}
                 </div>
             </div>
@@ -376,45 +320,6 @@
         opacity: 0.9;
     }
 
-    /* Simple Pagination Styles */
-    .simple-pagination {
-        margin: 2rem 0;
-        text-align: center;
-    }
-
-    .page-numbers {
-        display: flex;
-        justify-content: center;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-    }
-
-    .page-link, .current-page {
-        padding: 0.5rem 0.8rem;
-        font-size: 0.9rem;
-        border-radius: 5px;
-        text-decoration: none;
-        transition: all 0.3s;
-        display: inline-block;
-    }
-
-    .page-link {
-        background: #3498db;
-        color: white;
-        border: 1px solid #3498db;
-    }
-    .page-link:hover {
-        background: #2980b9;
-        color: white;
-        text-decoration: none;
-    }
-    .current-page {
-        background: #e74c3c;
-        color: white;
-        border: 1px solid #e74c3c;
-        cursor: default;
-    }
-
     /* Mobile Responsive for 3 Columns */
     @media (max-width: 1024px) {
         .city-grid-3col {
@@ -475,4 +380,20 @@
         }
     }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Set minimum dates for check-in and check-out
+    const today = new Date().toISOString().split('T')[0];
+    const checkInInput = document.querySelector('input[name="check_in"]');
+    const checkOutInput = document.querySelector('input[name="check_out"]');
+    
+    if (checkInInput && !checkInInput.value) {
+        checkInInput.min = today;
+    }
+    if (checkOutInput && !checkOutInput.value) {
+        checkOutInput.min = today;
+    }
+});
+</script>
 {% endblock %}

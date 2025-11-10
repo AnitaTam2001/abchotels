@@ -31,6 +31,30 @@ def room_list(request):
     selected_guests = request.GET.get('guests', '')
     selected_rooms = request.GET.get('rooms', '')
 
+    # If we have a city selected with filters, redirect directly to that city's page
+    if selected_city:
+        try:
+            city = City.objects.get(name=selected_city, is_active=True)
+            # Build redirect URL with all filters
+            redirect_url = f"/cities/{city.id}/"
+            params = []
+            # Include the selected city in the parameters
+            params.append(f"city={selected_city}")
+            if selected_check_in:
+                params.append(f"check_in={selected_check_in}")
+            if selected_check_out:
+                params.append(f"check_out={selected_check_out}")
+            if selected_guests:
+                params.append(f"guests={selected_guests}")
+            if selected_rooms:
+                params.append(f"rooms={selected_rooms}")
+            if params:
+                redirect_url += "?" + "&".join(params)
+            return redirect(redirect_url)
+        except City.DoesNotExist:
+            pass
+
+    # If no city selected or city doesn't exist, show the room list page with cities
     # Start with all active cities
     cities = City.objects.filter(is_active=True)
 
@@ -62,6 +86,7 @@ def room_list(request):
         'selected_check_out': selected_check_out,
         'selected_guests': selected_guests,
         'selected_rooms': selected_rooms,
+        'today': date.today().isoformat(),  # Added today's date
     }
     return render(request, 'room_list.html', context)
 
@@ -143,8 +168,6 @@ def city_detail(request, city_id):
         'today': date.today().isoformat(),
     }
     return render(request, 'city_detail.html', context)
-
-
 
 def room_type_detail(request, room_type_id):
     room_type = get_object_or_404(RoomType, id=room_type_id)
