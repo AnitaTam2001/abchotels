@@ -68,11 +68,41 @@ def room_list(request):
 def city_detail(request, city_id):
     city = get_object_or_404(City, id=city_id, is_active=True)
 
+    # Get all cities for the filter dropdown - ORDER BY NAME ASCENDING
+    all_cities = City.objects.filter(is_active=True).order_by('name')
+
     # Get filter parameters for the city-specific filter
+    selected_city = request.GET.get('city', '')
     selected_check_in = request.GET.get('check_in', '')
     selected_check_out = request.GET.get('check_out', '')
     selected_guests = request.GET.get('guests', '')
     selected_rooms = request.GET.get('rooms', '')
+
+    # Debug: Print the received parameters
+    print(f"DEBUG - Selected City: '{selected_city}'")
+    print(f"DEBUG - Selected Guests: '{selected_guests}'")
+    print(f"DEBUG - Selected Rooms: '{selected_rooms}'")
+
+    # If a different city is selected, redirect to that city's page with all filters
+    if selected_city and selected_city != city.name:
+        try:
+            new_city = City.objects.get(name=selected_city, is_active=True)
+            # Build redirect URL with all current filters
+            redirect_url = f"/cities/{new_city.id}/"
+            params = []
+            if selected_check_in:
+                params.append(f"check_in={selected_check_in}")
+            if selected_check_out:
+                params.append(f"check_out={selected_check_out}")
+            if selected_guests:
+                params.append(f"guests={selected_guests}")
+            if selected_rooms:
+                params.append(f"rooms={selected_rooms}")
+            if params:
+                redirect_url += "?" + "&".join(params)
+            return redirect(redirect_url)
+        except City.DoesNotExist:
+            pass
 
     # Get available room types for this city
     room_types = RoomType.objects.filter(
@@ -81,10 +111,17 @@ def city_detail(request, city_id):
     ).distinct()
 
     # Apply room type filters based on capacity
-    if selected_guests:
-        room_types = room_types.filter(capacity__gte=int(selected_guests))
+    if selected_guests and selected_guests.strip():  # Check if not empty and not just whitespace
+        try:
+            selected_guests_int = int(selected_guests)
+            print(f"DEBUG - Filtering for {selected_guests_int} guests")
+            # Only show room types that can accommodate the selected number of guests
+            room_types = room_types.filter(capacity__gte=selected_guests_int)
+            print(f"DEBUG - After filtering: {room_types.count()} room types")
+        except ValueError:
+            print(f"DEBUG - Invalid guests value: {selected_guests}")
 
-    # Get other cities for the "Explore Other Destinations" section - ORDER BY NAME
+    # Get other cities for the "Explore Other Destinations" section
     other_cities = City.objects.filter(
         is_active=True
     ).exclude(id=city_id).annotate(
@@ -93,6 +130,7 @@ def city_detail(request, city_id):
 
     context = {
         'city': city,
+        'all_cities': all_cities,
         'room_types': room_types,
         'other_cities': other_cities,
         'selected_check_in': selected_check_in,
@@ -102,6 +140,7 @@ def city_detail(request, city_id):
         'today': date.today().isoformat(),
     }
     return render(request, 'city_detail.html', context)
+
 
 def room_type_detail(request, room_type_id):
     room_type = get_object_or_404(RoomType, id=room_type_id)

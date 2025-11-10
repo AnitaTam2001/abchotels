@@ -160,7 +160,10 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="{% url 'city_detail' city.id %}" class="btn" style="width: 100%; text-align: center; padding: 0.6rem; font-size: 0.9rem;">View Hotel</a>
+                        <!-- In room_list.html, update the View Hotel button to pass all filters -->
+                        <a href="{% url 'city_detail' city.id %}?{% if selected_check_in %}check_in={{ selected_check_in }}{% endif %}{% if selected_check_out %}&check_out={{ selected_check_out }}{% endif %}{% if selected_guests %}&guests={{ selected_guests }}{% endif %}{% if selected_rooms %}&rooms={{ selected_rooms }}{% endif %}" class="btn" style="width: 100%; text-align: center; padding: 0.6rem; font-size: 0.9rem;">
+                            View Hotel
+                        </a>
                     </div>
                 </div>
             {% empty %}
