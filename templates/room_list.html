@@ -41,14 +41,19 @@
                         <input type="date" name="check_out" class="filter-input" value="{{ selected_check_out }}">
                     </div>
 
+                    <!-- Updated Guests dropdown with extended options -->
                     <div class="filter-group">
                         <label class="filter-label">Guests</label>
                         <select name="guests" class="filter-select">
                             <option value="">Any</option>
-                            <option value="1" {% if selected_guests == "1" %}selected{% endif %}>1</option>
-                            <option value="2" {% if selected_guests == "2" %}selected{% endif %}>2</option>
-                            <option value="3" {% if selected_guests == "3" %}selected{% endif %}>3</option>
-                            <option value="4" {% if selected_guests == "4" %}selected{% endif %}>4</option>
+                            <option value="1" {% if selected_guests == "1" %}selected{% endif %}>1 Guest</option>
+                            <option value="2" {% if selected_guests == "2" %}selected{% endif %}>2 Guests</option>
+                            <option value="3" {% if selected_guests == "3" %}selected{% endif %}>3 Guests</option>
+                            <option value="4" {% if selected_guests == "4" %}selected{% endif %}>4 Guests</option>
+                            <option value="5" {% if selected_guests == "5" %}selected{% endif %}>5 Guests</option>
+                            <option value="6" {% if selected_guests == "6" %}selected{% endif %}>6 Guests</option>
+                            <option value="7" {% if selected_guests == "7" %}selected{% endif %}>7 Guests</option>
+                            <option value="8" {% if selected_guests == "8" %}selected{% endif %}>8+ Guests</option>
                         </select>
                     </div>
 
@@ -56,7 +61,7 @@
                         <label class="filter-label">Rooms</label>
                         <select name="rooms" class="filter-select">
                             <option value="">Any</option>
-                            <option value="1" {% if selected_rooms == "1" %}selected{% endif %}>1 Rooms</option>
+                            <option value="1" {% if selected_rooms == "1" %}selected{% endif %}>1 Room</option>
                             <option value="2" {% if selected_rooms == "2" %}selected{% endif %}>2 Rooms</option>
                             <option value="3" {% if selected_rooms == "3" %}selected{% endif %}>3 Rooms</option>
                             <option value="4" {% if selected_rooms == "4" %}selected{% endif %}>4+ Rooms</option>
