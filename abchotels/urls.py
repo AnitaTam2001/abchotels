@@ -6,9 +6,10 @@ from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from hotel import views
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('hotel.urls')),  # Fixed: removed dot and added comma
+    path('', include('hotel.urls')),  
     path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
     path('register/', views.register, name='register'),

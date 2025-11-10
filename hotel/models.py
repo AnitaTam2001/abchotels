@@ -30,13 +30,13 @@ class RoomType(models.Model):
     image = models.ImageField(upload_to='rooms/', null=True, blank=True)
 
     def __str__(self):
-        return self.name  # Changed to show only name
+        return self.name
 
     class Meta:
         ordering = ['name']
 
 class Room(models.Model):
-    city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='rooms')
+    city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='room')
     room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE)
     is_available = models.BooleanField(default=True)
     image = models.ImageField(upload_to='room_images/', blank=True, null=True, verbose_name='Room Specific Image')
@@ -67,7 +67,7 @@ class Booking(models.Model):
         return f'Booking {self.id} - {self.guest_name} - {self.room}'
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['created_at']
 
 class FAQ(models.Model):
     CATEGORY_CHOICES = [

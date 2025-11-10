@@ -13,7 +13,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 def home(request):
     featured_cities = City.objects.filter(is_active=True).annotate(
-        room_count=Count('rooms', filter=Q(rooms__is_available=True))  # Fixed: rooms__is_available
+        room_count=Count('room', filter=Q(room__is_available=True))
     )[:3]
     context = {
         'featured_cities': featured_cities,
@@ -40,8 +40,8 @@ def room_list(request):
 
     # Annotate with room count and starting price
     cities = cities.annotate(
-        room_count=Count('rooms', filter=Q(rooms__is_available=True)),  # Fixed: rooms__is_available
-        starting_price=Min('rooms__room_type__price_per_night')  # Fixed: rooms__room_type__price_per_night
+        room_count=Count('room', filter=Q(room__is_available=True)),
+        starting_price=Min('room__room_type__price_per_night')
     ).order_by('name')
 
     # Filter by minimum room count if specified
@@ -76,8 +76,8 @@ def city_detail(request, city_id):
 
     # Get available room types for this city
     room_types = RoomType.objects.filter(
-        rooms__city=city,  # Fixed: rooms__city
-        rooms__is_available=True  # Fixed: rooms__is_available
+        room__city=city,
+        room__is_available=True
     ).distinct()
 
     # Apply room type filters based on capacity
@@ -88,7 +88,7 @@ def city_detail(request, city_id):
     other_cities = City.objects.filter(
         is_active=True
     ).exclude(id=city_id).annotate(
-        room_count=Count('rooms', filter=Q(rooms__is_available=True))  # Fixed: rooms__is_available
+        room_count=Count('room', filter=Q(room__is_available=True))
     ).order_by('name')[:6]
 
     context = {
@@ -237,7 +237,7 @@ def job_application(request, job_id):
         # Here you would typically save the application and handle file uploads
         messages.success(request, f'Thank you for applying to {job.title}! We will review your application.')
         return redirect('careers')
-
+    
     context = {
         'job': job,
     }
@@ -289,7 +289,6 @@ def dashboard(request):
         bookings = Booking.objects.filter(guest_email=request.user.email)
     else:
         bookings = []
-
     context = {
         'bookings': bookings,
     }
@@ -301,16 +300,13 @@ def room_admin(request):
     rooms = Room.objects.all().select_related('city', 'room_type')
     cities = City.objects.all()
     room_types = RoomType.objects.all()
+    available_rooms = rooms.filter(is_available=True)
     
-    # Count available rooms
-    available_rooms = rooms.filter(is_available=True).count()
-
     context = {
         'rooms': rooms,
         'cities': cities,
         'room_types': room_types,
-        'total_rooms': rooms.count(),
         'available_rooms': available_rooms,
-        'occupied_rooms': rooms.count() - available_rooms,
+        'occupied_rooms': rooms.count() - available_rooms.count(),
     }
     return render(request, 'hotel/room_admin.html', context)

@@ -4,14 +4,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from . import views
 
-# hotel/urls.py
-from django.urls import path
-from . import views
-
 urlpatterns = [
     path('', views.home, name='home'),
     path('rooms/', views.room_list, name='room_list'),
-    path('rooms/admin/', views.room_admin, name='room_admin'),  # ADD THIS LINE
+    path('rooms/admin/', views.room_admin, name='room_admin'),
     path('cities/<int:city_id>/', views.city_detail, name='city_detail'),
     path('room-types/<int:room_type_id>/', views.room_type_detail, name='room_type_detail'),
     path('rooms/<int:room_id>/', views.room_detail, name='room_detail'),
@@ -25,9 +21,10 @@ urlpatterns = [
     path('why-work-with-us/', views.why_work_with_us, name='why_work_with_us'),
     path('profile/', views.profile, name='profile'),
     path('dashboard/', views.dashboard, name='dashboard'),
+    path('login/', views.user_login, name='login'),
+    path('logout/', views.user_logout, name='logout'),
+    path('register/', views.register, name='register'),
 ]
-
-
 
 # Serve media files in development
 if settings.DEBUG:

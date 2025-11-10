@@ -39,7 +39,7 @@ ROOT_URLCONF = 'abchotels.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'], # This should include your templates directory
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -85,7 +85,6 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
@@ -95,7 +94,6 @@ STATICFILES_DIRS = [
 # Media files (Uploaded images)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -115,5 +113,5 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'anitatam2001@gmail.com'
-EMAIL_HOST_PASSWORD = 'tblh1hspicfhotwb'
+EMAIL_HOST_PASSWORD = 'tblhlnspicfhotwb'
 DEFAULT_FROM_EMAIL = 'anitatam2001@gmail.com'
