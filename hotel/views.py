@@ -337,6 +337,119 @@ def user_login(request):
             messages.error(request, 'Invalid username or password.')
     return render(request, 'registration/login.html')
 
+# Add this function to your views.py
+def get_available_room_or_redirect(room_type_id, city_id):
+    """Get the first available room of this room type in the specified city"""
+    try:
+        available_room = Room.objects.filter(
+            room_type_id=room_type_id,
+            city_id=city_id,
+            is_available=True
+        ).first()
+        
+        if available_room:
+            return available_room.id
+        else:
+            return None
+    except Room.DoesNotExist:
+        return None
+
+# Modify your city_detail view to include available rooms data
+def city_detail(request, city_id):
+    city = get_object_or_404(City, id=city_id, is_active=True)
+    # Get all cities for the filter dropdown - ORDER BY NAME ASCENDING
+    all_cities = City.objects.filter(is_active=True).order_by('name')
+
+    # Get filter parameters for the city-specific filter
+    selected_city = request.GET.get('city', '')
+    selected_check_in = request.GET.get('check_in', '')
+    selected_check_out = request.GET.get('check_out', '')
+    selected_guests = request.GET.get('guests', '')
+    selected_rooms = request.GET.get('rooms', '')
+
+    # Debug: Print the received parameters
+    print(f"DEBUG - Selected City: '{selected_city}'")
+    print(f"DEBUG - Selected Guests: '{selected_guests}'")
+    print(f"DEBUG - Selected Rooms: '{selected_rooms}'")
+
+    # If a different city is selected, redirect to that city's page with all filters
+    if selected_city and selected_city != city.name:
+        try:
+            new_city = City.objects.get(name=selected_city, is_active=True)
+            # Build redirect URL with all current filters
+            redirect_url = f"/cities/{new_city.id}/"
+            params = []
+            # Include the selected city in the parameters for the new page
+            params.append(f"city={selected_city}")
+            if selected_check_in:
+                params.append(f"check_in={selected_check_in}")
+            if selected_check_out:
+                params.append(f"check_out={selected_check_out}")
+            if selected_guests:
+                params.append(f"guests={selected_guests}")
+            if selected_rooms:
+                params.append(f"rooms={selected_rooms}")
+            if params:
+                redirect_url += "?" + "&".join(params)
+            return redirect(redirect_url)
+        except City.DoesNotExist:
+            pass
+
+    # Get available room types for this city
+    room_types = RoomType.objects.filter(
+        room__city=city,
+        room__is_available=True
+    ).distinct()
+
+    # Apply room type filters based on capacity
+    if selected_guests and selected_guests.strip():  # Check if not empty and not just whitespace
+        try:
+            selected_guests_int = int(selected_guests)
+            print(f"DEBUG - Filtering for {selected_guests_int} guests")
+            # Only show room types that can accommodate the selected number of guests
+            room_types = room_types.filter(capacity__gte=selected_guests_int)
+            print(f"DEBUG - After filtering: {room_types.count()} room types")
+        except ValueError:
+            print(f"DEBUG - Invalid guests value: {selected_guests}")
+
+    # NEW: Get available room IDs for each room type
+    room_type_data = []
+    for room_type in room_types:
+        available_room = Room.objects.filter(
+            room_type=room_type,
+            city=city,
+            is_available=True
+        ).first()
+        
+        room_type_data.append({
+            'room_type': room_type,
+            'available_room_id': available_room.id if available_room else None
+        })
+
+    # Get other cities for the "Explore Other Destinations" section
+    other_cities = City.objects.filter(
+        is_active=True
+    ).exclude(id=city_id).annotate(
+        room_count=Count('room', filter=Q(room__is_available=True))
+    ).order_by('name')[:6]
+
+    context = {
+        'city': city,
+        'all_cities': all_cities,
+        'room_type_data': room_type_data,  # CHANGED: Use room_type_data instead of room_types
+        'other_cities': other_cities,
+        'selected_check_in': selected_check_in,
+        'selected_check_out': selected_check_out,
+        'selected_guests': selected_guests,
+        'selected_rooms': selected_rooms,
+        'selected_city': selected_city,  # Make sure this is passed to template
+        'today': date.today().isoformat(),
+    }
+    return render(request, 'city_detail.html', context)
+
+
+
+
 @login_required
 def user_logout(request):
     logout(request)

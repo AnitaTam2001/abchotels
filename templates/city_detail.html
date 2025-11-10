@@ -139,9 +139,10 @@
                 <small style="font-size: 1rem; color: #666;">(showing rooms for {{ selected_guests }} guest{{ selected_guests|pluralize }} or more)</small>
                 {% endif %}
             </h2>
-            {% if room_types %}
+            {% if room_type_data %}
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem;">
-                {% for room_type in room_types %}
+                {% for data in room_type_data %}
+                {% with room_type=data.room_type available_room_id=data.available_room_id %}
                 <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid #f0f0f0;">
                     <div style="height: 200px; overflow: hidden;">
                         {% if room_type.image %}
@@ -186,13 +187,19 @@
                                 {% endif %}
                             </div>
                         </div>
-                        <!-- CHANGED: From "View Available Rooms" to "Reserve" -->
-                        <!-- This goes to room_type_detail where user can select specific room -->
-                        <a href="{% url 'room_type_detail' room_type.id %}" class="btn" style="width: 100%; text-align: center; background: #e74c3c; color: white; padding: 12px; border-radius: 6px; text-decoration: none; display: block;">
-                            Reserve
+                        <!-- CHANGED: Direct booking link with room_id -->
+                        {% if available_room_id %}
+                        <a href="{% url 'booking_form' available_room_id %}" class="btn" style="width: 100%; text-align: center; background: #e74c3c; color: white; padding: 12px; border-radius: 6px; text-decoration: none; display: block;">
+                            Reserve Now
                         </a>
+                        {% else %}
+                        <button class="btn" style="width: 100%; text-align: center; background: #95a5a6; color: white; padding: 12px; border-radius: 6px; text-decoration: none; display: block; border: none; cursor: not-allowed;" disabled>
+                            No Rooms Available
+                        </button>
+                        {% endif %}
                     </div>
                 </div>
+                {% endwith %}
                 {% endfor %}
             </div>
             {% else %}
