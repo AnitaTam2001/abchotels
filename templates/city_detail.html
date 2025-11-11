@@ -5,6 +5,7 @@
 {% block content %}
 <section style="padding: 2rem 0;">
     <div class="container">
+
         <!-- City Header with Photo -->
         <div style="position: relative; margin-bottom: 3rem;">
             <div style="height: 400px; overflow: hidden; border-radius: 15px;">
@@ -29,7 +30,7 @@
                 {% elif city.name == 'Bangkok' %}
                 <img src="{% static 'images/cities/bangkok.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
                 {% elif city.name == 'Los Angeles' %}
-                <img src="{% static 'images/cities/los_angles.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                <img src="{% static 'images/cities/los_angeles.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
                 {% elif city.name == 'Amsterdam' %}
                 <img src="{% static 'images/cities/amsterdam.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
                 {% elif city.name == 'Istanbul' %}
@@ -43,7 +44,7 @@
                 {% elif city.name == 'Vienna' %}
                 <img src="{% static 'images/cities/vienna.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
                 {% elif city.name == 'Kyoto' %}
-                <img src="{% static 'images/cities/Kyoto.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                <img src="{% static 'images/cities/kyoto.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
                 {% elif city.name == 'Dubai' %}
                 <img src="{% static 'images/cities/dubai.jpg' %}" alt="{{ city.name }}" style="width: 100%; height: 100%; object-fit: cover;">
                 {% else %}
@@ -56,6 +57,7 @@
                 <p style="margin: 0.5rem 0 0 0; font-size: 1.2rem; opacity: 0.9;">{{ city.description }}</p>
             </div>
         </div>
+
 
 <!-- Filter Section -->
 <div class="filter-section" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 2rem;">
