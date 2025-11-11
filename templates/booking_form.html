@@ -6,6 +6,7 @@
     <div class="container">
         <div style="max-width: 600px; margin: 0 auto; background: white; padding: 3rem; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
             <h1 style="text-align: center; margin-bottom: 2rem; color: #2c3e50;">Book Your Stay</h1>
+            
             <!-- Display messages -->
             {% if messages %}
             <div style="margin-bottom: 2rem;"> 
@@ -65,58 +66,80 @@
                 </div>
             </div>
 
-            <!-- Booking Details Below the Card -->
+
+
+
+            <!-- Booking Details -->
             <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
-                <h4 style="margin: 0 0 1rem 0; color: #2c3e50;">Booking Details</h4>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                    <div>
-                        <p style="margin: 0; color: #666;"><strong>Guests per room:</strong> {{ room.room_type.capacity }} guest{{ room.room_type.capacity|pluralize }}</p>
-                    </div>
-                    <div>
-                        <p style="margin: 0; color: #666;"><strong>Check-in:</strong>
-                        {% if request.GET.check_in %}
-                        {{ request.GET.check_in }}
-                        {% else %}
-                        {{ today }}
-                        {% endif %}
+                <h4 style="margin: 0 0 1rem 0; color: #2c3e50; font-size: 1.5rem; text-align: left;">Booking Details</h4>  <!-- 1.5 * 1rem = 1.5rem -->
+                <div style="display: flex; flex-wrap: wrap; gap: 2rem; align-items: center;">
+                    <!-- Guests per room with increased font size -->
+                    <div style="flex: 1; min-width: 200px;">
+                        <p style="margin: 0; color: #666; font-size: 1.3125rem; line-height: 1.5; text-align: left;">  <!-- 1.5 * 0.875rem = 1.3125rem -->
+                            <strong>Guests per room:</strong> {{ room.room_type.capacity }} guest{{ room.room_type.capacity|pluralize }}
                         </p>
                     </div>
-                    <div>
-                        <p style="margin: 0; color: #666;"><strong>Check-out:</strong>
-                        {% if request.GET.check_out %}
-                        {{ request.GET.check_out }}
-                        {% else %}
-                        {{ today }}
-                        {% endif %}
-                        </p>
+                    
+                    <!-- Check-in and Check-out on the same line -->
+                    <div style="flex: 2; min-width: 300px;">
+                        <div style="display: flex; gap: 2rem; align-items: center;">
+                            <div style="flex: 1;">
+                                <p style="margin: 0; color: #666; font-size: 1.3125rem; text-align: left;">  <!-- 1.5 * 0.875rem = 1.3125rem -->
+                                    <strong>Check-in:</strong><br>
+                                    {% if request.GET.check_in %}
+                                    {{ request.GET.check_in }}
+                                    {% else %}
+                                    {{ today }}
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div style="flex: 1;">
+                                <p style="margin: 0; color: #666; font-size: 1.3125rem; text-align: left;">  <!-- 1.5 * 0.875rem = 1.3125rem -->
+                                    <strong>Check-out:</strong><br>
+                                    {% if request.GET.check_out %}
+                                    {{ request.GET.check_out }}
+                                    {% else %}
+                                    {{ today }}
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-
             <form method="post">
                 {% csrf_token %}
-                <div style="display: grid; gap: 1.5rem;">
-                    <div class="form-group">
-                        <label class="form-label">Full Name</label>
-                        <input type="text" name="guest_name" required class="form-input" placeholder="Enter your full name" value="{{ request.POST.guest_name }}">
+                <div style="display: grid; gap: 1.05rem;">
+                    <!-- Form Grid Layout -->
+                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 0.7rem; align-items: center;">
+                        <!-- Full Name -->
+                        <label class="form-label" style="font-weight: bold; color: #2c3e50; margin: 0; text-align: left; font-size: 1.26rem;">Full Name:</label>  <!-- 1.8 * 0.7rem = 1.26rem -->
+                        <input type="text" name="guest_name" required class="form-input" placeholder="Enter your full name" value="{{ request.POST.guest_name }}" style="padding: 0.525rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1.26rem; width: 100%; box-sizing: border-box; text-align: left;">  <!-- 1.8 * 0.7rem = 1.26rem -->
+                        
+                        <!-- Email Address -->
+                        <label class="form-label" style="font-weight: bold; color: #2c3e50; margin: 0; text-align: left; font-size: 1.26rem;">Email Address:</label>  <!-- 1.8 * 0.7rem = 1.26rem -->
+                        <input type="email" name="guest_email" required class="form-input" placeholder="Enter your email address" value="{{ request.POST.guest_email }}" style="padding: 0.525rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1.26rem; width: 100%; box-sizing: border-box; text-align: left;">  <!-- 1.8 * 0.7rem = 1.26rem -->
+                        
+                        <!-- Phone Number -->
+                        <label class="form-label" style="font-weight: bold; color: #2c3e50; margin: 0; text-align: left; font-size: 1.26rem;">Phone Number:</label>  <!-- 1.8 * 0.7rem = 1.26rem -->
+                        <input type="tel" name="guest_phone" required class="form-input" placeholder="Enter your phone number" value="{{ request.POST.guest_phone }}" style="padding: 0.525rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1.26rem; width: 100%; box-sizing: border-box; text-align: left;">  <!-- 1.8 * 0.7rem = 1.26rem -->
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Email Address</label>
-                        <input type="email" name="guest_email" required class="form-input" placeholder="Enter your email address" value="{{ request.POST.guest_email }}">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Phone Number</label>
-                        <input type="tel" name="guest_phone" required class="form-input" placeholder="Enter your phone number" value="{{ request.POST.guest_phone }}">
-                    </div>
-                    <!-- CHANGED: Hidden fields for check-in and check-out dates from URL parameters -->
+                    
+                    <!-- Hidden fields for check-in and check-out dates from URL parameters -->
                     <input type="hidden" name="check_in" value="{{ request.GET.check_in }}">
                     <input type="hidden" name="check_out" value="{{ request.GET.check_out }}">
-                    <button type="submit" class="btn" style="width: 100%; padding: 1rem; font-size: 1.1rem; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                    
+
+                    <button type="submit" class="btn" style="width: 100%; padding: 0.7rem; font-size: 1.001rem; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">
                         Submit Booking
                     </button>
+
+
                 </div>
             </form>
+
+
         </div>
     </div>
 </section>
