@@ -89,7 +89,7 @@ class RoomAdmin(admin.ModelAdmin):
     list_filter = ['room_type', 'is_available', 'city']
     search_fields = ['city__name', 'room_type__name']
     readonly_fields = ['room_image_preview_large', 'room_specific_image_preview_large']
-    list_per_page = 20
+    list_per_page = 50
     list_select_related = ['city', 'room_type']
     
     def price_per_night(self, obj):
@@ -132,7 +132,7 @@ class BookingAdmin(admin.ModelAdmin):
     list_filter = ['status', 'check_in', 'check_out']
     search_fields = ['guest_name', 'guest_email']
     date_hierarchy = 'created_at'
-    list_per_page = 20
+    list_per_page = 50
     list_select_related = ['room', 'room__city', 'room__room_type']
 
 class FAQAdmin(admin.ModelAdmin):
@@ -140,7 +140,7 @@ class FAQAdmin(admin.ModelAdmin):
     list_filter = ['category', 'is_active']
     search_fields = ['question', 'answer']
     list_editable = ['order', 'is_active']
-    list_per_page = 20
+    list_per_page = 50
 
 class JobListingAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'department', 'job_type', 'experience_level', 'is_active', 'posted_date']
@@ -148,7 +148,7 @@ class JobListingAdmin(admin.ModelAdmin):
     list_editable = ['is_active']
     search_fields = ['title', 'description']
     date_hierarchy = 'posted_date'
-    list_per_page = 20
+    list_per_page = 50
     list_select_related = ['department']
 
 class JobApplicationAdmin(admin.ModelAdmin):
@@ -158,7 +158,7 @@ class JobApplicationAdmin(admin.ModelAdmin):
     search_fields = ['first_name', 'last_name', 'email']
     readonly_fields = ['applied_date']
     date_hierarchy = 'applied_date'
-    list_per_page = 20
+    list_per_page = 50
     list_select_related = ['job', 'job__department']
 
 # Register models
