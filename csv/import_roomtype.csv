@@ -1,10 +1,10 @@
 ID,Name,Description,Price Per Night,Capacity,Image Filename
-1,Accessible King,ADA compliant room with roll-in shower and grab bars,169.00,2,rooms/accessible_king.jpg
-2,Junior Suite,Compact suite with small living area,279.00,2,rooms/junior_suite.jpg
-3,Pool View King,King room with direct pool access and view,229.00,2,rooms/poolview_king.jpg
-4,City View Twin,Twin beds with panoramic city views,189.00,2,rooms/cityview_twin.jpg
-5,Corner Suite,Spacious corner room with extra windows,329.00,3,rooms/corner_suite.jpg
-6,Studio King,Open concept room with kitchenette,219.00,2,rooms/studio_king.jpg
-7,Connecting Family,Two connecting rooms perfect for larger families,499.00,6,rooms/connecting_family.jpg
-8,Garden View Queen,Peaceful room overlooking hotel gardens,179.00,2,rooms/garden_queen.jpg
+1,Accessible King,ADA compliant room with roll-in shower and grab bars,169.00,2,abchotels/static/images/rooms/accessible_king.jpg
+2,Junior Suite,Compact suite with small living area,279.00,2,abchotels/static/images/rooms/junior_suite.jpg
+3,Pool View King,King room with direct pool access and view,229.00,2,abchotels/static/images/rooms/poolview_king.jpg
+4,City View Twin,Twin beds with panoramic city views,189.00,2,abchotels/static/images/rooms/cityview_twin.jpg
+5,Corner Suite,Spacious corner room with extra windows,329.00,3,abchotels/static/images/rooms/corner_suite.jpg
+6,Studio King,Open concept room with kitchenette,219.00,2,abchotels/static/images/rooms/studio_king.jpg
+7,Connecting Family,Two connecting rooms perfect for larger families,499.00,6,abchotels/static/images/rooms/connecting_family.jpg
+8,Garden View Queen,Peaceful room overlooking hotel gardens,179.00,2,abchotels/static/images/rooms/garden_queen.jpg
 9,Penthouse Suite,Top-floor suite with private balcony,799.00,4,rooms/penthouse_suite.jpg
