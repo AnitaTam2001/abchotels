@@ -10,11 +10,11 @@ from django.utils import timezone
 from datetime import datetime, date
 from .models import City, RoomType, Room, Booking, FAQ, JobListing
 from django.contrib.admin.views.decorators import staff_member_required
-from .forms import BookingForm
+from .forms import BookingForm, CustomUserCreationForm
 
 def home(request):
     featured_cities = City.objects.filter(is_active=True).annotate(
-        room_count=Count('room', filter=Q(room__is_available=True))
+        room_count=Count('rooms', filter=Q(rooms__is_available=True))
     )[:3]
     context = {
         'featured_cities': featured_cities,
@@ -37,18 +37,19 @@ def room_list(request):
         try:
             city = City.objects.get(name=selected_city, is_active=True)
             # Build redirect URL with all filters
-            redirect_url = f"/cities/{city.id}/"
+            redirect_url = f'/cities/{city.id}/'
             params = []
             # Include the selected city in the parameters
-            params.append(f"city={selected_city}")
+            params.append(f'city={selected_city}')
             if selected_check_in:
-                params.append(f"check_in={selected_check_in}")
+                params.append(f'check_in={selected_check_in}')
             if selected_check_out:
-                params.append(f"check_out={selected_check_out}")
+                params.append(f'check_out={selected_check_out}')
             if selected_guests:
-                params.append(f"guests={selected_guests}")
+                params.append(f'guests={selected_guests}')
             if selected_rooms:
-                params.append(f"rooms={selected_rooms}")
+                params.append(f'rooms={selected_rooms}')
+            
             if params:
                 redirect_url += "?" + "&".join(params)
             return redirect(redirect_url)
@@ -65,8 +66,8 @@ def room_list(request):
 
     # Annotate with room count and starting price
     cities = cities.annotate(
-        room_count=Count('room', filter=Q(room__is_available=True)),
-        starting_price=Min('room__room_type__price_per_night')
+        room_count=Count('rooms', filter=Q(rooms__is_available=True)),
+        starting_price=Min('rooms__room_type__price_per_night')
     ).order_by('name')
 
     # Filter by minimum room count if specified
@@ -87,7 +88,7 @@ def room_list(request):
         'selected_check_out': selected_check_out,
         'selected_guests': selected_guests,
         'selected_rooms': selected_rooms,
-        'today': date.today().isoformat(),  # Added today's date
+        'today': date.today().isoformat(),
     }
     return render(request, 'room_list.html', context)
 
@@ -103,11 +104,6 @@ def city_detail(request, city_id):
     selected_check_out = request.GET.get('check_out', '')
     selected_guests = request.GET.get('guests', '')
     selected_rooms = request.GET.get('rooms', '')
-
-    # Debug: Print the received parameters
-    print(f"DEBUG - Selected City: '{selected_city}'")
-    print(f"DEBUG - Selected Guests: '{selected_guests}'")
-    print(f"DEBUG - Selected Rooms: '{selected_rooms}'")
 
     # If a different city is selected, redirect to that city's page with all filters
     if selected_city and selected_city != city.name:
@@ -139,33 +135,44 @@ def city_detail(request, city_id):
     ).distinct()
 
     # Apply room type filters based on capacity
-    if selected_guests and selected_guests.strip():  # Check if not empty and not just whitespace
+    if selected_guests and selected_guests.strip():
         try:
             selected_guests_int = int(selected_guests)
-            print(f"DEBUG - Filtering for {selected_guests_int} guests")
             # Only show room types that can accommodate the selected number of guests
             room_types = room_types.filter(capacity__gte=selected_guests_int)
-            print(f"DEBUG - After filtering: {room_types.count()} room types")
         except ValueError:
-            print(f"DEBUG - Invalid guests value: {selected_guests}")
+            pass
+
+    # Get available room IDs for each room type
+    room_type_data = []
+    for room_type in room_types:
+        available_room = Room.objects.filter(
+            room_type=room_type,
+            city=city,
+            is_available=True
+        ).first()
+        room_type_data.append({
+            'room_type': room_type,
+            'available_room_id': available_room.id if available_room else None
+        })
 
     # Get other cities for the "Explore Other Destinations" section
     other_cities = City.objects.filter(
         is_active=True
     ).exclude(id=city_id).annotate(
-        room_count=Count('room', filter=Q(room__is_available=True))
+        room_count=Count('rooms', filter=Q(rooms__is_available=True))
     ).order_by('name')[:6]
 
     context = {
         'city': city,
         'all_cities': all_cities,
-        'room_types': room_types,
+        'room_type_data': room_type_data,
         'other_cities': other_cities,
         'selected_check_in': selected_check_in,
         'selected_check_out': selected_check_out,
         'selected_guests': selected_guests,
         'selected_rooms': selected_rooms,
-        'selected_city': selected_city,  # Make sure this is passed to template
+        'selected_city': selected_city,
         'today': date.today().isoformat(),
     }
     return render(request, 'city_detail.html', context)
@@ -178,6 +185,7 @@ def room_type_detail(request, room_type_id):
         room_type=room_type,
         is_available=True
     )
+
     context = {
         'room_type': room_type,
         'available_rooms': available_rooms,
@@ -201,28 +209,14 @@ def room_detail(request, room_id):
     }
     return render(request, 'room_detail.html', context)
 
-
-# hotel/views.py
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib import messages
-from django.utils import timezone
-from .models import Room, Booking
-from .forms import BookingForm  # This should now work
-
-# hotel/views.py
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib import messages
-from django.utils import timezone
-from .models import Room, Booking
-from .forms import BookingForm
-
+# In hotel/views.py - fix the booking_form function
 def booking_form(request, room_id):
     room = get_object_or_404(Room, id=room_id)
-    
+
     # Get dates from URL parameters
     check_in = request.GET.get('check_in')
     check_out = request.GET.get('check_out')
-    
+
     if request.method == 'POST':
         form = BookingForm(request.POST)
         if form.is_valid():
@@ -231,10 +225,11 @@ def booking_form(request, room_id):
                 booking = form.save(commit=False)
                 booking.room = room
                 booking.save()
-                
+
                 messages.success(request, f'Booking confirmed! Total price: ${booking.total_price}')
+                # FIXED: Make sure booking_id is passed correctly
                 return redirect('booking_confirmation', booking_id=booking.id)
-                
+
             except Exception as e:
                 messages.error(request, f'Error creating booking: {str(e)}')
         else:
@@ -249,9 +244,9 @@ def booking_form(request, room_id):
             initial_data['check_in'] = check_in
         if check_out:
             initial_data['check_out'] = check_out
-            
+
         form = BookingForm(initial=initial_data)
-    
+
     context = {
         'room': room,
         'form': form,
@@ -259,14 +254,13 @@ def booking_form(request, room_id):
     }
     return render(request, 'booking_form.html', context)
 
-def booking_confirmation(request, booking_id):  # Add this function
+
+def booking_confirmation(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
     context = {
         'booking': booking,
     }
     return render(request, 'booking_confirmation.html', context)
-
-
 
 def about(request):
     return render(request, 'about.html')
@@ -313,13 +307,11 @@ def job_application(request, job_id):
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         email = request.POST.get('email')
-        phone = request.POST.get('phone')
-        cover_letter = request.POST.get('cover_letter')
-
-        # Here you would typically save the application and handle file uploads
-        messages.success(request, f'Thank you for applying to {job.title}! We will review your application.')
+        # Add more processing as needed
+        
+        messages.success(request, 'Application submitted successfully!')
         return redirect('careers')
-    
+
     context = {
         'job': job,
     }
@@ -330,14 +322,14 @@ def why_work_with_us(request):
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
             messages.success(request, 'Registration successful')
             return redirect('home')
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
 
 def user_login(request):
@@ -347,124 +339,11 @@ def user_login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            messages.success(request, 'Login successful!')
+            messages.success(request, 'Login successful')
             return redirect('dashboard')
         else:
             messages.error(request, 'Invalid username or password.')
     return render(request, 'registration/login.html')
-
-# Add this function to your views.py
-def get_available_room_or_redirect(room_type_id, city_id):
-    """Get the first available room of this room type in the specified city"""
-    try:
-        available_room = Room.objects.filter(
-            room_type_id=room_type_id,
-            city_id=city_id,
-            is_available=True
-        ).first()
-        
-        if available_room:
-            return available_room.id
-        else:
-            return None
-    except Room.DoesNotExist:
-        return None
-
-# Modify your city_detail view to include available rooms data
-def city_detail(request, city_id):
-    city = get_object_or_404(City, id=city_id, is_active=True)
-    # Get all cities for the filter dropdown - ORDER BY NAME ASCENDING
-    all_cities = City.objects.filter(is_active=True).order_by('name')
-
-    # Get filter parameters for the city-specific filter
-    selected_city = request.GET.get('city', '')
-    selected_check_in = request.GET.get('check_in', '')
-    selected_check_out = request.GET.get('check_out', '')
-    selected_guests = request.GET.get('guests', '')
-    selected_rooms = request.GET.get('rooms', '')
-
-    # Debug: Print the received parameters
-    print(f"DEBUG - Selected City: '{selected_city}'")
-    print(f"DEBUG - Selected Guests: '{selected_guests}'")
-    print(f"DEBUG - Selected Rooms: '{selected_rooms}'")
-
-    # If a different city is selected, redirect to that city's page with all filters
-    if selected_city and selected_city != city.name:
-        try:
-            new_city = City.objects.get(name=selected_city, is_active=True)
-            # Build redirect URL with all current filters
-            redirect_url = f"/cities/{new_city.id}/"
-            params = []
-            # Include the selected city in the parameters for the new page
-            params.append(f"city={selected_city}")
-            if selected_check_in:
-                params.append(f"check_in={selected_check_in}")
-            if selected_check_out:
-                params.append(f"check_out={selected_check_out}")
-            if selected_guests:
-                params.append(f"guests={selected_guests}")
-            if selected_rooms:
-                params.append(f"rooms={selected_rooms}")
-            if params:
-                redirect_url += "?" + "&".join(params)
-            return redirect(redirect_url)
-        except City.DoesNotExist:
-            pass
-
-    # Get available room types for this city
-    room_types = RoomType.objects.filter(
-        room__city=city,
-        room__is_available=True
-    ).distinct()
-
-    # Apply room type filters based on capacity
-    if selected_guests and selected_guests.strip():  # Check if not empty and not just whitespace
-        try:
-            selected_guests_int = int(selected_guests)
-            print(f"DEBUG - Filtering for {selected_guests_int} guests")
-            # Only show room types that can accommodate the selected number of guests
-            room_types = room_types.filter(capacity__gte=selected_guests_int)
-            print(f"DEBUG - After filtering: {room_types.count()} room types")
-        except ValueError:
-            print(f"DEBUG - Invalid guests value: {selected_guests}")
-
-    # NEW: Get available room IDs for each room type
-    room_type_data = []
-    for room_type in room_types:
-        available_room = Room.objects.filter(
-            room_type=room_type,
-            city=city,
-            is_available=True
-        ).first()
-        
-        room_type_data.append({
-            'room_type': room_type,
-            'available_room_id': available_room.id if available_room else None
-        })
-
-    # Get other cities for the "Explore Other Destinations" section
-    other_cities = City.objects.filter(
-        is_active=True
-    ).exclude(id=city_id).annotate(
-        room_count=Count('room', filter=Q(room__is_available=True))
-    ).order_by('name')[:6]
-
-    context = {
-        'city': city,
-        'all_cities': all_cities,
-        'room_type_data': room_type_data,  # CHANGED: Use room_type_data instead of room_types
-        'other_cities': other_cities,
-        'selected_check_in': selected_check_in,
-        'selected_check_out': selected_check_out,
-        'selected_guests': selected_guests,
-        'selected_rooms': selected_rooms,
-        'selected_city': selected_city,  # Make sure this is passed to template
-        'today': date.today().isoformat(),
-    }
-    return render(request, 'city_detail.html', context)
-
-
-
 
 @login_required
 def user_logout(request):
@@ -496,7 +375,7 @@ def room_admin(request):
     cities = City.objects.all()
     room_types = RoomType.objects.all()
     available_rooms = rooms.filter(is_available=True)
-    
+
     context = {
         'rooms': rooms,
         'cities': cities,

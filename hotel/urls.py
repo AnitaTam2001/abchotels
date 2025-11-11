@@ -7,7 +7,7 @@ from . import views
 urlpatterns = [
     path('', views.home, name='home'),
     path('booking/<int:room_id>/', views.booking_form, name='booking_form'),
-    path('booking/confirmation/<int:booking_id>/', views.booking_confirmation, name='booking_confirmation'),
+    path('booking/confirmation/<int:booking_id>/', views.booking_confirmation, name='booking_confirmation'),  # FIXED: Added booking_id parameter
     path('rooms/', views.room_list, name='room_list'),
     path('rooms/admin/', views.room_admin, name='room_admin'),
     path('cities/<int:city_id>/', views.city_detail, name='city_detail'),

@@ -72,7 +72,6 @@ class Booking(models.Model):
 
     @property
     def total_price(self):
-        """Calculate total price based on nights and room price"""
         if self.check_in and self.check_out and self.room:
             nights = (self.check_out - self.check_in).days
             return nights * self.room.room_type.price_per_night
@@ -80,7 +79,6 @@ class Booking(models.Model):
 
     @property
     def nights(self):
-        """Calculate number of nights"""
         if self.check_in and self.check_out:
             return (self.check_out - self.check_in).days
         return 0

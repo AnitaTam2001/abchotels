@@ -94,8 +94,7 @@ class RoomAdmin(admin.ModelAdmin):
 
     def price_per_night(self, obj):
         return f"${obj.room_type.price_per_night}"
-    price_per_night.short_description = 'Price Per Night'
-    price_per_night.admin_order_field = 'room_type__price_per_night'
+    price_per_night.short_description = 'Price/Night'
 
     def capacity(self, obj):
         return obj.room_type.capacity
@@ -167,7 +166,7 @@ class JobApplicationAdmin(admin.ModelAdmin):
     readonly_fields = ['applied_date']
     date_hierarchy = 'applied_date'
     list_per_page = 20
-    list_select_related = ['job', 'job__department']
+    list_select_related = ['job']
 
     def job_display(self, obj):
         return str(obj.job)
