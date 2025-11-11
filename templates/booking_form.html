@@ -18,76 +18,81 @@
                 {% endfor %}
             </div>
             {% endif %}
+
             <!-- Room Information Card -->
             <div style="background: #e8f4fd; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
-                <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
-                    <div style="width: 80px; height: 80px; border-radius: 8px; overflow: hidden; background: #f8f9fa;">
-                        {% if room.room_type.name == 'Accessible King' %}
-                        <img src="{% static 'images/rooms/accessible_king.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                        {% elif room.room_type.name == 'Junior Suite' %}
-                        <img src="{% static 'images/rooms/junior_suite.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                        {% elif room.room_type.name == 'Pool View King' %}
-                        <img src="{% static 'images/rooms/poolview_king.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                        {% elif room.room_type.name == 'City View Twin' %}
-                        <img src="{% static 'images/rooms/cityview_twin.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                        {% elif room.room_type.name == 'Corner Suite' %}
-                        <img src="{% static 'images/rooms/corner_suite.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                        {% elif room.room_type.name == 'Studio King' %}
-                        <img src="{% static 'images/rooms/studio_king.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                        {% elif room.room_type.name == 'Connecting Family' %}
-                        <img src="{% static 'images/rooms/connecting_family.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                        {% elif room.room_type.name == 'Garden View Queen' %}
-                        <img src="{% static 'images/rooms/garden_queen.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                        {% elif room.room_type.name == 'Penthouse Suite' %}
-                        <img src="{% static 'images/rooms/penthouse_suite.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                        {% else %}
-                        <img src="{% static 'images/rooms/accessible_king.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                        {% endif %}
+                <!-- Hotel Name - Bold and Center -->
+                <h2 style="text-align: center; font-weight: bold; margin-bottom: 1.5rem; color: #2c3e50;">
+                    ABC {{ room.city.name }} Hotel
+                </h2>
+                
+                <div style="display: flex; gap: 1.5rem; align-items: flex-start;">
+                    <!-- Image on the left - half size -->
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="width: 100%; height: 150px; border-radius: 8px; overflow: hidden; background: #f8f9fa;">
+                            {% if room.room_type.name == 'Accessible King' %}
+                            <img src="{% static 'images/rooms/accessible_king.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                            {% elif room.room_type.name == 'Junior Suite' %}
+                            <img src="{% static 'images/rooms/junior_suite.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                            {% elif room.room_type.name == 'Pool View King' %}
+                            <img src="{% static 'images/rooms/poolview_king.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                            {% elif room.room_type.name == 'City View Twin' %}
+                            <img src="{% static 'images/rooms/cityview_twin.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                            {% elif room.room_type.name == 'Corner Suite' %}
+                            <img src="{% static 'images/rooms/corner_suite.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                            {% elif room.room_type.name == 'Studio King' %}
+                            <img src="{% static 'images/rooms/studio_king.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                            {% elif room.room_type.name == 'Connecting Family' %}
+                            <img src="{% static 'images/rooms/connecting_family.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                            {% elif room.room_type.name == 'Garden View Queen' %}
+                            <img src="{% static 'images/rooms/garden_queen.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                            {% elif room.room_type.name == 'Penthouse Suite' %}
+                            <img src="{% static 'images/rooms/penthouse_suite.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                            {% else %}
+                            <img src="{% static 'images/rooms/accessible_king.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                            {% endif %}
+                        </div>
                     </div>
-                    <div>
+                    
+                    <!-- Room type details on the right - half size -->
+                    <div style="flex: 1; min-width: 0;">
                         <h3 style="margin: 0 0 0.5rem 0; color: #2c3e50;">{{ room.room_type.name }}</h3>
-                        <p style="margin: 0; color: #666;">${{ room.room_type.price_per_night }} per night</p>
-                    </div>
-                </div>
-
-                <!-- Room Details -->
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div>
-                        <!-- CHANGED: From "Capacity" to "Guests per room" -->
-                        <p style="margin: 0; color: #666;"><strong>Guests per room:</strong> {{ room.room_type.capacity }} guest{{ room.room_type.capacity|pluralize }}</p>
-                    </div>
-                    <div>
-                        <!-- CHANGED: From "Location" to "ABC Amsterdam Hotel" -->
-                        <p style="margin: 0; color: #666;"><strong>Location:</strong> ABC {{ room.city.name }} Hotel</p>
-                    </div>
-                </div>
-
-                <!-- Selected Dates -->
-                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #d1ecf1;">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <div>
-                            <!-- CHANGED: Fixed check-in date from URL parameters -->
-                            <p style="margin: 0; color: #666;"><strong>Check-in:</strong>
-                            {% if request.GET.check_in %}
-                            {{ request.GET.check_in }}
-                            {% else %}
-                            {{ today }}
-                            {% endif %}
-                            </p>
-                        </div>
-                        <div>
-                            <!-- CHANGED: Fixed check-out date from URL parameters -->
-                            <p style="margin: 0; color: #666;"><strong>Check-out:</strong>
-                            {% if request.GET.check_out %}
-                            {{ request.GET.check_out }}
-                            {% else %}
-                            {{ today }}
-                            {% endif %}
-                            </p>
-                        </div>
+                        <p style="margin: 0 0 1rem 0; color: #666; font-size: 1.1rem;">
+                            <strong style="color: #e74c3c; font-size: 1.3rem;">${{ room.room_type.price_per_night }}</strong> per night
+                        </p>
+                        <p style="margin: 0; color: #666; line-height: 1.5;">{{ room.room_type.description }}</p>
                     </div>
                 </div>
             </div>
+
+            <!-- Booking Details Below the Card -->
+            <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                <h4 style="margin: 0 0 1rem 0; color: #2c3e50;">Booking Details</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div>
+                        <p style="margin: 0; color: #666;"><strong>Guests per room:</strong> {{ room.room_type.capacity }} guest{{ room.room_type.capacity|pluralize }}</p>
+                    </div>
+                    <div>
+                        <p style="margin: 0; color: #666;"><strong>Check-in:</strong>
+                        {% if request.GET.check_in %}
+                        {{ request.GET.check_in }}
+                        {% else %}
+                        {{ today }}
+                        {% endif %}
+                        </p>
+                    </div>
+                    <div>
+                        <p style="margin: 0; color: #666;"><strong>Check-out:</strong>
+                        {% if request.GET.check_out %}
+                        {{ request.GET.check_out }}
+                        {% else %}
+                        {{ today }}
+                        {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
 
             <form method="post">
                 {% csrf_token %}
