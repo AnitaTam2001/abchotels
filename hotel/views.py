@@ -6,10 +6,11 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from django.utils.timezone import now
+from django.utils import timezone
 from datetime import datetime, date
 from .models import City, RoomType, Room, Booking, FAQ, JobListing
 from django.contrib.admin.views.decorators import staff_member_required
+from .forms import BookingForm
 
 def home(request):
     featured_cities = City.objects.filter(is_active=True).annotate(
@@ -200,57 +201,72 @@ def room_detail(request, room_id):
     }
     return render(request, 'room_detail.html', context)
 
+
+# hotel/views.py
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+from django.utils import timezone
+from .models import Room, Booking
+from .forms import BookingForm  # This should now work
+
+# hotel/views.py
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+from django.utils import timezone
+from .models import Room, Booking
+from .forms import BookingForm
+
 def booking_form(request, room_id):
-    room = get_object_or_404(Room, id=room_id, is_available=True)
-
+    room = get_object_or_404(Room, id=room_id)
+    
+    # Get dates from URL parameters
+    check_in = request.GET.get('check_in')
+    check_out = request.GET.get('check_out')
+    
     if request.method == 'POST':
-        # Process booking form
-        guest_name = request.POST.get('guest_name')
-        guest_email = request.POST.get('guest_email')
-        guest_phone = request.POST.get('guest_phone')
-        check_in = request.POST.get('check_in')
-        check_out = request.POST.get('check_out')
-
-        # Validate dates
-        try:
-            check_in_date = datetime.strptime(check_in, '%Y-%m-%d').date()
-            check_out_date = datetime.strptime(check_out, '%Y-%m-%d').date()
-
-            if check_in_date >= check_out_date:
-                messages.error(request, 'Check-out date must be after check-in date.')
-            elif check_in_date < date.today():
-                messages.error(request, 'Check-in date cannot be in the past.')
-            else:
-                # Calculate total price
-                nights = (check_out_date - check_in_date).days
-                total_price = room.room_type.price_per_night * nights
-
-                # Create booking
-                booking = Booking.objects.create(
-                    guest_name=guest_name,
-                    guest_email=guest_email,
-                    guest_phone=guest_phone,
-                    room=room,
-                    check_in=check_in_date,
-                    check_out=check_out_date,
-                    total_price=total_price,
-                    status='pending'
-                )
-                # Mark room as unavailable
-                room.is_available = False
-                room.save()
-
-                messages.success(request, f'Booking confirmed! Your booking reference is #{booking.id}')
-                return redirect('home')
-
-        except ValueError:
-            messages.error(request, 'Invalid date format.')
-
+        form = BookingForm(request.POST)
+        if form.is_valid():
+            try:
+                # Create booking but don't save yet
+                booking = form.save(commit=False)
+                booking.room = room
+                booking.save()
+                
+                messages.success(request, f'Booking confirmed! Total price: ${booking.total_price}')
+                return redirect('booking_confirmation', booking_id=booking.id)
+                
+            except Exception as e:
+                messages.error(request, f'Error creating booking: {str(e)}')
+        else:
+            # Form is invalid, show errors
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f'{field}: {error}')
+    else:
+        # GET request - create form with initial data from URL parameters
+        initial_data = {}
+        if check_in:
+            initial_data['check_in'] = check_in
+        if check_out:
+            initial_data['check_out'] = check_out
+            
+        form = BookingForm(initial=initial_data)
+    
     context = {
         'room': room,
-        'today': date.today().isoformat(),
+        'form': form,
+        'today': timezone.now().date(),
     }
     return render(request, 'booking_form.html', context)
+
+def booking_confirmation(request, booking_id):  # Add this function
+    booking = get_object_or_404(Booking, id=booking_id)
+    context = {
+        'booking': booking,
+    }
+    return render(request, 'booking_confirmation.html', context)
+
+
 
 def about(request):
     return render(request, 'about.html')

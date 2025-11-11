@@ -1,0 +1,91 @@
+<!-- templates/booking_confirmation.html -->
+{% extends 'base.html' %}
+{% block content %}
+<section style="padding: 4rem 0;">
+    <div class="container">
+        <div style="max-width: 600px; margin: 0 auto; background: white; padding: 3rem; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center;">
+            <h1 style="color: #27ae60; margin-bottom: 1rem;">Booking Confirmed!</h1>
+            <p style="font-size: 1.2rem; margin-bottom: 2rem; color: #666;">
+                Thank you for your booking, <strong>{{ booking.guest_name }}</strong>!
+            </p>
+            
+            <div style="background: #f8f9fa; padding: 2rem; border-radius: 8px; margin-bottom: 2rem; text-align: left;">
+                <h3 style="color: #2c3e50; margin-bottom: 1.5rem; text-align: center;">Booking Details</h3>
+                
+                <!-- Hotel Name -->
+                <div style="text-align: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid #3498db;">
+                    <h4 style="color: #2c3e50; margin: 0; font-size: 1.4rem;">
+                        ABC {{ booking.room.city.name }} Hotel
+                    </h4>
+                    <p style="color: #666; margin: 0.5rem 0 0 0; font-size: 1rem;">
+                        {{ booking.room.city.description }}
+                    </p>
+                </div>
+                
+                <div style="display: grid; gap: 1rem;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="font-weight: bold;">Room Type:</span>
+                        <span>{{ booking.room.room_type.name }}</span>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="font-weight: bold;">Location:</span>
+                        <span>{{ booking.room.city.name }}</span>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="font-weight: bold;">Check-in:</span>
+                        <span>{{ booking.check_in }}</span>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="font-weight: bold;">Check-out:</span>
+                        <span>{{ booking.check_out }}</span>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="font-weight: bold;">Nights:</span>
+                        <span>{{ booking.nights }}</span>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="font-weight: bold;">Price per Night:</span>
+                        <span>${{ booking.room.room_type.price_per_night }}</span>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; font-size: 1.2rem; border-top: 1px solid #ddd; padding-top: 1rem; margin-top: 1rem;">
+                        <span style="font-weight: bold; color: #2c3e50;">Total Price:</span>
+                        <span style="font-weight: bold; color: #e74c3c;">${{ booking.total_price }}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: #e8f4fd; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                <h4 style="color: #2c3e50; margin-bottom: 1rem;">Booking Reference</h4>
+                <p style="font-size: 1.5rem; font-weight: bold; color: #e74c3c; margin: 0;">#{{ booking.id }}</p>
+            </div>
+            
+            <p style="color: #666; margin-bottom: 2rem;">
+                A confirmation email has been sent to <strong>{{ booking.guest_email }}</strong>
+            </p>
+            
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+                <a href="/" class="btn" style="display: inline-block; padding: 0.75rem 2rem; background: #3498db; color: white; text-decoration: none; border-radius: 5px;">
+                    Return to Home
+                </a>
+                <a href="{% url 'booking_form' booking.room.id %}" class="btn" style="display: inline-block; padding: 0.75rem 2rem; background: #95a5a6; color: white; text-decoration: none; border-radius: 5px;">
+                    Book Another Room
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+</style>
+{% endblock %}

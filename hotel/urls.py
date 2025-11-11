@@ -6,12 +6,13 @@ from . import views
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('booking/<int:room_id>/', views.booking_form, name='booking_form'),
+    path('booking/confirmation/<int:booking_id>/', views.booking_confirmation, name='booking_confirmation'),
     path('rooms/', views.room_list, name='room_list'),
     path('rooms/admin/', views.room_admin, name='room_admin'),
     path('cities/<int:city_id>/', views.city_detail, name='city_detail'),
     path('room-types/<int:room_type_id>/', views.room_type_detail, name='room_type_detail'),
     path('rooms/<int:room_id>/', views.room_detail, name='room_detail'),
-    path('booking/<int:room_id>/', views.booking_form, name='booking_form'),
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
     path('faq/', views.faq, name='faq'),

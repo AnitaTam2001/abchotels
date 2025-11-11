@@ -89,38 +89,37 @@ class RoomAdmin(admin.ModelAdmin):
     list_filter = ['room_type', 'is_available', 'city']
     search_fields = ['city__name', 'room_type__name']
     readonly_fields = ['room_image_preview_large', 'room_specific_image_preview_large']
-    list_per_page = 50
+    list_per_page = 20
     list_select_related = ['city', 'room_type']
-    
+
     def price_per_night(self, obj):
         return f"${obj.room_type.price_per_night}"
     price_per_night.short_description = 'Price Per Night'
     price_per_night.admin_order_field = 'room_type__price_per_night'
-    
+
     def capacity(self, obj):
         return obj.room_type.capacity
     capacity.short_description = 'Capacity'
     capacity.admin_order_field = 'room_type__capacity'
-    
+
     def room_image_preview(self, obj):
         if obj.room_type.image:
             return format_html('<img src="{}" style="max-height: 50px; max-width: 50px; border-radius: 4px;" />', obj.room_type.image.url)
         return "No image"
     room_image_preview.short_description = 'Room Type Image'
-    
+
     def room_image_preview_large(self, obj):
         if obj.room_type.image:
             return format_html('<img src="{}" style="max-height: 200px; border-radius: 8px;" />', obj.room_type.image.url)
         return "No image"
     room_image_preview_large.short_description = 'Room Type Image Preview'
-    
-    # New methods for room-specific image
+
     def room_specific_image_preview(self, obj):
         if obj.image:
             return format_html('<img src="{}" style="max-height: 50px; max-width: 50px; border-radius: 4px;" />', obj.image.url)
         return "No specific image"
     room_specific_image_preview.short_description = 'Room Specific Image'
-    
+
     def room_specific_image_preview_large(self, obj):
         if obj.image:
             return format_html('<img src="{}" style="max-height: 200px; border-radius: 8px;" />', obj.image.url)
@@ -128,19 +127,28 @@ class RoomAdmin(admin.ModelAdmin):
     room_specific_image_preview_large.short_description = 'Room Specific Image Preview'
 
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ['id', 'guest_name', 'room', 'check_in', 'check_out', 'status']
-    list_filter = ['status', 'check_in', 'check_out']
-    search_fields = ['guest_name', 'guest_email']
+    list_display = ['id', 'guest_name', 'room_display', 'check_in', 'check_out', 'status', 'total_price_display', 'created_at']
+    list_filter = ['status', 'check_in', 'check_out', 'created_at']
+    search_fields = ['guest_name', 'guest_email', 'room__city__name', 'room__room_type__name']
+    readonly_fields = ['created_at', 'updated_at', 'total_price_display']
+    list_per_page = 20
     date_hierarchy = 'created_at'
-    list_per_page = 50
-    list_select_related = ['room', 'room__city', 'room__room_type']
+
+    def room_display(self, obj):
+        return str(obj.room)
+    room_display.short_description = 'Room'
+    room_display.admin_order_field = 'room'
+
+    def total_price_display(self, obj):
+        return f"${obj.total_price}"
+    total_price_display.short_description = 'Total Price'
 
 class FAQAdmin(admin.ModelAdmin):
     list_display = ['id', 'question', 'category', 'order', 'is_active']
     list_filter = ['category', 'is_active']
     search_fields = ['question', 'answer']
     list_editable = ['order', 'is_active']
-    list_per_page = 50
+    list_per_page = 20
 
 class JobListingAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'department', 'job_type', 'experience_level', 'is_active', 'posted_date']
@@ -148,18 +156,22 @@ class JobListingAdmin(admin.ModelAdmin):
     list_editable = ['is_active']
     search_fields = ['title', 'description']
     date_hierarchy = 'posted_date'
-    list_per_page = 50
+    list_per_page = 20
     list_select_related = ['department']
 
 class JobApplicationAdmin(admin.ModelAdmin):
-    list_display = ['id', 'first_name', 'last_name', 'job', 'status', 'applied_date']
+    list_display = ['id', 'first_name', 'last_name', 'job_display', 'status', 'applied_date']
     list_filter = ['status', 'job', 'applied_date']
     list_editable = ['status']
     search_fields = ['first_name', 'last_name', 'email']
     readonly_fields = ['applied_date']
     date_hierarchy = 'applied_date'
-    list_per_page = 50
+    list_per_page = 20
     list_select_related = ['job', 'job__department']
+
+    def job_display(self, obj):
+        return str(obj.job)
+    job_display.short_description = 'Job'
 
 # Register models
 admin.site.register(City, CityAdmin)

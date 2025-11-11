@@ -6,7 +6,7 @@ from django.utils import timezone
 class City(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
-    image = models.ImageField(upload_to='cities/', null=True, blank=True)
+    image = models.ImageField(upload_to='images/city/', null=True, blank=True)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
@@ -14,7 +14,7 @@ class City(models.Model):
 
     class Meta:
         verbose_name = 'City'
-        verbose_name_plural = 'Cities'  # This fixes the "citys" to "cities"
+        verbose_name_plural = 'Cities'
 
 class Department(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -31,7 +31,7 @@ class RoomType(models.Model):
     description = models.TextField()
     price_per_night = models.DecimalField(max_digits=8, decimal_places=2)
     capacity = models.PositiveIntegerField()
-    image = models.ImageField(upload_to='rooms/', null=True, blank=True)
+    image = models.ImageField(upload_to='images/room/', null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -40,10 +40,10 @@ class RoomType(models.Model):
         ordering = ['name']
 
 class Room(models.Model):
-    city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='room')
+    city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='rooms')
     room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE)
     is_available = models.BooleanField(default=True)
-    image = models.ImageField(upload_to='room_images/', blank=True, null=True, verbose_name='Room Specific Image')
+    image = models.ImageField(upload_to='images/room_specific/', blank=True, null=True, verbose_name='Room Specific Image')
 
     def __str__(self):
         return f"{self.room_type.name} - {self.city.name}"
@@ -70,8 +70,23 @@ class Booking(models.Model):
     def __str__(self):
         return f'Booking {self.id} - {self.guest_name} - {self.room}'
 
+    @property
+    def total_price(self):
+        """Calculate total price based on nights and room price"""
+        if self.check_in and self.check_out and self.room:
+            nights = (self.check_out - self.check_in).days
+            return nights * self.room.room_type.price_per_night
+        return 0
+
+    @property
+    def nights(self):
+        """Calculate number of nights"""
+        if self.check_in and self.check_out:
+            return (self.check_out - self.check_in).days
+        return 0
+
     class Meta:
-        ordering = ['created_at']
+        ordering = ['-created_at']
 
 class FAQ(models.Model):
     CATEGORY_CHOICES = [
@@ -93,6 +108,8 @@ class FAQ(models.Model):
 
     class Meta:
         ordering = ['order', 'category']
+        verbose_name = 'FAQ'
+        verbose_name_plural = 'FAQs'
 
 class JobListing(models.Model):
     JOB_TYPE_CHOICES = [
