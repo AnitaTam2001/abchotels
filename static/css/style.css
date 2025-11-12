@@ -26,7 +26,7 @@ body {
 .navbar {
     background: var(--primary-color);
     color: white;
-    padding: 1rem 0;
+    padding: 1.3rem 0;
     position: fixed;
     width: 100%;
     top: 0;
@@ -43,6 +43,8 @@ body {
     padding: 0 2.5rem;
 }
 
+
+
 .logo {
     font-size: 1.8rem;
     font-weight: bold;
@@ -54,6 +56,7 @@ body {
     display: flex;
     list-style: none;
     gap: 2rem;
+    align-items: center;
 }
 
 .nav-links a {
@@ -61,8 +64,9 @@ body {
     text-decoration: none;
     font-weight: 500;
     transition: color 0.3s ease;
-    padding: 0.5rem 1rem;
+    padding: 0.65rem 1.3rem;
     border-radius: 5px;
+    text-transform: none;
 }
 
 .nav-links a:hover {
@@ -70,9 +74,35 @@ body {
     background: rgba(255,255,255,0.1);
 }
 
+.nav-btn {
+    display: inline-block;
+    background: #3498db;
+    color: white;
+    padding: 0.65rem 1.3rem;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-transform: none;
+    font-size: 0.9rem;
+}
+
+.nav-btn:hover {
+    background: #2980b9;
+}
+
+.nav-btn-register {
+    background: #e74c3c;
+}
+
+.nav-btn-register:hover {
+    background: #c0392b;
+}
+
 .main-content {
-    margin-top: 80px;
-    min-height: calc(100vh - 160px);
+    margin-top: 104px;
+    min-height: calc(100vh - 208px);
 }
 
 .container {
@@ -82,8 +112,7 @@ body {
 }
 
 .hero-section {
-    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-                url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
     background-size: cover;
     background-position: center;
     color: white;
@@ -236,8 +265,7 @@ body {
 }
 
 .contact-hero {
-    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-                url('https://images.unsplash.com/photo-1497366811353-6870744d04b2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1497366811353-6870744d04b2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
     background-size: cover;
     background-position: center;
     color: white;
@@ -247,8 +275,7 @@ body {
 }
 
 .about-hero {
-    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-                url('https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
     background-size: cover;
     background-position: center;
     color: white;
@@ -322,29 +349,31 @@ body {
         flex-direction: column;
         gap: 1rem;
     }
-    
+
     .nav-links {
         gap: 1rem;
     }
-    
+
     .hero-title {
         font-size: 2.5rem;
     }
-    
+
     .container {
         padding: 0 1rem;
     }
-    
+
+    .main-content {
+        margin-top: 120px;
+    }
+
     .room-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .feature-grid {
         grid-template-columns: 1fr;
     }
 }
-
-/* Add these styles to your existing CSS */
 
 /* Filter and Selection Styles */
 .filter-section {
@@ -471,7 +500,7 @@ body {
 
 .selection-header {
     display: flex;
-    justify-content: between;
+    justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
 }
@@ -593,7 +622,7 @@ body {
 /* Results Counter */
 .results-info {
     display: flex;
-    justify-content: between;
+    justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
     padding: 1rem;
@@ -607,27 +636,6 @@ body {
     border-radius: 5px;
     background: white;
 }
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .filter-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .booking-form-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .amenities-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .contact-preferences {
-        flex-direction: column;
-    }
-}
-
-/* Add to static/css/style.css */
 
 /* City Grid Styles */
 .city-grid {
@@ -684,11 +692,52 @@ body {
 
 /* Mobile Responsive for City Grid */
 @media (max-width: 768px) {
+    .filter-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .amenities-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-preferences {
+        flex-direction: column;
+    }
+
     .city-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .city-image {
         height: 200px;
+    }
+}
+
+/* Additional responsive adjustments */
+@media (max-width: 480px) {
+    .nav-container {
+        padding: 0 1rem;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .hero-title {
+        font-size: 2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+
+    .btn {
+        padding: 0.6rem 1.5rem;
+        font-size: 0.9rem;
     }
 }

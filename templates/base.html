@@ -23,29 +23,29 @@
   .navbar {
   background: #2c3e50;
   color: white;
-  padding: 1rem 0;
+  padding: 1.15rem 0;
   position: fixed;
   width: 100%;
   top: 0;
   z-index: 1000;
   }
   .nav-container {
-  max-width: 1200px;
+  max-width: 1380px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 2rem;
+  padding: 0 2.875rem;
   }
   .logo {
-  font-size: 1.5rem;
+  font-size: 2.07rem;
   font-weight: bold;
   color: #3498db;
   }
   .nav-links {
   display: flex;
   list-style: none;
-  gap: 2rem;
+  gap: 2.3rem;
   align-items: center;
   }
   .nav-links a {
@@ -53,6 +53,7 @@
   text-decoration: none;
   transition: color 0.3s;
   text-transform: none;
+  font-size: 1.035rem;
   }
   .nav-links a:hover {
   color: #3498db;
@@ -61,14 +62,14 @@
     display: inline-block;
     background: #3498db;
     color: white;
-    padding: 0.5rem 1rem;
+    padding: 0.575rem 1.15rem;
     text-decoration: none;
     border-radius: 5px;
     border: none;
     cursor: pointer;
     transition: background 0.3s;
     text-transform: none;
-    font-size: 0.9rem;
+    font-size: 1.035rem;
   }
   .nav-btn:hover {
     background: #2980b9;
@@ -80,8 +81,8 @@
     background: #c0392b;
   }
   .main-content {
-  margin-top: 80px;
-  min-height: calc(100vh - 160px);
+  margin-top: 0; /* Changed from 92px to 0 to eliminate gap */
+  min-height: calc(100vh - 184px);
   }
   .container {
   max-width: 1200px;
@@ -116,7 +117,6 @@
   border: none;
   cursor: pointer;
   transition: background 0.3s;
-  text-transform: none;
   }
   .btn:hover {
   background: #2980b9;
