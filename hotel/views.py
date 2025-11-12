@@ -12,6 +12,19 @@ from .models import City, RoomType, Room, Booking, FAQ, JobListing
 from django.contrib.admin.views.decorators import staff_member_required
 from .forms import BookingForm, CustomUserCreationForm
 
+# Add this to hotel/views.py temporarily
+from django.urls import get_resolver
+
+def debug_url_patterns(request):
+    """Debug function to check URL patterns"""
+    try:
+        # Test the booking_confirmation URL
+        url = reverse('booking_confirmation', kwargs={'booking_id': 999})
+        return HttpResponse(f"✅ URL pattern works! Generated URL: {url}")
+    except Exception as e:
+        return HttpResponse(f"❌ URL pattern error: {e}")
+
+
 def home(request):
     featured_cities = City.objects.filter(is_active=True).annotate(
         room_count=Count('rooms', filter=Q(rooms__is_available=True))
@@ -209,7 +222,7 @@ def room_detail(request, room_id):
     }
     return render(request, 'room_detail.html', context)
 
-# In hotel/views.py - fix the booking_form function
+# In hotel/views.py - update the booking_form function
 def booking_form(request, room_id):
     room = get_object_or_404(Room, id=room_id)
 
@@ -227,11 +240,16 @@ def booking_form(request, room_id):
                 booking.save()
 
                 messages.success(request, f'Booking confirmed! Total price: ${booking.total_price}')
+                # Debug: Print the booking ID and URL
+                print(f"DEBUG: Booking created with ID: {booking.id}")
+                print(f"DEBUG: Redirecting to booking_confirmation with booking_id: {booking.id}")
+                
                 # FIXED: Make sure booking_id is passed correctly
                 return redirect('booking_confirmation', booking_id=booking.id)
 
             except Exception as e:
                 messages.error(request, f'Error creating booking: {str(e)}')
+                print(f"ERROR in booking creation: {str(e)}")
         else:
             # Form is invalid, show errors
             for field, errors in form.errors.items():
@@ -253,7 +271,6 @@ def booking_form(request, room_id):
         'today': timezone.now().date(),
     }
     return render(request, 'booking_form.html', context)
-
 
 def booking_confirmation(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)

@@ -1,68 +1,50 @@
 <!-- templates/booking_confirmation.html -->
 {% extends 'base.html' %}
-
-{% block title %}Booking Confirmation - ABC Hotels{% endblock %}
+{% load static %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-lg">
-                <div class="card-header bg-success text-white">
-                    <h2 class="mb-0">Booking Confirmed! 🎉</h2>
-                </div>
-                <div class="card-body">
-                    <div class="text-center mb-4">
-                        <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
-                    </div>
-                    
-                    <h3 class="text-center mb-4">Thank you for your booking!</h3>
-                    
-                    {% if booking %}
-                    <div class="booking-details">
-                        <h4>Booking Details:</h4>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p><strong>Booking ID:</strong> #{{ booking.id }}</p>
-                                <p><strong>Guest Name:</strong> {{ booking.guest_name }}</p>
-                                <p><strong>Email:</strong> {{ booking.guest_email }}</p>
-                                <p><strong>Phone:</strong> {{ booking.guest_phone }}</p>
-                            </div>
-                            <div class="col-md-6">
-                                <p><strong>Room:</strong> {{ booking.room }}</p>
-                                <p><strong>Check-in:</strong> {{ booking.check_in }}</p>
-                                <p><strong>Check-out:</strong> {{ booking.check_out }}</p>
-                                <p><strong>Total Nights:</strong> {{ booking.nights }}</p>
-                                <p><strong>Total Price:</strong> ${{ booking.total_price }}</p>
-                            </div>
-                        </div>
-                    </div>
-                    {% else %}
-                    <div class="alert alert-info">
-                        <p>Your booking has been successfully created! A confirmation email has been sent to your email address.</p>
-                    </div>
-                    {% endif %}
-
-                    <div class="alert alert-info mt-4">
-                        <h5>What's Next?</h5>
-                        <ul class="mb-0">
-                            <li>You will receive a confirmation email shortly</li>
-                            <li>Check your spam folder if you don't see it</li>
-                            <li>Contact us if you need to make any changes</li>
-                        </ul>
-                    </div>
-
-                    <div class="text-center mt-4">
-                        <a href="{% url 'dashboard' %}" class="btn btn-primary me-2">
-                            <i class="fas fa-tachometer-alt"></i> View Dashboard
-                        </a>
-                        <a href="{% url 'home' %}" class="btn btn-outline-secondary">
-                            <i class="fas fa-home"></i> Back to Home
-                        </a>
-                    </div>
-                </div>
+<section style="padding: 4rem 0;">
+    <div class="container">
+        <div style="max-width: 600px; margin: 0 auto; background: white; padding: 3rem; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center;">
+            <h1 style="color: #27ae60; margin-bottom: 1rem;">Booking Confirmed! 🎉</h1>
+            
+            <div style="font-size: 4rem; color: #27ae60; margin-bottom: 2rem;">✓</div>
+            
+            <h2 style="color: #2c3e50; margin-bottom: 2rem;">Thank You for Your Booking!</h2>
+            
+            {% if booking %}
+            <div style="background: #f8f9fa; padding: 2rem; border-radius: 8px; margin-bottom: 2rem; text-align: left;">
+                <h3 style="color: #2c3e50; margin-bottom: 1rem;">Booking Details</h3>
+                <p><strong>Booking ID:</strong> #{{ booking.id }}</p>
+                <p><strong>Guest Name:</strong> {{ booking.guest_name }}</p>
+                <p><strong>Email:</strong> {{ booking.guest_email }}</p>
+                <p><strong>Phone:</strong> {{ booking.guest_phone }}</p>
+                <p><strong>Room:</strong> {{ booking.room }}</p>
+                <p><strong>Check-in:</strong> {{ booking.check_in }}</p>
+                <p><strong>Check-out:</strong> {{ booking.check_out }}</p>
+                <p><strong>Total Nights:</strong> {{ booking.nights }}</p>
+                <p><strong>Total Price:</strong> ${{ booking.total_price }}</p>
+            </div>
+            {% endif %}
+            
+            <div style="background: #e8f4fd; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                <h4 style="color: #2c3e50; margin-bottom: 1rem;">What's Next?</h4>
+                <ul style="text-align: left; margin-bottom: 0;">
+                    <li>You will receive a confirmation email shortly</li>
+                    <li>Check your spam folder if you don't see it</li>
+                    <li>Contact us if you need to make any changes</li>
+                </ul>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+                <a href="{% url 'dashboard' %}" style="padding: 0.75rem 1.5rem; background: #3498db; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                    View Dashboard
+                </a>
+                <a href="{% url 'home' %}" style="padding: 0.75rem 1.5rem; background: #95a5a6; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                    Back to Home
+                </a>
             </div>
         </div>
     </div>
-</div>
+</section>
 {% endblock %}
