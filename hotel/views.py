@@ -11,6 +11,8 @@ from datetime import datetime, date
 from .models import City, RoomType, Room, Booking, FAQ, JobListing
 from django.contrib.admin.views.decorators import staff_member_required
 from .forms import BookingForm, CustomUserCreationForm
+from django.contrib.auth.models import User
+
 
 # Add this to hotel/views.py temporarily
 from django.urls import get_resolver
@@ -339,15 +341,18 @@ def why_work_with_us(request):
 
 def register(request):
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
+        form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)
-            messages.success(request, 'Registration successful')
-            return redirect('home')
+            # Get phone number from form
+            phone_number = request.POST.get('phone_number')
+            # You might want to save phone_number to user profile
+            messages.success(request, 'Registration successful! You can now log in.')
+            return redirect('login')
     else:
-        form = CustomUserCreationForm()
+        form = UserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
+
 
 def user_login(request):
     if request.method == 'POST':
