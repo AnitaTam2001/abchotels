@@ -6,8 +6,9 @@ import csv
 import time
 
 # Setup Django environment
-sys.path.append('/Users/anita/abc')  # CHANGED: from abchotels to abc
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'abchotels.settings')  # Keep this as is if your Django project name is still abchotels
+sys.path.append('/Users/anita/abchotels')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'abchotels.settings')
+
 django.setup()
 
 from django.db import connection

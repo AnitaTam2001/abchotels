@@ -2,6 +2,14 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from django.contrib.auth.models import AbstractUser
+from django.conf import settings
+
+class CustomUser(AbstractUser):
+    phone_number = models.CharField(max_length=20, blank=True)
+
+    def __str__(self):
+        return self.username
 
 class City(models.Model):
     name = models.CharField(max_length=100)
@@ -43,8 +51,9 @@ class Room(models.Model):
     city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='rooms')
     room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE)
     is_available = models.BooleanField(default=True)
-    image = models.ImageField(upload_to='images/room_specific/', blank=True, null=True, verbose_name='Room Specific Image')
-
+    image = models.ImageField(upload_to='images/room_specific/', blank=True,
+                            null=True, verbose_name='Room Specific Image')
+    
     def __str__(self):
         return f"{self.room_type.name} - {self.city.name}"
 
@@ -60,16 +69,18 @@ class Booking(models.Model):
     guest_name = models.CharField(max_length=100)
     guest_email = models.EmailField()
     guest_phone = models.CharField(max_length=20)
-    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='bookings')
+    room = models.ForeignKey(Room, on_delete=models.CASCADE,
+                           related_name='bookings')
     check_in = models.DateField()
     check_out = models.DateField()
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES,
+                            default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
+    
     def __str__(self):
         return f'Booking {self.id} - {self.guest_name} - {self.room}'
-
+    
     @property
     def total_price(self):
         if self.check_in and self.check_out and self.room:
@@ -97,7 +108,8 @@ class FAQ(models.Model):
 
     question = models.CharField(max_length=255)
     answer = models.TextField()
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='general')
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES,
+                              default='general')
     order = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
 
@@ -125,7 +137,8 @@ class JobListing(models.Model):
     ]
 
     title = models.CharField(max_length=200)
-    department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='job_listings')
+    department = models.ForeignKey(Department, on_delete=models.CASCADE,
+                                 related_name='job_listings')
     description = models.TextField()
     requirements = models.TextField()
     job_type = models.CharField(max_length=20, choices=JOB_TYPE_CHOICES)
@@ -151,14 +164,16 @@ class JobApplication(models.Model):
         ('hired', 'Hired'),
     ]
 
-    job = models.ForeignKey(JobListing, on_delete=models.CASCADE, related_name='applications')
+    job = models.ForeignKey(JobListing, on_delete=models.CASCADE,
+                          related_name='applications')
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField()
     phone = models.CharField(max_length=20)
     resume = models.FileField(upload_to='resumes/')
     cover_letter = models.TextField(blank=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='applied')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES,
+                            default='applied')
     applied_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -166,3 +181,10 @@ class JobApplication(models.Model):
 
     class Meta:
         ordering = ['-applied_date']
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=20, blank=True)
+
+    def __str__(self):
+        return f"{self.user.username} Profile"

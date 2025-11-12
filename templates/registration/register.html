@@ -21,7 +21,7 @@
                 <!-- Display messages -->
                 {% if messages %}
                 {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" style="background: #d4edda; color: #155724; border: 1px solid #c3e6cb; padding: 1rem; border-radius: 5px; margin-bottom: 1rem;">
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" style="background: {% if message.tags == 'error' %}#f8d7da{% else %}#d4edda{% endif %}; color: {% if message.tags == 'error' %}#721c24{% else %}#155724{% endif %}; border: 1px solid {% if message.tags == 'error' %}#f5c6cb{% else %}#c3e6cb{% endif %}; padding: 1rem; border-radius: 5px; margin-bottom: 1rem;">
                     {{ message }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="background: none; border: none; float: right; font-size: 1.2rem; cursor: pointer;">×</button>
                 </div>
@@ -34,7 +34,7 @@
                     <!-- Username Field -->
                     <div class="form-group">
                         <label class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: bold; color: #2c3e50; font-family: Arial, sans-serif;">Username **</label>
-                        <input type="text" name="username" class="form-control" placeholder="Enter your username" required>
+                        {{ form.username }}
                         {% if form.username.errors %}
                         <div class="text-danger" style="color: #e74c3c; margin-top: 0.5rem;">
                             {% for error in form.username.errors %}
@@ -47,7 +47,7 @@
                     <!-- Email Field -->
                     <div class="form-group">
                         <label class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: bold; color: #2c3e50; font-family: Arial, sans-serif;">Email Address **</label>
-                        <input type="email" name="email" class="form-control" placeholder="Enter your email address" required>
+                        {{ form.email }}
                         {% if form.email.errors %}
                         <div class="text-danger" style="color: #e74c3c; margin-top: 0.5rem;">
                             {% for error in form.email.errors %}
@@ -60,7 +60,7 @@
                     <!-- Phone Number Field -->
                     <div class="form-group">
                         <label class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: bold; color: #2c3e50; font-family: Arial, sans-serif;">Phone Number **</label>
-                        <input type="tel" name="phone_number" class="form-control" placeholder="Enter your phone number" required>
+                        {{ form.phone_number }}
                         {% if form.phone_number.errors %}
                         <div class="text-danger" style="color: #e74c3c; margin-top: 0.5rem;">
                             {% for error in form.phone_number.errors %}
@@ -73,7 +73,7 @@
                     <!-- Password Field -->
                     <div class="form-group">
                         <label class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: bold; color: #2c3e50; font-family: Arial, sans-serif;">Password **</label>
-                        <input type="password" name="password1" class="form-control" placeholder="Enter your password" required>
+                        {{ form.password1 }}
                         {% if form.password1.errors %}
                         <div class="text-danger" style="color: #e74c3c; margin-top: 0.5rem;">
                             {% for error in form.password1.errors %}
@@ -89,7 +89,7 @@
                     <!-- Confirm Password Field -->
                     <div class="form-group">
                         <label class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: bold; color: #2c3e50; font-family: Arial, sans-serif;">Confirm Password **</label>
-                        <input type="password" name="password2" class="form-control" placeholder="Confirm your password" required>
+                        {{ form.password2 }}
                         {% if form.password2.errors %}
                         <div class="text-danger" style="color: #e74c3c; margin-top: 0.5rem;">
                             {% for error in form.password2.errors %}

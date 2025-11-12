@@ -5,27 +5,52 @@ from django.core.paginator import Paginator
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
 from django.utils import timezone
+from django.urls import reverse
+from django.http import HttpResponse
 from datetime import datetime, date
-from .models import City, RoomType, Room, Booking, FAQ, JobListing
+from .models import City, RoomType, Room, Booking, FAQ, JobListing, CustomUser
 from django.contrib.admin.views.decorators import staff_member_required
-from .forms import BookingForm, CustomUserCreationForm
-from django.contrib.auth.models import User
+from .forms import BookingForm, CustomUserCreationForm, ContactForm
 
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, 'Registration successful! You can now log in.')
+            return redirect('login')
+        else:
+            # If form is invalid, show error messages
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f'{field}: {error}')
+    else:
+        form = CustomUserCreationForm()
 
-# Add this to hotel/views.py temporarily
-from django.urls import get_resolver
+    return render(request, 'registration/register.html', {'form': form})
+
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            messages.success(request, 'Login successful')
+            return redirect('dashboard')
+        else:
+            messages.error(request, 'Invalid username or password.')
+    return render(request, 'registration/login.html')
 
 def debug_url_patterns(request):
     """Debug function to check URL patterns"""
     try:
         # Test the booking_confirmation URL
         url = reverse('booking_confirmation', kwargs={'booking_id': 999})
-        return HttpResponse(f"✅ URL pattern works! Generated URL: {url}")
+        return HttpResponse(f"URL pattern works! Generated URL: {url}")
     except Exception as e:
-        return HttpResponse(f"❌ URL pattern error: {e}")
-
+        return HttpResponse(f"URL pattern error: {e}")
 
 def home(request):
     featured_cities = City.objects.filter(is_active=True).annotate(
@@ -64,7 +89,7 @@ def room_list(request):
                 params.append(f'guests={selected_guests}')
             if selected_rooms:
                 params.append(f'rooms={selected_rooms}')
-            
+
             if params:
                 redirect_url += "?" + "&".join(params)
             return redirect(redirect_url)
@@ -74,10 +99,7 @@ def room_list(request):
     # If no city selected or city doesn't exist, show the room list page with cities
     # Start with all active cities
     cities = City.objects.filter(is_active=True)
-
     # Apply filters
-    if selected_city:
-        cities = cities.filter(name__icontains=selected_city)
 
     # Annotate with room count and starting price
     cities = cities.annotate(
@@ -224,7 +246,6 @@ def room_detail(request, room_id):
     }
     return render(request, 'room_detail.html', context)
 
-# In hotel/views.py - update the booking_form function
 def booking_form(request, room_id):
     room = get_object_or_404(Room, id=room_id)
 
@@ -245,18 +266,20 @@ def booking_form(request, room_id):
                 # Debug: Print the booking ID and URL
                 print(f"DEBUG: Booking created with ID: {booking.id}")
                 print(f"DEBUG: Redirecting to booking_confirmation with booking_id: {booking.id}")
-                
+
                 # FIXED: Make sure booking_id is passed correctly
                 return redirect('booking_confirmation', booking_id=booking.id)
 
             except Exception as e:
                 messages.error(request, f'Error creating booking: {str(e)}')
                 print(f"ERROR in booking creation: {str(e)}")
+
         else:
             # Form is invalid, show errors
             for field, errors in form.errors.items():
                 for error in errors:
                     messages.error(request, f'{field}: {error}')
+
     else:
         # GET request - create form with initial data from URL parameters
         initial_data = {}
@@ -327,7 +350,7 @@ def job_application(request, job_id):
         last_name = request.POST.get('last_name')
         email = request.POST.get('email')
         # Add more processing as needed
-        
+
         messages.success(request, 'Application submitted successfully!')
         return redirect('careers')
 
@@ -338,34 +361,6 @@ def job_application(request, job_id):
 
 def why_work_with_us(request):
     return render(request, 'why_work_with_us.html')
-
-def register(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            # Get phone number from form
-            phone_number = request.POST.get('phone_number')
-            # You might want to save phone_number to user profile
-            messages.success(request, 'Registration successful! You can now log in.')
-            return redirect('login')
-    else:
-        form = UserCreationForm()
-    return render(request, 'registration/register.html', {'form': form})
-
-
-def user_login(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            messages.success(request, 'Login successful')
-            return redirect('dashboard')
-        else:
-            messages.error(request, 'Invalid username or password.')
-    return render(request, 'registration/login.html')
 
 @login_required
 def user_logout(request):
