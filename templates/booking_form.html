@@ -65,40 +65,48 @@
 
             <!-- Booking Details -->
             <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
-                <h4 style="margin: 0 0 1rem 0; color: #2c3e50; font-size: 1.5rem; text-align: left;">Booking Details</h4>
+                <h4 style="margin: 0 0 1rem 0; color: #2c3e50; font-size: 1.35rem; text-align: left;">Booking Details</h4>
                 
-                <div style="display: flex; gap: 1rem; align-items: center;">
-                    <!-- Guests per room with increased font size -->
-                    <div style="flex: 1; min-width: 200px;">
-                        <p style="margin: 0; color: #666; font-size: 1.3125rem; line-height: 1.5; text-align: left;">
-                            <strong>Guests per room:</strong> {{ room.room_type.capacity }} guest{{ room.room_type.capacity|pluralize }}
+                <!-- Line 1: Guests per room -->
+                <div style="margin-bottom: 1rem;">
+                    <p style="margin: 0; color: #666; font-size: 1.18125rem; line-height: 1.5; text-align: left;">
+                        <strong>Guests per room:</strong> {{ room.room_type.capacity }} guest{{ room.room_type.capacity|pluralize }}
+                    </p>
+                </div>
+                
+                <!-- Line 2: Check-in & Check-out labels -->
+                <div style="display: flex; gap: 2rem; margin-bottom: 0.5rem;">
+                    <div style="flex: 1;">
+                        <p style="margin: 0; color: #666; font-size: 1.18125rem; text-align: left;">
+                            <strong>Check-in:</strong>
                         </p>
                     </div>
-                    
-                    <!-- Check-in and Check-out on the same line -->
-                    <div style="flex: 2; min-width: 300px;">
-                        <div style="display: flex; gap: 2rem; align-items: center;">
-                            <div style="flex: 1;">
-                                <p style="margin: 0; color: #666; font-size: 1.3125rem; text-align: left;">
-                                    <strong>Check-in:</strong><br>
-                                    {% if request.GET.check_in %}
-                                    {{ request.GET.check_in }}
-                                    {% else %}
-                                    {{ today }}
-                                    {% endif %}
-                                </p>
-                            </div>
-                            <div style="flex: 1;">
-                                <p style="margin: 0; color: #666; font-size: 1.3125rem; text-align: left;">
-                                    <strong>Check-out:</strong><br>
-                                    {% if request.GET.check_out %}
-                                    {{ request.GET.check_out }}
-                                    {% else %}
-                                    {{ today }}
-                                    {% endif %}
-                                </p>
-                            </div>
-                        </div>
+                    <div style="flex: 1;">
+                        <p style="margin: 0; color: #666; font-size: 1.18125rem; text-align: left;">
+                            <strong>Check-out:</strong>
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Line 3: Check-in & Check-out dates -->
+                <div style="display: flex; gap: 2rem;">
+                    <div style="flex: 1;">
+                        <p style="margin: 0; color: #666; font-size: 1.18125rem; text-align: left;">
+                            {% if request.GET.check_in %}
+                            {{ request.GET.check_in }}
+                            {% else %}
+                            {{ today }}
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div style="flex: 1;">
+                        <p style="margin: 0; color: #666; font-size: 1.18125rem; text-align: left;">
+                            {% if request.GET.check_out %}
+                            {{ request.GET.check_out }}
+                            {% else %}
+                            {{ today }}
+                            {% endif %}
+                        </p>
                     </div>
                 </div>
             </div>
