@@ -6,8 +6,6 @@
     <div class="container">
         <h1 class="hero-title">About Us</h1>
         <p class="hero-subtitle">Two Decades of Excellence in Hospitality</p>
-        <!-- You can add a button here if needed, similar to home.html -->
-        <!-- <a href="#" class="btn btn-primary">Learn More</a> -->
     </div>
 </section>
 
@@ -30,30 +28,38 @@
                 </p>
             </div>
         </div>
+    </div>
+</section>
 
-        <!-- What Sets Us Apart in 4 columns -->
-        <div style="background: #f8f9fa; padding: 3rem; border-radius: 10px; margin-bottom: 4rem;">
-            <h2 style="text-align: center; margin-bottom: 3rem;">What Sets Us Apart</h2>
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;">
-                <div style="text-align: center;">
-                    <h3 style="margin-bottom: 1rem; color: #2c3e50;">🏆 Award-Winning Service</h3>
-                    <p style="color: #666; line-height: 1.6;">Consistently recognized for exceptional service and guest satisfaction</p>
+<!-- What Sets Us Apart Section - Matching home.html structure -->
+<section style="background: #f8f9fa; padding: 4rem 0;">
+    <div class="container">
+        <div style="text-align: center;">
+            <h2 style="margin-bottom: 3rem;">What Sets Us Apart</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🏆 Award-Winning Service</h3>
+                    <p>Consistently recognized for exceptional service and guest satisfaction</p>
                 </div>
-                <div style="text-align: center;">
-                    <h3 style="margin-bottom: 1rem; color: #2c3e50;">🌍 Global Standards</h3>
-                    <p style="color: #666; line-height: 1.6;">International quality standards and best practices in hospitality</p>
+                <div class="feature-card">
+                    <h3>🌍 Global Standards</h3>
+                    <p>International quality standards and best practices in hospitality</p>
                 </div>
-                <div style="text-align: center;">
-                    <h3 style="margin-bottom: 1rem; color: #2c3e50;">🌱 Sustainable Practices</h3>
-                    <p style="color: #666; line-height: 1.6;">Environmentally conscious operations and green initiatives</p>
+                <div class="feature-card">
+                    <h3>🌱 Sustainable Practices</h3>
+                    <p>Environmentally conscious operations and green initiatives</p>
                 </div>
-                <div style="text-align: center;">
-                    <h3 style="margin-bottom: 1rem; color: #2c3e50;">⭐ 5-Star Amenities</h3>
-                    <p style="color: #666; line-height: 1.6;">World-class facilities and personalized services for every guest</p>
+                <div class="feature-card">
+                    <h3>⭐ 5-Star Amenities</h3>
+                    <p>World-class facilities and personalized services for every guest</p>
                 </div>
             </div>
         </div>
+    </div>
+</section>
 
+<section style="padding: 4rem 0;">
+    <div class="container">
         <!-- Our Facilities Section with 3 columns -->
         <div style="margin-bottom: 4rem;">
             <h2 style="text-align: center; margin-bottom: 3rem;">Our Facilities</h2>
@@ -91,12 +97,6 @@
         gap: 2rem !important;
     }
     
-    /* Make What Sets Us Apart 2 columns on tablet and 1 column on mobile */
-    .container > div:nth-child(4) > div {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 1.5rem !important;
-    }
-    
     /* Make facilities section single column on mobile */
     .container > div:last-child > div {
         grid-template-columns: 1fr !important;
@@ -105,14 +105,6 @@
     
     .container > div:last-child > div > div img {
         height: 200px !important;
-    }
-}
-
-/* For very small screens */
-@media (max-width: 480px) {
-    .container > div:nth-child(4) > div {
-        grid-template-columns: 1fr !important;
-        gap: 1.5rem !important;
     }
 }
 </style>
