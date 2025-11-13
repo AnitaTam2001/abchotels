@@ -1,0 +1,498 @@
+<!-- templates/faq.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="hero-section" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1551632811-561732d1e306?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWd1fHx8fGVufDBB-fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');">
+    <div class="container">
+        <h1 class="hero-title">Frequently Asked Questions</h1>
+        <p class="hero-subtitle">Find answers to common questions about your stay</p>
+    </div>
+</section>
+
+<section style="padding: 4rem 0;">
+    <div class="container">
+        <div style="max-width: 10000px; margin: 0 auto;">
+            <!-- Quick Navigation -->
+            <div style="background: #f8f9fa; padding: 2rem; border-radius: 100px; margin-bottom: 3rem;">
+                <h3 style="text-align: center; margin-bottom: 1.5rem;">Quick Navigation</h3>
+                <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                    <a href="#booking" class="btn" style="background: #3498db;">Booking</a>
+                    <a href="#rooms" class="btn" style="background: #c74c3c;">Rooms</a>
+                    <a href="#services" class="btn" style="background: #2ecC71;">Services</a>
+                    <a href="#payment" class="btn" style="background: #f39c12;">Payments</a>
+                    <a href="#general" class="btn" style="background: #95596;">General</a>
+                </div>
+            </div>
+
+            <!-- Search Box -->
+            <div style="margin-bottom: 3rem;">
+                <div class="form-group">
+                    <label class="form-label">Search FAQs</label>
+                    <input type="text" id="faqSearch" class="form-input" placeholder="Type your question here...">
+                </div>
+            </div>
+
+            <!-- FAQ Categories -->
+
+            <!-- Booking Category -->
+            <div id="booking" style="margin-bottom: 4rem;">
+                <h2 style="margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e74c3c; color: #2c3e50;">
+                    Booking
+                </h2>
+                <div class="faq-accordion">
+                    <div class="faq-item" data-category="Booking">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">What is your cancellation policy?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">You can cancel your booking up to 48 hours before check-in for a full refund. Cancellations made within 48 hours will incur a one-night charge. For non-refundable rates, cancellations are not permitted.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" data-category="Booking">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">How do I modify my reservation?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">You can modify your reservation by logging into your account on our website or by contacting our customer service team directly. Changes are subject to availability and may incur rate differences.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" data-category="Booking">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">What time is check-in and check-out?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">Check-in time is 3:00 PM and check-out time is 11:00 AM. Early check-in and late check-out may be available upon request and subject to additional fees and availability.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" data-category="Booking">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">Do you require a deposit?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">Yes, we require a security deposit of $100 upon check-in, which will be refunded after check-out pending no damages or extra cleaning requirements.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" data-category="Booking">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">Can I get a receipt for my stay?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">Yes, you can access and print your receipt from your account dashboard. Receipts are also automatically emailed upon completion of your stay.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" data-category="Booking">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">What is your pet policy?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">We welcome pets up to 50 lbs for an additional $50 per stay. Please inform us in advance about your pet. Some restrictions may apply to certain room types.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rooms Category -->
+            <div id="rooms" style="margin-bottom: 4rem;">
+                <h2 style="margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e74c3c; color: #2c3e50;">
+                    Rooms
+                </h2>
+                <div class="faq-accordion">
+                    <div class="faq-item" data-category="Rooms">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">What amenities are included in the rooms?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">All our rooms include free Wi-Fi, flat-screen TV, air conditioning, mini-fridge, coffee maker, safe, ironing facilities, and en-suite bathroom with premium toiletries.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" data-category="Rooms">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">Do you have accessible rooms?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">Yes, we offer ADA-compliant accessible rooms with wider doorways, roll-in showers, grab bars, lowered fixtures, and visual alarms. Please request when booking.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" data-category="Rooms">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">Are pets allowed in the rooms?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">We are a pet-friendly hotel! Pets up to 50 lbs are allowed for an additional $50 per stay. Please inform us in advance about your furry friend.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" data-category="Rooms">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">Do rooms have kitchenettes?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">Our suites include kitchenettes with microwave, sink, refrigerator, and basic cooking utensils. Standard rooms have mini-fridges and coffee makers only.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" data-category="Rooms">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">What size are your beds?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">We offer rooms with king beds (76" x 80"), queen beds (60" x 80"), or two double beds (53" x 75" each). Bed type can be selected during booking.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" data-category="Rooms">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">Is room service available?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">Room service is available daily from 6:00 AM to 11:00 PM. You can order through our mobile app or by calling the front desk.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Services Category -->
+            <div id="services" style="margin-bottom: 4rem;">
+                <h2 style="margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e74c3c; color: #2c3e50;">
+                    Services
+                </h2>
+                <div class="faq-accordion">
+                    <div class="faq-item" data-category="Services">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">Do you offer airport transportation?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">Yes, we provide complimentary airport shuttle service from 6:00 AM to 10:00 PM daily. Please schedule your pickup at least 2 hours in advance.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" data-category="Services">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">Is there parking available?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">We offer both valet parking ($35/night) and self-parking ($25/night) options. Electric vehicle charging stations are also available for guests.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" data-category="Services">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">Do you have a fitness center?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">Our 24-hour fitness center features cardio equipment, free weights, yoga mats, and towels. Access is complimentary for all hotel guests.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" data-category="Services">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">Is there a swimming pool?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">Yes, we have an outdoor heated swimming pool open from 8:00 AM to 10:00 PM seasonally (April through October). Pool towels are provided.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" data-category="Services">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">Do you have laundry facilities?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">We have self-service laundry facilities on the 3rd floor open 24/7. Dry cleaning and valet laundry services are also available for an additional fee.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" data-category="Services">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">Is there a business center?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">Our business center is open 24/7 and offers computers, printers, photocopiers, and office supplies complimentary for guests.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payments Category -->
+            <div id="payment" style="margin-bottom: 4rem;">
+                <h2 style="margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e74c3c; color: #2c3e50;">
+                    Payments
+                </h2>
+                <div class="faq-accordion">
+                    <div class="faq-item" data-category="Payments">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">What payment methods do you accept?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">We accept all major credit cards (Visa, MasterCard, American Express, Discover), debit cards, and mobile payments like Apple Pay and Google Pay.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" data-category="Payments">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">When is my credit card charged?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">Your card is authorized at the time of booking and fully charged 48 hours before your scheduled check-in date.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" data-category="Payments">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">Do you accept cash payments?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">We accept cash for incidental expenses, but a valid credit card is required for the room reservation and security deposit.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" data-category="Payments">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">Can I pay with multiple payment methods?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">Yes, you can split your payment between multiple credit cards or combine credit card and cash payments at check-in.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" data-category="Payments">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">Is there a resort fee?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">Yes, we charge a daily resort fee of $25 plus tax, which includes Wi-Fi, fitness center access, pool towels, local calls, and newspaper.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" data-category="Payments">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">Do you offer corporate rates?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">Yes, we offer special corporate rates for business travelers. Please contact our sales department for more information and eligibility.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- General Category -->
+            <div id="general" style="margin-bottom: 4rem;">
+                <h2 style="margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e74c3c; color: #2c3e50;">
+                    General
+                </h2>
+                <div class="faq-accordion">
+                    <div class="faq-item" data-category="General">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">What is your smoking policy?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">We are a 100% smoke-free property. Smoking in rooms will result in a $250 cleaning fee. Designated smoking areas are available outside the building.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" data-category="General">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">What is the minimum check-in age?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">Guests must be at least 21 years old to check in. Valid government-issued photo identification is required for all guests.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" data-category="General">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">Do you offer luggage storage?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">Yes, we provide complimentary luggage storage before check-in and after check-out at the front desk.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" data-category="General">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">Is the hotel wheelchair accessible?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">Yes, our hotel is fully wheelchair accessible with ramps, elevators, and accessible public areas throughout the property.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" data-category="General">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">Do you have connecting rooms?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">Yes, we offer connecting rooms for families and groups. Please request connecting rooms at the time of booking as they are subject to availability.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" data-category="General">
+                        <div class="faq-question">
+                            <h3 style="margin: 0; font-size: 1.1rem;">What languages do your staff speak?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p style="margin: 0; line-height: 1.6; color: #666;">Our staff speaks English, Spanish, French, and Mandarin to assist international guests with their needs.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Still Have Questions -->
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 3rem; border-radius: 15px; text-align: center;">
+                <h2 style="margin-bottom: 1rem;">Still Have Questions?</h2>
+                <p style="margin-bottom: 2rem; font-size: 1.1rem;">
+                    Can't find the answer you're looking for? Please contact our friendly team.
+                </p>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="{% url 'contact' %}" class="btn" style="background: white; color: #667eea;">Contact Us</a>
+                    <a href="tel:+15551234567" class="btn" style="background: transparent; border: 2px solid white;">Call Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.faq-accordion {
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.faq-item {
+    border-bottom: 1px solid #e0e0e0;
+    background: white;
+}
+
+.faq-item:last-child {
+    border-bottom: none;
+}
+
+.faq-question {
+    padding: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.faq-question:hover {
+    background: #f8f9fa;
+}
+
+.faq-question h3 {
+    flex: 1;
+    margin-right: 1rem;
+}
+
+.faq-toggle {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #e74c3c;
+    transition: transform 0.3s ease;
+}
+
+.faq-answer {
+    padding: 0 1.5rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+}
+
+.faq-item.active .faq-answer {
+    padding: 1.5rem;
+    max-height: 500px;
+}
+
+.faq-item.active .faq-toggle {
+    transform: rotate(45deg);
+}
+
+.faq-item.hidden {
+    display: none;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // FAQ Accordion functionality
+    const faqItems = document.querySelectorAll('.faq-item');
+    
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        
+        question.addEventListener('click', function() {
+            // Close all other items
+            faqItems.forEach(otherItem => {
+                if (otherItem !== item) {
+                    otherItem.classList.remove('active');
+                }
+            });
+            
+            // Toggle current item
+            item.classList.toggle('active');
+        });
+    });
+
+    // FAQ Search functionality
+    const searchInput = document.getElementById('faqSearch');
+    
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        const faqItems = document.querySelectorAll('.faq-item');
+        
+        faqItems.forEach(item => {
+            const question = item.querySelector('h3').textContent.toLowerCase();
+            const answer = item.querySelector('.faq-answer p').textContent.toLowerCase();
+            
+            if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                item.classList.remove('hidden');
+            } else {
+                item.classList.add('hidden');
+            }
+        });
+
+        // Show/hide categories based on visible items
+        const categories = document.querySelectorAll('[id]');
+        categories.forEach(category => {
+            if (category.id !== 'faqSearch') {
+                const visibleItems = category.querySelectorAll('.faq-item:not(.hidden)');
+                if (visibleItems.length === 0 && searchTerm) {
+                    category.style.display = 'none';
+                } else {
+                    category.style.display = 'block';
+                }
+            }
+        });
+    });
+
+    // Smooth scroll for category links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

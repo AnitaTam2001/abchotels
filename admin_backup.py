@@ -1,9 +1,44 @@
 # hotel/admin.py
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import Group
+from django.utils.translation import gettext_lazy as _
 from django.utils.html import format_html
 from django import forms
-from .models import City, Department, RoomType, Room, Booking, FAQ, JobListing, JobApplication
+from .models import CustomUser, City, Department, RoomType, Room, Booking, FAQ, JobListing, JobApplication
 
+# Custom User Admin with app_label override
+class CustomUserAdmin(UserAdmin):
+    list_display = ['username', 'email', 'phone_number', 'first_name', 'last_name', 'is_staff', 'is_active']
+    list_filter = ['is_staff', 'is_superuser', 'is_active']
+    fieldsets = (
+        (None, {'fields': ('username', 'password')}),
+        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email', 'phone_number')}),
+        (_('Permissions'), {
+            'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
+        }),
+        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('username', 'email', 'phone_number', 'password1', 'password2'),
+        }),
+    )
+    search_fields = ['username', 'email', 'first_name', 'last_name']
+    ordering = ['username']
+
+# Unregister the default User model if it's registered
+try:
+    admin.site.unregister(CustomUser)
+except admin.sites.NotRegistered:
+    pass
+
+# Register CustomUser with explicit app_label
+admin.site.register(CustomUser, CustomUserAdmin)
+
+
+# Rest of your admin classes remain the same...
 class CityAdminForm(forms.ModelForm):
     class Meta:
         model = City
@@ -153,9 +188,9 @@ class JobListingAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'department', 'job_type', 'experience_level', 'is_active', 'posted_date']
     list_filter = ['department', 'job_type', 'experience_level', 'is_active', 'posted_date']
     list_editable = ['is_active']
-    list_per_page = 20
     search_fields = ['title', 'description']
     date_hierarchy = 'posted_date'
+    list_per_page = 20
     list_select_related = ['department']
 
 class JobApplicationAdmin(admin.ModelAdmin):
@@ -172,7 +207,7 @@ class JobApplicationAdmin(admin.ModelAdmin):
         return str(obj.job)
     job_display.short_description = 'Job'
 
-# Register all models (NO CustomUser or UserProfile)
+# Register all other models
 admin.site.register(City, CityAdmin)
 admin.site.register(Department, DepartmentAdmin)
 admin.site.register(RoomType, RoomTypeAdmin)

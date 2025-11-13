@@ -9,7 +9,7 @@ from django.utils import timezone
 from django.urls import reverse
 from django.http import HttpResponse
 from datetime import datetime, date
-from .models import City, RoomType, Room, Booking, FAQ, JobListing  # REMOVED CustomUser
+from .models import City, RoomType, Room, Booking, FAQ, JobListing, CustomUser
 from django.contrib.admin.views.decorators import staff_member_required
 from .forms import BookingForm, CustomUserCreationForm, ContactForm
 
@@ -247,12 +247,12 @@ def room_detail(request, room_id):
     return render(request, 'room_detail.html', context)
 
 def booking_form(request, room_id):
-    room = get_object_or_404(Room, id=room_id, is_available=True)
-    
-    # Get dates from URL parameters if available
+    room = get_object_or_404(Room, id=room_id)
+
+    # Get dates from URL parameters
     check_in = request.GET.get('check_in')
     check_out = request.GET.get('check_out')
-    
+
     if request.method == 'POST':
         form = BookingForm(request.POST)
         if form.is_valid():
@@ -261,17 +261,25 @@ def booking_form(request, room_id):
                 booking = form.save(commit=False)
                 booking.room = room
                 booking.save()
-                
+
                 messages.success(request, f'Booking confirmed! Total price: ${booking.total_price}')
+                # Debug: Print the booking ID and URL
+                print(f"DEBUG: Booking created with ID: {booking.id}")
+                print(f"DEBUG: Redirecting to booking_confirmation with booking_id: {booking.id}")
+
+                # FIXED: Make sure booking_id is passed correctly
                 return redirect('booking_confirmation', booking_id=booking.id)
-                
+
             except Exception as e:
                 messages.error(request, f'Error creating booking: {str(e)}')
+                print(f"ERROR in booking creation: {str(e)}")
+
         else:
             # Form is invalid, show errors
             for field, errors in form.errors.items():
                 for error in errors:
                     messages.error(request, f'{field}: {error}')
+
     else:
         # GET request - create form with initial data from URL parameters
         initial_data = {}
@@ -279,9 +287,9 @@ def booking_form(request, room_id):
             initial_data['check_in'] = check_in
         if check_out:
             initial_data['check_out'] = check_out
-            
+
         form = BookingForm(initial=initial_data)
-    
+
     context = {
         'room': room,
         'form': form,

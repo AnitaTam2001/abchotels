@@ -1,14 +1,13 @@
 # hotel/forms.py
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User  # Use default User
-from .models import Booking
+from django.conf import settings
+from .models import Booking, UserProfile, CustomUser
 
-# Use default UserCreationForm instead of CustomUserCreationForm
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(
         required=True,
-        widget=forms.EmailInput(attrs={ 
+        widget=forms.EmailInput(attrs={
             'class': 'form-control',
             'placeholder': 'Enter your email address'
         })
@@ -16,18 +15,19 @@ class CustomUserCreationForm(UserCreationForm):
     phone_number = forms.CharField(
         max_length=20,
         required=True,
-        widget=forms.TextInput(attrs={ 
+        widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'Enter your phone number'
         })
     )
 
     class Meta:
-        model = User  # Use default User model
+        model = CustomUser
         fields = ['username', 'email', 'password1', 'password2']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # Add Bootstrap classes to all fields
         self.fields['username'].widget.attrs.update({
             'class': 'form-control',
             'placeholder': 'Choose a username'
@@ -40,6 +40,19 @@ class CustomUserCreationForm(UserCreationForm):
             'class': 'form-control',
             'placeholder': 'Confirm password'
         })
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.email = self.cleaned_data['email']
+        user.phone_number = self.cleaned_data['phone_number']
+        if commit:
+            user.save()
+            # Create user profile with phone number
+            UserProfile.objects.create(
+                user=user,
+                phone_number=self.cleaned_data['phone_number']
+            )
+        return user
 
 class ContactForm(forms.Form):
     name = forms.CharField(max_length=100, required=True)

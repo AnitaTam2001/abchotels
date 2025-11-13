@@ -2,6 +2,14 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from django.contrib.auth.models import AbstractUser
+from django.conf import settings
+
+class CustomUser(AbstractUser):
+    phone_number = models.CharField(max_length=20, blank=True)
+
+    def __str__(self):
+        return self.username
 
 class City(models.Model):
     name = models.CharField(max_length=100)
@@ -45,7 +53,7 @@ class Room(models.Model):
     is_available = models.BooleanField(default=True)
     image = models.ImageField(upload_to='images/room_specific/', blank=True,
                             null=True, verbose_name='Room Specific Image')
-
+    
     def __str__(self):
         return f"{self.room_type.name} - {self.city.name}"
 
@@ -69,10 +77,10 @@ class Booking(models.Model):
                             default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
+    
     def __str__(self):
         return f'Booking {self.id} - {self.guest_name} - {self.room}'
-
+    
     @property
     def total_price(self):
         if self.check_in and self.check_out and self.room:
@@ -173,3 +181,10 @@ class JobApplication(models.Model):
 
     class Meta:
         ordering = ['-applied_date']
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=20, blank=True)
+
+    def __str__(self):
+        return f"{self.user.username} Profile"
