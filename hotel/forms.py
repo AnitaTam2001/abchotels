@@ -1,10 +1,9 @@
 # hotel/forms.py
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User  # Use default User
+from django.contrib.auth.models import User
 from .models import Booking
 
-# Use default UserCreationForm instead of CustomUserCreationForm
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(
         required=True,
@@ -15,15 +14,15 @@ class CustomUserCreationForm(UserCreationForm):
     )
     phone_number = forms.CharField(
         max_length=20,
-        required=True,
+        required=False,
         widget=forms.TextInput(attrs={ 
             'class': 'form-control',
-            'placeholder': 'Enter your phone number'
+            'placeholder': 'Enter your phone number (optional)'
         })
     )
 
     class Meta:
-        model = User  # Use default User model
+        model = User
         fields = ['username', 'email', 'password1', 'password2']
 
     def __init__(self, *args, **kwargs):
@@ -72,8 +71,14 @@ class BookingForm(forms.ModelForm):
                 'class': 'form_input',
                 'placeholder': 'Enter your phone number'
             }),
-            'check_in': forms.DateInput(attrs={'type': 'date'}),
-            'check_out': forms.DateInput(attrs={'type': 'date'})
+            'check_in': forms.DateInput(attrs={
+                'type': 'date',
+                'class': 'form_input'
+            }),
+            'check_out': forms.DateInput(attrs={
+                'type': 'date', 
+                'class': 'form_input'
+            })
         }
 
     def clean(self):
