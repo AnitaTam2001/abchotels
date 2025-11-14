@@ -1,8 +1,213 @@
 # hotel/admin.py
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
 from django.utils.html import format_html
 from django import forms
-from .models import City, Department, RoomType, Room, Booking, FAQ, JobListing, JobApplication
+from .models import City, Department, RoomType, Room, Booking, FAQ, JobListing, JobApplication, UserProfile
+
+# ================================
+# USER PROFILE & PHONE NUMBER ADMIN
+# ================================
+
+class UserProfileInline(admin.StackedInline):
+    model = UserProfile
+    can_delete = False
+    verbose_name_plural = 'Phone Number'
+    fields = ('phone_number',)
+    extra = 1
+    
+    def get_formset(self, request, obj=None, **kwargs):
+        formset = super().get_formset(request, obj, **kwargs)
+        formset.form.base_fields['phone_number'].help_text = "Enter 8-digit phone number"
+        formset.form.base_fields['phone_number'].widget.attrs.update({
+            'style': 'width: 200px;',
+            'placeholder': '12345678',
+            'min': '10000000',
+            'max': '99999999'
+        })
+        return formset
+
+class CustomUserAdmin(UserAdmin):
+    inlines = (UserProfileInline,)
+    
+    # List view customization - ADD PHONE NUMBER TO LIST DISPLAY
+    list_display = (
+        'username', 
+        'email', 
+        'first_name', 
+        'last_name', 
+        'get_phone_number',  # This adds phone number to the list view
+        'is_staff', 
+        'is_active',
+        'date_joined'
+    )
+    
+    list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups', 'date_joined')
+    search_fields = ('username', 'email', 'first_name', 'last_name', 'profile__phone_number')
+    list_editable = ('is_active', 'is_staff')
+    list_per_page = 25
+    
+    # FIXED: Proper way to extend search fields
+    def get_search_fields(self, request):
+        search_fields = list(super().get_search_fields(request))
+        search_fields.append('profile__phone_number')
+        return search_fields
+    
+    def get_phone_number(self, obj):
+        """Display phone number in list view at /admin/auth/user/"""
+        if hasattr(obj, 'profile') and obj.profile.phone_number:
+            return format_html(
+                '<span style="font-weight: bold; color: #007bff;">{}</span>',
+                obj.profile.phone_number
+            )
+        return format_html(
+            '<span style="color: #6c757d; font-style: italic;">Not set</span>'
+        )
+    get_phone_number.short_description = 'Phone Number'
+    get_phone_number.admin_order_field = 'profile__phone_number'
+
+# ================================
+# USERPROFILE ADMIN - MOVED UNDER AUTHENTICATION AND AUTHORIZATION
+# ================================
+
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ['user', 'phone_number', 'user_email', 'user_first_name', 'user_last_name', 'user_is_staff', 'user_is_active']
+    list_filter = ['user__is_staff', 'user__is_active']
+    search_fields = ['user__username', 'user__email', 'phone_number', 'user__first_name', 'user__last_name']
+    readonly_fields = ['user_info', 'user_permissions_display', 'user_important_dates']
+    list_per_page = 25
+    
+    fieldsets = (
+        (None, {
+            'fields': ('user', 'phone_number')
+        }),
+        ('User Information', {
+            'fields': ('user_info',),
+            'classes': ('collapse',)
+        }),
+        ('Permissions', {
+            'fields': ('user_permissions_display',),
+            'classes': ('collapse',)
+        }),
+        ('Important dates', {
+            'fields': ('user_important_dates',),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    def user_email(self, obj):
+        return obj.user.email
+    user_email.short_description = 'Email'
+    user_email.admin_order_field = 'user__email'
+    
+    def user_first_name(self, obj):
+        return obj.user.first_name
+    user_first_name.short_description = 'First Name'
+    user_first_name.admin_order_field = 'user__first_name'
+    
+    def user_last_name(self, obj):
+        return obj.user.last_name
+    user_last_name.short_description = 'Last Name'
+    user_last_name.admin_order_field = 'user__last_name'
+    
+    def user_is_staff(self, obj):
+        return obj.user.is_staff
+    user_is_staff.short_description = 'Staff'
+    user_is_staff.boolean = True
+    user_is_staff.admin_order_field = 'user__is_staff'
+    
+    def user_is_active(self, obj):
+        return obj.user.is_active
+    user_is_active.short_description = 'Active'
+    user_is_active.boolean = True
+    user_is_active.admin_order_field = 'user__is_active'
+    
+    def user_info(self, obj):
+        if obj.user:
+            return format_html(
+                """
+                <div style="padding: 10px; background: #f8f9fa; border-radius: 5px;">
+                    <strong>Username:</strong> {}<br>
+                    <strong>Email:</strong> {}<br>
+                    <strong>Full Name:</strong> {} {}<br>
+                    <strong>Staff:</strong> {} | <strong>Active:</strong> {}<br>
+                    <strong>Superuser:</strong> {}
+                </div>
+                """,
+                obj.user.username,
+                obj.user.email,
+                obj.user.first_name,
+                obj.user.last_name,
+                "✓" if obj.user.is_staff else "✗",
+                "✓" if obj.user.is_active else "✗",
+                "✓" if obj.user.is_superuser else "✗"
+            )
+        return "No user associated"
+    user_info.short_description = 'User Details'
+    
+    def user_permissions_display(self, obj):
+        if obj.user:
+            groups = obj.user.groups.all()
+            permissions = obj.user.user_permissions.all()
+            
+            groups_html = ""
+            if groups:
+                groups_html = "<strong>Groups:</strong><ul style='margin: 5px 0;'>"
+                for group in groups:
+                    groups_html += f"<li>{group.name}</li>"
+                groups_html += "</ul>"
+            else:
+                groups_html = "<strong>Groups:</strong> None<br>"
+            
+            permissions_html = ""
+            if permissions:
+                permissions_html = "<strong>Permissions:</strong><ul style='margin: 5px 0;'>"
+                for perm in permissions[:10]:  # Show first 10 permissions
+                    permissions_html += f"<li>{perm.name}</li>"
+                if len(permissions) > 10:
+                    permissions_html += f"<li>... and {len(permissions) - 10} more</li>"
+                permissions_html += "</ul>"
+            else:
+                permissions_html = "<strong>Permissions:</strong> None<br>"
+            
+            return format_html(
+                """
+                <div style="padding: 10px; background: #f8f9fa; border-radius: 5px;">
+                    <strong>Staff Status:</strong> {}<br>
+                    <strong>Superuser Status:</strong> {}<br>
+                    <strong>Active Status:</strong> {}<br>
+                    {}
+                    {}
+                </div>
+                """,
+                "Yes" if obj.user.is_staff else "No",
+                "Yes" if obj.user.is_superuser else "No",
+                "Yes" if obj.user.is_active else "No",
+                groups_html,
+                permissions_html
+            )
+        return "No user associated"
+    user_permissions_display.short_description = 'Permissions Information'
+    
+    def user_important_dates(self, obj):
+        if obj.user:
+            return format_html(
+                """
+                <div style="padding: 10px; background: #f8f9fa; border-radius: 5px;">
+                    <strong>Date Joined:</strong> {}<br>
+                    <strong>Last Login:</strong> {}<br>
+                </div>
+                """,
+                obj.user.date_joined.strftime("%Y-%m-%d %H:%M:%S"),
+                obj.user.last_login.strftime("%Y-%m-%d %H:%M:%S") if obj.user.last_login else "Never"
+            )
+        return "No user associated"
+    user_important_dates.short_description = 'Important Dates'
+
+# ================================
+# EXISTING HOTEL MODELS ADMIN
+# ================================
 
 class CityAdminForm(forms.ModelForm):
     class Meta:
@@ -136,7 +341,6 @@ class BookingAdmin(admin.ModelAdmin):
     def room_display(self, obj):
         return str(obj.room)
     room_display.short_description = 'Room'
-    room_display.admin_order_field = 'room'
 
     def total_price_display(self, obj):
         return f"${obj.total_price}"
@@ -172,7 +376,28 @@ class JobApplicationAdmin(admin.ModelAdmin):
         return str(obj.job)
     job_display.short_description = 'Job'
 
-# Register all models (NO CustomUser or UserProfile)
+# ================================
+# REGISTRATION - FINAL VERSION
+# ================================
+
+# Unregister default User admin and register with custom admin
+admin.site.unregister(User)
+admin.site.register(User, CustomUserAdmin)
+
+# Create a proxy model to move UserProfile under Authentication section
+class UserProfileProxy(UserProfile):
+    class Meta:
+        proxy = True
+        verbose_name = 'User Profile'
+        verbose_name_plural = 'User Profiles'
+        app_label = 'auth'  # This makes it appear under Authentication
+
+# Register the proxy model with the same admin class
+@admin.register(UserProfileProxy)
+class UserProfileProxyAdmin(UserProfileAdmin):
+    pass
+
+# Register all hotel models (EXCEPT UserProfile - we use the proxy instead)
 admin.site.register(City, CityAdmin)
 admin.site.register(Department, DepartmentAdmin)
 admin.site.register(RoomType, RoomTypeAdmin)
@@ -181,3 +406,8 @@ admin.site.register(Booking, BookingAdmin)
 admin.site.register(FAQ, FAQAdmin)
 admin.site.register(JobListing, JobListingAdmin)
 admin.site.register(JobApplication, JobApplicationAdmin)
+
+# Optional: Custom admin site header and title
+admin.site.site_header = "ABC Hotels Administration"
+admin.site.site_title = "ABC Hotels Admin Portal"
+admin.site.index_title = "Welcome to ABC Hotels Administration"
