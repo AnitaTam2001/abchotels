@@ -1,4 +1,4 @@
-# hotel/models.py
+# hote1/models.py
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils import timezone
@@ -9,16 +9,16 @@ from django.dispatch import receiver
 # Add UserProfile model at the top
 class UserProfile(models.Model):
     user = models.OneToOneField(
-        User, 
+        User,
         on_delete=models.CASCADE,
         related_name='profile'
     )
     phone_number = models.IntegerField(
-        blank=True, 
-        null=True, 
+        blank=True,
+        null=True,
         help_text="8-digit phone number"
     )
-    
+
     def __str__(self):
         return f"{self.user.username} - {self.phone_number}"
 
@@ -87,7 +87,6 @@ class Room(models.Model):
 
 class Booking(models.Model):
     STATUS_CHOICES = [
-        ('pending', 'Pending'),
         ('confirmed', 'Confirmed'),
         ('checked_in', 'Checked In'),
         ('checked_out', 'Checked Out'),
@@ -101,13 +100,24 @@ class Booking(models.Model):
     related_name='bookings')
     check_in = models.DateField()
     check_out = models.DateField()
+    total_guests = models.PositiveIntegerField(default=1)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES,
-    default='pending')
+    default='confirmed')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'Booking {self.id} - {self.guest_name} - {self.room}'
+
+    @property
+    def display_guests(self):
+        """Return the actual number of guests, using room capacity for old bookings"""
+        # For new bookings with actual guest count, use total_guests
+        # For old bookings where total_guests=1 (default), use room capacity
+        if self.total_guests > 1:
+            return self.total_guests
+        else:
+            return self.room.room_type.capacity
 
     @property
     def total_price(self):

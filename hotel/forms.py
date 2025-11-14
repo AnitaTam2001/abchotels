@@ -1,4 +1,4 @@
-# hotel/forms.py
+# hote1/forms.py
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -8,27 +8,24 @@ from .models import Booking, UserProfile
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(
         required=True,
-        widget=forms.EmailInput(attrs={ 
-            'class': 'form-control',
-            'placeholder': 'Enter your email address'
+        widget=forms.EmailInput(attrs={'class': 'form-control',
+        'placeholder': 'Enter your email address'
         })
     )
-    
+
     full_name = forms.CharField(
         max_length=100,
         required=True,
-        widget=forms.TextInput(attrs={ 
-            'class': 'form-control',
-            'placeholder': 'Enter your full name'
+        widget=forms.TextInput(attrs={'class': 'form-control',
+        'placeholder': 'Enter your full name'
         })
     )
-    
+
     phone_number = forms.CharField(
         max_length=20,
         required=False,
-        widget=forms.TextInput(attrs={ 
-            'class': 'form-control',
-            'placeholder': 'Enter your phone number'
+        widget=forms.TextInput(attrs={'class': 'form-control',
+        'placeholder': 'Enter your phone number'
         })
     )
 
@@ -53,32 +50,30 @@ class CustomUserCreationForm(UserCreationForm):
 
     def clean_password1(self):
         password1 = self.cleaned_data.get('password1')
-        
         # NO VALIDATION - ALL PASSWORDS ARE ALLOWED
         # Including "password", "12345678", etc.
-        
         return password1
 
     def clean(self):
         cleaned_data = super().clean()
         password1 = cleaned_data.get('password1')
         password2 = cleaned_data.get('password2')
-        
+
         if password1 and password2 and password1 != password2:
             raise ValidationError("The two password fields didn't match.")
-        
+
         return cleaned_data
 
     def save(self, commit=True):
         user = super().save(commit=False)
         user.email = self.cleaned_data['email']
-        
+
         # Split full name into first and last name
         full_name = self.cleaned_data['full_name']
-        names = full_name.split(' ', 1)  # Split into max 2 parts
+        names = full_name.split(' ', 1) # Split into max 2 parts
         user.first_name = names[0]
         user.last_name = names[1] if len(names) > 1 else ''
-        
+
         if commit:
             user.save()
             # Save phone number to UserProfile
@@ -88,7 +83,7 @@ class CustomUserCreationForm(UserCreationForm):
                 profile, created = UserProfile.objects.get_or_create(user=user)
                 profile.phone_number = phone_number
                 profile.save()
-        
+
         return user
 
 class ContactForm(forms.Form):
@@ -97,7 +92,7 @@ class ContactForm(forms.Form):
     subject = forms.CharField(max_length=200, required=True)
     message = forms.CharField(widget=forms.Textarea, required=True)
     contact_method = forms.ChoiceField(
-        choices=[ 
+        choices=[
             ('email', 'Email'),
             ('phone', 'Phone'),
             ('both', 'Both')
@@ -108,7 +103,7 @@ class ContactForm(forms.Form):
 class BookingForm(forms.ModelForm):
     class Meta:
         model = Booking
-        fields = ['guest_name', 'guest_email', 'guest_phone', 'check_in', 'check_out']
+        fields = ['guest_name', 'guest_email', 'guest_phone', 'check_in', 'check_out', 'total_guests']
         widgets = {
             'guest_name': forms.TextInput(attrs={ 
                 'class': 'form_input',
@@ -129,6 +124,11 @@ class BookingForm(forms.ModelForm):
             'check_out': forms.DateInput(attrs={ 
                 'type': 'date',
                 'class': 'form_input'
+            }),
+            'total_guests': forms.NumberInput(attrs={ 
+                'class': 'form_input',
+                'placeholder': 'Number of guests',
+                'min': 1
             }),
         }
 

@@ -346,8 +346,9 @@ class RoomAdmin(admin.ModelAdmin):
         return "No specific image"
     room_specific_image_preview_large.short_description = 'Room Specific Image Preview'
 
+
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ['id', 'guest_name', 'room_display', 'check_in', 'check_out', 'status', 'total_price_display', 'created_at']
+    list_display = ['id', 'guest_name', 'room_display', 'total_guests', 'check_in', 'check_out', 'status', 'total_price_display', 'created_at']
     list_filter = ['status', 'check_in', 'check_out', 'created_at']
     search_fields = ['guest_name', 'guest_email', 'room__city__name', 'room__room_type__name']
     readonly_fields = ['created_at', 'updated_at', 'total_price_display']
@@ -361,6 +362,7 @@ class BookingAdmin(admin.ModelAdmin):
     def total_price_display(self, obj):
         return f"${obj.total_price}"
     total_price_display.short_description = 'Total Price'
+
 
 class FAQAdmin(admin.ModelAdmin):
     list_display = ['id', 'question', 'category', 'order', 'is_active']
