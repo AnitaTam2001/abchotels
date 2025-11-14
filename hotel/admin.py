@@ -16,7 +16,7 @@ class UserProfileInline(admin.StackedInline):
     verbose_name_plural = 'Phone Number'
     fields = ('phone_number',)
     extra = 1
-    
+
     def get_formset(self, request, obj=None, **kwargs):
         formset = super().get_formset(request, obj, **kwargs)
         formset.form.base_fields['phone_number'].help_text = "Enter 8-digit phone number"
@@ -30,30 +30,29 @@ class UserProfileInline(admin.StackedInline):
 
 class CustomUserAdmin(UserAdmin):
     inlines = (UserProfileInline,)
-    
+
     # List view customization - ADD PHONE NUMBER TO LIST DISPLAY
     list_display = (
-        'username', 
-        'email', 
-        'first_name', 
-        'last_name', 
+        'username',
+        'email',
+        'first_name',
+        'last_name',
         'get_phone_number',  # This adds phone number to the list view
-        'is_staff', 
+        'is_staff',
         'is_active',
         'date_joined'
     )
-    
+
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups', 'date_joined')
     search_fields = ('username', 'email', 'first_name', 'last_name', 'profile__phone_number')
     list_editable = ('is_active', 'is_staff')
-    list_per_page = 25
-    
+
     # FIXED: Proper way to extend search fields
     def get_search_fields(self, request):
         search_fields = list(super().get_search_fields(request))
         search_fields.append('profile__phone_number')
         return search_fields
-    
+
     def get_phone_number(self, obj):
         """Display phone number in list view at /admin/auth/user/"""
         if hasattr(obj, 'profile') and obj.profile.phone_number:
@@ -67,72 +66,89 @@ class CustomUserAdmin(UserAdmin):
     get_phone_number.short_description = 'Phone Number'
     get_phone_number.admin_order_field = 'profile__phone_number'
 
-# ================================
+# ---
 # USERPROFILE ADMIN - MOVED UNDER AUTHENTICATION AND AUTHORIZATION
-# ================================
+# ---
+
+class UserProfileAdminForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = '__all__'
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Make user field 2 times the default width
+        self.fields['user'].widget.attrs.update({
+            'style': 'width: 600px;',  # 2 times the default user field width
+        })
+        # Keep phone_number at normal width
+        self.fields['phone_number'].widget.attrs.update({
+            'style': 'width: 300px;',
+        })
 
 class UserProfileAdmin(admin.ModelAdmin):
+    form = UserProfileAdminForm
     list_display = ['user', 'phone_number', 'user_email', 'user_first_name', 'user_last_name', 'user_is_staff', 'user_is_active']
     list_filter = ['user__is_staff', 'user__is_active']
     search_fields = ['user__username', 'user__email', 'phone_number', 'user__first_name', 'user__last_name']
     readonly_fields = ['user_info', 'user_permissions_display', 'user_important_dates']
     list_per_page = 25
-    
+
     fieldsets = (
         (None, {
             'fields': ('user', 'phone_number')
         }),
         ('User Information', {
             'fields': ('user_info',),
-            'classes': ('collapse',)
+            'classes': ('collapse',),
         }),
         ('Permissions', {
             'fields': ('user_permissions_display',),
-            'classes': ('collapse',)
+            'classes': ('collapse',),
         }),
         ('Important dates', {
             'fields': ('user_important_dates',),
-            'classes': ('collapse',)
+            'classes': ('collapse',),
         }),
     )
-    
+
     def user_email(self, obj):
         return obj.user.email
     user_email.short_description = 'Email'
     user_email.admin_order_field = 'user__email'
-    
+
     def user_first_name(self, obj):
         return obj.user.first_name
     user_first_name.short_description = 'First Name'
     user_first_name.admin_order_field = 'user__first_name'
-    
+
     def user_last_name(self, obj):
         return obj.user.last_name
     user_last_name.short_description = 'Last Name'
     user_last_name.admin_order_field = 'user__last_name'
-    
+
     def user_is_staff(self, obj):
         return obj.user.is_staff
     user_is_staff.short_description = 'Staff'
     user_is_staff.boolean = True
     user_is_staff.admin_order_field = 'user__is_staff'
-    
+
     def user_is_active(self, obj):
         return obj.user.is_active
     user_is_active.short_description = 'Active'
     user_is_active.boolean = True
     user_is_active.admin_order_field = 'user__is_active'
-    
+
     def user_info(self, obj):
         if obj.user:
             return format_html(
                 """
                 <div style="padding: 10px; background: #f8f9fa; border-radius: 5px;">
-                    <strong>Username:</strong> {}<br>
-                    <strong>Email:</strong> {}<br>
-                    <strong>Full Name:</strong> {} {}<br>
-                    <strong>Staff:</strong> {} | <strong>Active:</strong> {}<br>
-                    <strong>Superuser:</strong> {}
+                <strong>Username:</strong> {}<br>
+                <strong>Email:</strong> {}<br>
+                <strong>Full Name:</strong> {} {}<br>
+                <strong>Staff:</strong> {} | <strong>Active:</strong> {}<br>
+                <strong>Superuser:</strong> {}
                 </div>
                 """,
                 obj.user.username,
@@ -145,12 +161,12 @@ class UserProfileAdmin(admin.ModelAdmin):
             )
         return "No user associated"
     user_info.short_description = 'User Details'
-    
+
     def user_permissions_display(self, obj):
         if obj.user:
             groups = obj.user.groups.all()
             permissions = obj.user.user_permissions.all()
-            
+
             groups_html = ""
             if groups:
                 groups_html = "<strong>Groups:</strong><ul style='margin: 5px 0;'>"
@@ -159,7 +175,7 @@ class UserProfileAdmin(admin.ModelAdmin):
                 groups_html += "</ul>"
             else:
                 groups_html = "<strong>Groups:</strong> None<br>"
-            
+
             permissions_html = ""
             if permissions:
                 permissions_html = "<strong>Permissions:</strong><ul style='margin: 5px 0;'>"
@@ -170,15 +186,15 @@ class UserProfileAdmin(admin.ModelAdmin):
                 permissions_html += "</ul>"
             else:
                 permissions_html = "<strong>Permissions:</strong> None<br>"
-            
+
             return format_html(
                 """
                 <div style="padding: 10px; background: #f8f9fa; border-radius: 5px;">
-                    <strong>Staff Status:</strong> {}<br>
-                    <strong>Superuser Status:</strong> {}<br>
-                    <strong>Active Status:</strong> {}<br>
-                    {}
-                    {}
+                <strong>Staff Status:</strong> {}<br>
+                <strong>Superuser Status:</strong> {}<br>
+                <strong>Active Status:</strong> {}<br>
+                {}
+                {}
                 </div>
                 """,
                 "Yes" if obj.user.is_staff else "No",
@@ -189,14 +205,14 @@ class UserProfileAdmin(admin.ModelAdmin):
             )
         return "No user associated"
     user_permissions_display.short_description = 'Permissions Information'
-    
+
     def user_important_dates(self, obj):
         if obj.user:
             return format_html(
                 """
                 <div style="padding: 10px; background: #f8f9fa; border-radius: 5px;">
-                    <strong>Date Joined:</strong> {}<br>
-                    <strong>Last Login:</strong> {}<br>
+                <strong>Date Joined:</strong> {}<br>
+                <strong>Last Login:</strong> {}<br>
                 </div>
                 """,
                 obj.user.date_joined.strftime("%Y-%m-%d %H:%M:%S"),
@@ -205,9 +221,9 @@ class UserProfileAdmin(admin.ModelAdmin):
         return "No user associated"
     user_important_dates.short_description = 'Important Dates'
 
-# ================================
+# =========================================================
 # EXISTING HOTEL MODELS ADMIN
-# ================================
+# =========================================================
 
 class CityAdminForm(forms.ModelForm):
     class Meta:
@@ -376,9 +392,9 @@ class JobApplicationAdmin(admin.ModelAdmin):
         return str(obj.job)
     job_display.short_description = 'Job'
 
-# ================================
+# ===========================================================
 # REGISTRATION - FINAL VERSION
-# ================================
+# ===========================================================
 
 # Unregister default User admin and register with custom admin
 admin.site.unregister(User)
