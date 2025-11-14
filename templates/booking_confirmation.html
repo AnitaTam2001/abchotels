@@ -5,13 +5,12 @@
 {% block content %}
 <section style="padding: 4rem 0;">
     <div class="container">
-        <div style="max-width: 600px; margin: 0 auto; background: white; padding: 3rem; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center;">
-            <h1 style="color: #27ae60; margin-bottom: 1rem;">Booking Confirmed! 🎉</h1>
-
+        <div style="max-width: 600px; margin: 0 auto; background: white; padding: 3rem; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center;"> 
+            <h1 style="color: #27ae60; margin-bottom: 1rem;">Booking Confirmed!</h1>
             <h2 style="color: #2c3e50; margin-bottom: 2rem;">Thank You for Your Booking!</h2>
             
             {% if booking %}
-            <div style="background: #f8f9fa; padding: 2rem; border-radius: 8px; margin-bottom: 2rem; text-align: left;">
+            <div style="background: #f8f9fa; padding: 2rem; border-radius: 8px; margin-bottom: 2rem; text-align: left;"> 
                 <h3 style="color: #2c3e50; margin-bottom: 1rem;">Booking Details</h3>
                 <p><strong>Booking ID:</strong> #{{ booking.id }}</p>
                 <p><strong>Guest Name:</strong> {{ booking.guest_name }}</p>
@@ -20,12 +19,14 @@
                 <p><strong>Room:</strong> {{ booking.room }}</p>
                 <p><strong>Check-in:</strong> {{ booking.check_in }}</p>
                 <p><strong>Check-out:</strong> {{ booking.check_out }}</p>
+                <p><strong>Guests per room:</strong> {{ booking.room.room_type.capacity }} guest{{ booking.room.room_type.capacity|pluralize }}</p>
+                <p><strong>Price per night:</strong> ${{ booking.room.room_type.price_per_night }}</p>
                 <p><strong>Total Nights:</strong> {{ booking.nights }}</p>
                 <p><strong>Total Price:</strong> ${{ booking.total_price }}</p>
             </div>
             {% endif %}
-            
-            <div style="background: #e8f4fd; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+
+            <div style="background: #e8f4fd; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;"> 
                 <h4 style="color: #2c3e50; margin-bottom: 1rem;">What's Next?</h4>
                 <ul style="text-align: left; margin-bottom: 0;">
                     <li>You will receive a confirmation email shortly</li>
@@ -33,9 +34,9 @@
                     <li>Contact us if you need to make any changes</li>
                 </ul>
             </div>
-            
-            <div style="display: flex; gap: 1rem; justify-content: center;">
-                <a href="{% url 'dashboard' %}" style="padding: 0.75rem 1.5rem; background: #3498db; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+
+            <div style="display: flex; gap: 1rem; justify-content: center;"> 
+                <a href="{% url 'dashboard' %}" style="padding: 0.75rem 1.5rem; background: #3498db; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;"> 
                     View Dashboard
                 </a>
                 <a href="{% url 'home' %}" style="padding: 0.75rem 1.5rem; background: #95a5a6; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
