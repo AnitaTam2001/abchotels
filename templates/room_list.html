@@ -24,21 +24,21 @@
                         <select name="city" class="filter-select" required>
                             <option value="">Select a City</option>
                             {% for city in all_cities %}
-                                <option value="{{ city.name }}" {% if selected_city == city.name %}selected{% endif %}>
-                                    {{ city.name }}
-                                </option>
+                            <option value="{{ city.name }}" {% if selected_city == city.name %}selected{% endif %}>
+                                {{ city.name }}
+                            </option>
                             {% endfor %}
                         </select>
                     </div>
 
                     <div class="filter-group">
                         <label class="filter-label">Check-in</label>
-                        <input type="date" name="check_in" class="filter-input" value="{{ selected_check_in }}" min="{{ today }}">
+                        <input type="date" name="check_in" class="filter-input" value="{{ selected_check_in }}" min="{{ today }}" max="{{ max_check_in_date }}" required>
                     </div>
 
                     <div class="filter-group">
                         <label class="filter-label">Check-out</label>
-                        <input type="date" name="check_out" class="filter-input" value="{{ selected_check_out }}" min="{{ today }}">
+                        <input type="date" name="check_out" class="filter-input" value="{{ selected_check_out }}" min="{{ today }}" max="{{ max_check_out_date }}" required>
                     </div>
 
                     <!-- Updated Guests dropdown with extended options -->
@@ -61,8 +61,8 @@
                         <label class="filter-label">Number of Rooms</label>
                         <select name="rooms" class="filter-select">
                             <option value="">Any Number</option>
-                            <option value="1" {% if selected_rooms == "1" %}selected{% endif %}>1 Room</option>
-                            <option value="2" {% if selected_rooms == "2" %}selected{% endif %}>2 Rooms</option>
+                            <option value="1" {% if selected_rooms == "1" %}selected{% endif %}>1 Rooms</option>
+                            <option value="2" {% if selected_guests == "2" %}selected{% endif %}>2 Rooms</option>
                             <option value="3" {% if selected_rooms == "3" %}selected{% endif %}>3 Rooms</option>
                             <option value="4" {% if selected_rooms == "4" %}selected{% endif %}>4+ Rooms</option>
                         </select>
@@ -71,7 +71,7 @@
                     <!-- Buttons on the same line -->
                     <div class="filter-group button-group">
                         <button type="submit" class="filter-btn">Search Hotels</button>
-                        <a href="{% url 'room_list' %}" class="btn clear-btn">Clear Filters</a>
+                        <a href="{% url 'room_list' %}" class="btn clear-btn">Clear</a>
                     </div>
                 </div>
             </form>
@@ -79,63 +79,63 @@
 
         <!-- Only show cities if no specific city is selected -->
         {% if not selected_city %}
-            <!-- Popular Destinations Section -->
-            <div style="margin-top: 3rem;">
-                <h2 style="text-align: center; margin-bottom: 2rem; color: #2c3e50;">Popular Destinations</h2>
-                <div class="city-grid-3col">
-                    {% for city in cities|slice:":6" %}
-                        <div class="city-card-3col">
-                            <div class="city-image-3col">
-                                {% if city.image %}
-                                    <img src="{{ city.image.url }}" alt="{{ city.name }}">
-                                {% else %}
-                                    <!-- Fallback images for popular cities -->
-                                    {% if "New York" in city.name %}
-                                        <img src="{% static 'images/cities/new_york.jpg' %}" alt="ABC New York Hotel">
-                                    {% elif "London" in city.name %}
-                                        <img src="{% static 'images/cities/london.jpg' %}" alt="ABC London Hotel">
-                                    {% elif "Paris" in city.name %}
-                                        <img src="{% static 'images/cities/paris.jpg' %}" alt="ABC Paris Hotel">
-                                    {% elif "Tokyo" in city.name %}
-                                        <img src="{% static 'images/cities/tokyo.jpg' %}" alt="ABC Tokyo Hotel">
-                                    {% elif "Dubai" in city.name %}
-                                        <img src="{% static 'images/cities/dubai.jpg' %}" alt="ABC Dubai Hotel">
-                                    {% elif "Singapore" in city.name %}
-                                        <img src="{% static 'images/cities/singapore.jpg' %}" alt="ABC Singapore Hotel">
+        <!-- Popular Destinations Section -->
+        <div style="margin-top: 3rem;">
+            <h2 style="text-align: center; margin-bottom: 2rem; color: #2c3e50;">Popular Destinations</h2>
+            <div class="city-grid-3col">
+                {% for city in cities|slice:":6" %}
+                <div class="city-card-3col">
+                    <div class="city-image-3col">
+                        {% if city.image %}
+                        <img src="{{ city.image.url }}" alt="{{ city.name }}">
+                        {% else %}
+                        <!-- Fallback images for popular cities -->
+                        {% if "New York" in city.name %}
+                        <img src="{% static 'images/cities/new_york.jpg' %}" alt="ABC New York Hotel">
+                        {% elif "London" in city.name %}
+                        <img src="{% static 'images/cities/london.jpg' %}" alt="ABC London Hotel">
+                        {% elif "Paris" in city.name %}
+                        <img src="{% static 'images/cities/paris.jpg' %}" alt="ABC Paris Hotel">
+                        {% elif "Tokyo" in city.name %}
+                        <img src="{% static 'images/cities/tokyo.jpg' %}" alt="ABC Tokyo Hotel">
+                        {% elif "Dubai" in city.name %}
+                        <img src="{% static 'images/cities/dubai.jpg' %}" alt="ABC Dubai Hotel">
+                        {% elif "Singapore" in city.name %}
+                        <img src="{% static 'images/cities/singapore.jpg' %}" alt="ABC Singapore Hotel">
+                        {% else %}
+                        <img src="{% static 'images/cities/default.jpg' %}" alt="ABC {{ city.name }} Hotel">
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="city-content-3col">
+                        <h3 class="city-title-3col" style="color: #2c3e50; margin: 0 0 0.2rem 0; font-size: 1.1rem;">ABC {{ city.name }} Hotel</h3>
+                        <p style="color: #666; margin: 0; font-size: 0.9rem;">{{ city.country }}</p>
+                        <p style="color: #666; margin-bottom: 1rem; line-height: 1.5; font-size: 0.9rem;">{{ city.description|truncatewords:15 }}</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <div>
+                                <strong style="color: #674c3c; font-size: 1.2rem;">
+                                    {% if city.starting_price %}
+                                    ${{ city.starting_price }}
                                     {% else %}
-                                        <img src="{% static 'images/cities/default.jpg' %}" alt="ABC {{ city.name }} Hotel">
+                                    $199
                                     {% endif %}
-                                {% endif %}
+                                </strong>
+                                <span style="color: #666; font-size: 0.8rem;">/night</span>
                             </div>
-                            <div class="city-content-3col">
-                                <h3 class="city-title-3col" style="color: #2c3e50; margin: 0 0 0.2rem 0; font-size: 1.1rem;">ABC {{ city.name }} Hotel</h3>
-                                <p style="color: #666; margin: 0; font-size: 0.9rem;">{{ city.country }}</p>
-                                <p style="color: #666; margin-bottom: 1rem; line-height: 1.5; font-size: 0.9rem;">{{ city.description|truncatewords:15 }}</p>
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                                    <div>
-                                        <strong style="color: #e74c3c; font-size: 1.2rem;">
-                                            {% if city.starting_price %}
-                                                ${{ city.starting_price }}
-                                            {% else %}
-                                                $199
-                                            {% endif %}
-                                        </strong>
-                                        <span style="color: #666; font-size: 0.8rem;"> /night</span>
-                                    </div>
-                                    <div>
-                                        <div style="color: #666; font-size: 0.8rem;">
-                                            <strong>{{ city.room_count }}</strong> rooms
-                                        </div>
-                                    </div>
+                            <div>
+                                <div style="color: #666; font-size: 0.8rem;">
+                                    <strong>{{ city.room_count }}</strong> rooms
                                 </div>
-                                <a href="{% url 'city_detail' city.id %}" class="btn" style="width: 100%; text-align: center; padding: 0.6rem; font-size: 0.9rem;">
-                                    View Hotel
-                                </a>
                             </div>
                         </div>
-                    {% endfor %}
+                        <a href="{% url 'city_detail' city.id %}" class="btn" style="width: 100%; text-align: center; padding: 0.6rem; font-size: 0.9rem;">
+                            View Hotel
+                        </a>
+                    </div>
                 </div>
+                {% endfor %}
             </div>
+        </div>
         {% endif %}
     </div>
 </section>
@@ -220,6 +220,7 @@
         text-align: center;
         display: inline-block;
     }
+
     .clear-btn:hover {
         background: #7f8c8d;
         color: white;
@@ -241,6 +242,7 @@
         gap: 1.5rem;
         margin-top: 2rem;
     }
+
     .city-card-3col {
         background: white;
         border-radius: 12px;
@@ -261,6 +263,7 @@
         background: #f8f9fa;
         overflow: hidden;
     }
+
     .city-image-3col img {
         width: 100%;
         height: 100%;
@@ -337,6 +340,7 @@
         .city-image-3col {
             height: 180px;
         }
+
         .filter-grid-single-line {
             flex-direction: column;
         }
@@ -375,6 +379,7 @@
         .hero-title {
             font-size: 2rem;
         }
+
         .hero-section {
             padding: 3rem 0;
         }
@@ -383,16 +388,89 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Set minimum dates for check-in and check-out
-    const today = new Date().toISOString().split('T')[0];
+    // Set minimum and maximum dates for check-in and check-out
+    const today = new Date();
+    const maxDate = new Date();
+    maxDate.setFullYear(today.getFullYear() + 1); // One year from today
+    
+    const todayString = today.toISOString().split('T')[0];
+    const maxDateString = maxDate.toISOString().split('T')[0];
+    
     const checkInInput = document.querySelector('input[name="check_in"]');
     const checkOutInput = document.querySelector('input[name="check_out"]');
-    
-    if (checkInInput && !checkInInput.value) {
-        checkInInput.min = today;
+
+    // Set min and max attributes
+    if (checkInInput) {
+        checkInInput.min = todayString;
+        checkInInput.max = maxDateString;
+        
+        // Add event listener to update check-out min date when check-in changes
+        checkInInput.addEventListener('change', function() {
+            if (checkOutInput) {
+                checkOutInput.min = this.value;
+                checkOutInput.max = maxDateString;
+                
+                // If check-out is before new check-in, clear it
+                if (checkOutInput.value && checkOutInput.value < this.value) {
+                    checkOutInput.value = '';
+                }
+            }
+        });
     }
-    if (checkOutInput && !checkOutInput.value) {
-        checkOutInput.min = today;
+
+    if (checkOutInput) {
+        checkOutInput.min = todayString;
+        checkOutInput.max = maxDateString;
+        
+        // Add event listener to update check-in max date when check-out changes
+        checkOutInput.addEventListener('change', function() {
+            if (checkInInput && this.value) {
+                const maxCheckIn = new Date(this.value);
+                maxCheckIn.setDate(maxCheckIn.getDate() - 1);
+                const maxCheckInString = maxCheckIn.toISOString().split('T')[0];
+                
+                checkInInput.max = maxCheckInString;
+                
+                // If check-in is after new check-out, clear it
+                if (checkInInput.value && checkInInput.value > this.value) {
+                    checkInInput.value = '';
+                }
+            }
+        });
+    }
+
+    // Validate dates on form submission
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const checkInValue = checkInInput.value;
+            const checkOutValue = checkOutInput.value;
+            
+            if (checkInValue && checkOutValue) {
+                const checkInDate = new Date(checkInValue);
+                const checkOutDate = new Date(checkOutValue);
+                
+                // Check if check-out is after check-in
+                if (checkOutDate <= checkInDate) {
+                    e.preventDefault();
+                    alert('Check-out date must be after check-in date.');
+                    return false;
+                }
+                
+                // Check if dates are within allowed range
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const maxAllowedDate = new Date();
+                maxAllowedDate.setFullYear(today.getFullYear() + 1);
+                
+                if (checkInDate < today || checkInDate > maxAllowedDate || 
+                    checkOutDate < today || checkOutDate > maxAllowedDate) {
+                    e.preventDefault();
+                    alert('Please select dates within the next year.');
+                    return false;
+                }
+            }
+        });
     }
 });
 </script>

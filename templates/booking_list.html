@@ -1,0 +1,102 @@
+<!-- templates/booking_list.html -->
+{% extends 'base.html' %}
+{% block title %}My Bookings - ABC Hotels{% endblock %}
+{% block content %}
+
+<section class="hero-section" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+    <div class="container">
+        <h1 class="hero-title">My Bookings</h1>
+        <p class="hero-subtitle">View your reservation history</p>
+    </div>
+</section>
+
+<section style="padding: 2rem 0;">
+    <div class="container">
+        {% if bookings %}
+            <div style="max-width: 1000px; margin: 0 auto;">
+                {% for booking in bookings %}
+                <div style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h3 style="color: #2c3e50; margin: 0;">Booking #{{ booking.id }}</h3>
+                        <span style="background: 
+                            {% if booking.status == 'confirmed' %}#27ae60
+                            {% elif booking.status == 'pending' %}#f39c12
+                            {% elif booking.status == 'cancelled' %}#e74c3c
+                            {% else %}#95a5a6{% endif %};
+                            color: white; padding: 0.3rem 1rem; border-radius: 15px; font-size: 0.9rem; text-transform: capitalize;">
+                            {{ booking.status }}
+                        </span>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                        <div>
+                            <p><strong>Room:</strong> {{ booking.room.room_type.name }}</p>
+                            <p><strong>Location:</strong> {{ booking.room.city.name }}</p>
+                            <p><strong>Guests:</strong> {{ booking.total_guests }}</p>
+                        </div>
+                        <div>
+                            <p><strong>Check-in:</strong> {{ booking.check_in }}</p>
+                            <p><strong>Check-out:</strong> {{ booking.check_out }}</p>
+                            <p><strong>Total:</strong> ${{ booking.total_price }}</p>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: right;">
+                        <a href="{% url 'booking_detail' booking.id %}" class="btn" style="background: #3498db; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 5px;">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div style="text-align: center; padding: 3rem;">
+                <h3 style="color: #666; margin-bottom: 1rem;">No bookings found</h3>
+                <p style="color: #999; margin-bottom: 2rem;">You haven't made any bookings yet.</p>
+                <a href="{% url 'room_list' %}" class="btn" style="background: #3498db; color: white; padding: 0.8rem 1.5rem; text-decoration: none; border-radius: 5px;">
+                    Book Now
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<style>
+.hero-section {
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+    padding: 4rem 0;
+}
+
+.hero-title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+.btn {
+    display: inline-block;
+    background: #3498db;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-align: center;
+}
+
+.btn:hover {
+    background: #2980b9;
+    color: white;
+    text-decoration: none;
+}
+</style>
+{% endblock %}
