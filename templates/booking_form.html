@@ -112,32 +112,46 @@
             </div>
 
             <form method="post">
-                {% csrf_token %}
-                <div style="display: grid; gap: 1.05rem;">
-                    <!-- Form Grid Layout -->
-                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 0.7rem; align-items: center;">
-                        <!-- Full Name -->
-                        <label class="form-label" style="font-weight: bold; color: #2c3e50; margin: 0; text-align: left; font-size: 1.26rem;">Full Name:</label>
-                        <input type="text" name="guest_name" required class="form-input" placeholder="Enter your full name" value="{{ request.POST.guest_name }}" style="padding: 0.525rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1.26rem; width: 100%; box-sizing: border-box; text-align: left;">
+            {% csrf_token %}
+            <div style="display: grid; gap: 1.05rem;">
+            <!-- Form Grid Layout -->
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 0.7rem; align-items: center;">
 
-                        <!-- Email Address -->
-                        <label class="form-label" style="font-weight: bold; color: #2c3e50; margin: 0; text-align: left; font-size: 1.26rem;">Email Address:</label>
-                        <input type="email" name="guest_email" required class="form-input" placeholder="Enter your email address" value="{{ request.POST.guest_email }}" style="padding: 0.525rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1.26rem; width: 100%; box-sizing: border-box; text-align: left;">
+            <!-- Full Name -->
+            <label class="form-label" style="font-weight: bold; color: #2c3e50; margin: 0; text-align: left; font-size: 1.26rem;">Full Name:</label>
+            <input type="text" name="guest_name" required class="form-input" 
+                placeholder="Enter your full name" 
+                value="{% if user.is_authenticated %}{{ user.first_name }} {{ user.last_name }}{% else %}{{ request.POST.guest_name }}{% endif %}" 
+                style="padding: 0.525rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1.26rem; width: 100%; box-sizing: border-box; text-align: left;">
 
-                        <!-- Phone Number -->
-                        <label class="form-label" style="font-weight: bold; color: #2c3e50; margin: 0; text-align: left; font-size: 1.26rem;">Phone Number:</label>
-                        <input type="tel" name="guest_phone" required class="form-input" placeholder="Enter your phone number" value="{{ request.POST.guest_phone }}" style="padding: 0.525rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1.26rem; width: 100%; box-sizing: border-box; text-align: left;">
-                    </div>
+            <!-- Email Address -->
+            <label class="form-label" style="font-weight: bold; color: #2c3e50; margin: 0; text-align: left; font-size: 1.26rem;">Email Address:</label>
+            <input type="email" name="guest_email" required class="form-input" 
+                placeholder="Enter your email address" 
+                value="{% if user.is_authenticated %}{{ user.email }}{% else %}{{ request.POST.guest_email }}{% endif %}" 
+                style="padding: 0.525rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1.26rem; width: 100%; box-sizing: border-box; text-align: left;">
 
-                    <!-- Hidden fields for check-in and check-out dates from URL parameters -->
-                    <input type="hidden" name="check_in" value="{{ request.GET.check_in }}">
-                    <input type="hidden" name="check_out" value="{{ request.GET.check_out }}">
+            <!-- Phone Number -->
+            <label class="form-label" style="font-weight: bold; color: #2c3e50; margin: 0; text-align: left; font-size: 1.26rem;">Phone Number:</label>
+            <input type="tel" name="guest_phone" required class="form-input" 
+                placeholder="Enter your phone number" 
+                value="{% if user.is_authenticated %}{% if user.profile.phone_number %}{{ user.profile.phone_number }}{% endif %}{% else %}{{ request.POST.guest_phone }}{% endif %}" 
+                style="padding: 0.525rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1.26rem; width: 100%; box-sizing: border-box; text-align: left;">
 
-                    <button type="submit" class="btn" style="width: 100%; padding: 0.7rem; font-size: 1.001rem; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                        Submit Booking
-                    </button>
-                </div>
+            </div>
+
+            <!-- Hidden fields for check-in and check-out dates from URL parameters -->
+            <input type="hidden" name="check_in" value="{{ request.GET.check_in }}">
+            <input type="hidden" name="check_out" value="{{ request.GET.check_out }}">
+
+            <button type="submit" class="btn" style="width: 100%; padding: 0.7rem; font-size: 1.001rem; background: #674c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                Submit Booking
+            </button>
+
+            </div>
             </form>
+
+
         </div>
     </div>
 </section>

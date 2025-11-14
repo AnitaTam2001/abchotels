@@ -28,13 +28,13 @@
                 {% endfor %}
                 {% endif %}
 
-                <form method="post" novalidate style="display: grid; gap: 1.5rem;">
+                <form method="post" novalidate style="display: grid; gap: 1.5rem;" id="registrationForm">
                     {% csrf_token %}
 
                     <!-- Username Field -->
                     <div class="form-group">
                         <label class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: bold; color: #2c3e50; font-family: Arial, sans-serif;">Username **</label>
-                        {{ form.username }}
+                        <input type="text" name="username" class="form-control clean-field" placeholder="Choose a username" required id="id_username" autocomplete="off">
                         {% if form.username.errors %}
                         <div class="text-danger" style="color: #e74c3c; margin-top: 0.5rem;">
                             {% for error in form.username.errors %}
@@ -44,10 +44,23 @@
                         {% endif %}
                     </div>
 
+                    <!-- Full Name Field -->
+                    <div class="form-group">
+                        <label class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: bold; color: #2c3e50; font-family: Arial, sans-serif;">Full Name **</label>
+                        <input type="text" name="full_name" class="form-control clean-field" placeholder="Enter your full name" required id="id_full_name" autocomplete="off">
+                        {% if form.full_name.errors %}
+                        <div class="text-danger" style="color: #e74c3c; margin-top: 0.5rem;">
+                            {% for error in form.full_name.errors %}
+                            <small style="font-size: 0.875rem;">{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
                     <!-- Email Field -->
                     <div class="form-group">
                         <label class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: bold; color: #2c3e50; font-family: Arial, sans-serif;">Email Address **</label>
-                        {{ form.email }}
+                        <input type="email" name="email" class="form-control clean-field" placeholder="Enter your email address" required id="id_email" autocomplete="off">
                         {% if form.email.errors %}
                         <div class="text-danger" style="color: #e74c3c; margin-top: 0.5rem;">
                             {% for error in form.email.errors %}
@@ -60,7 +73,7 @@
                     <!-- Phone Number Field -->
                     <div class="form-group">
                         <label class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: bold; color: #2c3e50; font-family: Arial, sans-serif;">Phone Number **</label>
-                        {{ form.phone_number }}
+                        <input type="text" name="phone_number" class="form-control clean-field" placeholder="Enter your phone number" id="id_phone_number" autocomplete="off">
                         {% if form.phone_number.errors %}
                         <div class="text-danger" style="color: #e74c3c; margin-top: 0.5rem;">
                             {% for error in form.phone_number.errors %}
@@ -73,7 +86,12 @@
                     <!-- Password Field -->
                     <div class="form-group">
                         <label class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: bold; color: #2c3e50; font-family: Arial, sans-serif;">Password **</label>
-                        {{ form.password1 }}
+                        <div style="position: relative;">
+                            <input type="password" name="password1" class="form-control clean-field password-field" placeholder="Enter password" required id="id_password1" style="padding-right: 2.5rem;" autocomplete="new-password">
+                            <button type="button" class="password-toggle" data-target="id_password1" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #666; font-size: 1.2rem;">
+                                🙈
+                            </button>
+                        </div>
                         {% if form.password1.errors %}
                         <div class="text-danger" style="color: #e74c3c; margin-top: 0.5rem;">
                             {% for error in form.password1.errors %}
@@ -89,7 +107,12 @@
                     <!-- Confirm Password Field -->
                     <div class="form-group">
                         <label class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: bold; color: #2c3e50; font-family: Arial, sans-serif;">Confirm Password **</label>
-                        {{ form.password2 }}
+                        <div style="position: relative;">
+                            <input type="password" name="password2" class="form-control clean-field password-field" placeholder="Confirm password" required id="id_password2" style="padding-right: 2.5rem;" autocomplete="new-password">
+                            <button type="button" class="password-toggle" data-target="id_password2" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #666; font-size: 1.2rem;">
+                                🙈
+                            </button>
+                        </div>
                         {% if form.password2.errors %}
                         <div class="text-danger" style="color: #e74c3c; margin-top: 0.5rem;">
                             {% for error in form.password2.errors %}
@@ -116,83 +139,169 @@
 </section>
 
 <style>
-.form-group {
-    margin-bottom: 1rem;
-}
+    .form-group {
+        margin-bottom: 1rem;
+    }
 
-.form-control {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-    font-family: Arial, sans-serif;
-    transition: border-color 0.3s;
-}
+    .form-control {
+        width: 100%;
+        padding: 0.75rem;
+        padding-right: 2.5rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+        font-family: Arial, sans-serif;
+        transition: border-color 0.3s;
+        box-sizing: border-box;
+        background-color: white;
+    }
 
-.form-control:focus {
-    outline: none;
-    border-color: #3498db;
-    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
-}
+    .form-control:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        background-color: white;
+    }
 
-.btn {
-    display: inline-block;
-    background: #3498db;
-    color: white;
-    padding: 0.8rem 1.5rem;
-    text-decoration: none;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    transition: background 0.3s;
-    text-align: center;
-    font-family: Arial, sans-serif;
-}
+    .btn {
+        display: inline-block;
+        background: #3498db;
+        color: white;
+        padding: 0.8rem 1.5rem;
+        text-decoration: none;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        transition: background 0.3s;
+        text-align: center;
+        font-family: Arial, sans-serif;
+    }
 
-.btn:hover {
-    background: #2980b9;
-}
+    .btn:hover {
+        background: #2980b9;
+    }
 
-.btn-primary {
-    background: #e74c3c;
-}
+    .btn-primary {
+        background: #e74c3c;
+    }
 
-.btn-primary:hover {
-    background: #c0392b;
-}
+    .btn-primary:hover {
+        background: #c0392b;
+    }
 
-.hero-section {
-    background-size: cover;
-    background-position: center;
-    color: white;
-    text-align: center;
-    padding: 4rem 0;
-}
+    .hero-section {
+        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
+        background-size: cover;
+        background-position: center;
+        color: white;
+        text-align: center;
+        padding: 4rem 0;
+    }
 
-.hero-title {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    font-family: Arial, sans-serif;
-}
+    .hero-title {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        font-family: Arial, sans-serif;
+    }
 
-.hero-subtitle {
-    font-size: 1.2rem;
-    opacity: 0.9;
-    font-family: Arial, sans-serif;
-}
+    .hero-subtitle {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        font-family: Arial, sans-serif;
+    }
 
-.text-danger {
-    color: #e74c3c;
-}
+    .text-danger {
+        color: #e74c3c;
+    }
 
-.alert-success {
-    background: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-    padding: 1rem;
-    border-radius: 5px;
-    font-family: Arial, sans-serif;
-}
+    .alert-success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+        padding: 1rem;
+        border-radius: 5px;
+        font-family: Arial, sans-serif;
+    }
+
+    .password-toggle {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.2rem;
+        padding: 0.25rem;
+        border-radius: 3px;
+        transition: background-color 0.2s;
+    }
+
+    .password-toggle:hover {
+        background-color: rgba(0,0,0,0.1);
+    }
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Function to clean all form fields
+        function cleanFormFields() {
+            // Clear all input fields
+            const cleanFields = document.querySelectorAll('.clean-field');
+            cleanFields.forEach(field => {
+                field.value = '';
+            });
+            
+            // Reset password fields to hidden type
+            const passwordFields = document.querySelectorAll('.password-field');
+            passwordFields.forEach(field => {
+                field.type = 'password';
+            });
+            
+            // Reset all eye icons to closed state
+            const passwordToggles = document.querySelectorAll('.password-toggle');
+            passwordToggles.forEach(toggle => {
+                toggle.textContent = '🙈';
+            });
+            
+            // Clear any browser autofill
+            const form = document.getElementById('registrationForm');
+            if (form) {
+                form.reset();
+            }
+        }
+
+        // Clean fields immediately when page loads
+        cleanFormFields();
+
+        // Also clean fields after a short delay to catch any browser autofill
+        setTimeout(cleanFormFields, 100);
+
+        // Add password toggle functionality
+        const passwordToggles = document.querySelectorAll('.password-toggle');
+        
+        passwordToggles.forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const passwordInput = document.getElementById(targetId);
+                
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    this.textContent = '👁️';
+                } else {
+                    passwordInput.type = 'password';
+                    this.textContent = '🙈';
+                }
+            });
+        });
+    });
+
+    // Additional cleanup when the page becomes visible
+    document.addEventListener('visibilitychange', function() {
+        if (!document.hidden) {
+            const cleanFields = document.querySelectorAll('.clean-field');
+            cleanFields.forEach(field => {
+                if (!field.value) {
+                    field.value = '';
+                }
+            });
+        }
+    });
+</script>
 {% endblock %}
