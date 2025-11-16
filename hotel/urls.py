@@ -28,6 +28,7 @@ urlpatterns = [
     # User dashboard and bookings
     path('dashboard/', views.dashboard, name='dashboard'),
     path('profile/', views.profile, name='profile'),
+    path('profile/current-bookings/', views.current_bookings, name='current_bookings'),
     path('bookings/', views.booking_list, name='booking_list'),
     path('bookings/<int:booking_id>/', views.booking_detail, name='booking_detail'),
     

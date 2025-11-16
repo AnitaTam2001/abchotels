@@ -233,7 +233,6 @@ def booking_form(request, room_id):
                 
                 messages.success(request, f'Booking confirmed! Total price: ${booking.total_price}')
                 return redirect('booking_confirmation', booking_id=booking.id)
-                
             except Exception as e:
                 messages.error(request, f'Error creating booking: {str(e)}')
         else:
@@ -270,7 +269,6 @@ def booking_list(request):
         bookings = Booking.objects.filter(guest_email=request.user.email).order_by('-created_at')
     else:
         bookings = []
-    
     context = {
         'bookings': bookings,
     }
@@ -354,18 +352,6 @@ def user_logout(request):
     return redirect('home')
 
 @login_required
-def profile(request):
-    if request.user.is_authenticated:
-        user_bookings = Booking.objects.filter(guest_email=request.user.email).order_by('-created_at')
-    else:
-        user_bookings = []
-    
-    context = {
-        'user_bookings': user_bookings,
-    }
-    return render(request, 'profile.html', context)
-
-@login_required
 def dashboard(request):
     if request.user.is_authenticated:
         bookings = Booking.objects.filter(guest_email=request.user.email)
@@ -392,3 +378,35 @@ def room_admin(request):
         'occupied_rooms': rooms.count() - available_rooms.count(),
     }
     return render(request, 'hotel/room_admin.html', context)
+
+@login_required
+def profile(request):
+    # Show all bookings by default
+    if request.user.is_authenticated:
+        user_bookings = Booking.objects.filter(guest_email=request.user.email).order_by('-created_at')
+    else:
+        user_bookings = []
+    
+    context = {
+        'user_bookings': user_bookings,
+        'show_all': True  # Flag to indicate showing all bookings
+    }
+    return render(request, 'profile.html', context)
+
+@login_required
+def current_bookings(request):
+    # Show only current/future bookings
+    today = timezone.now().date()
+    if request.user.is_authenticated:
+        user_bookings = Booking.objects.filter(
+            guest_email=request.user.email,
+            check_out__gte=today  # Only bookings that haven't ended
+        ).order_by('-created_at')
+    else:
+        user_bookings = []
+    
+    context = {
+        'user_bookings': user_bookings,
+        'show_all': False  # Flag to indicate showing current bookings only
+    }
+    return render(request, 'profile.html', context)
