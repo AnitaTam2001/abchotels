@@ -2,12 +2,14 @@
 :root {
     --primary-color: #2c3e50;
     --secondary-color: #3498db;
-    --accent-color: #e74c3c;
+    --accent-color: #c74c3c;
     --light-color: #ecf0f1;
     --dark-color: #34495e;
     --success-color: #27ae60;
     --warning-color: #f39c12;
-    --danger-color: #e74c3c;
+    --danger-color: #c74c3c;
+    --button-width: 130px;
+    --button-height: 44px;
 }
 
 * {
@@ -73,7 +75,9 @@ body {
 }
 
 .nav-btn {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background: #3498db;
     color: white;
     padding: 0.65rem 1.3rem;
@@ -84,6 +88,9 @@ body {
     transition: background 0.3s;
     text-transform: none;
     font-size: 0.9rem;
+    width: var(--button-width);
+    height: var(--button-height);
+    white-space: nowrap;
 }
 
 .nav-btn:hover {
@@ -133,7 +140,9 @@ body {
 }
 
 .btn {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background: var(--accent-color);
     color: white;
     padding: 0.8rem 2rem;
@@ -145,6 +154,9 @@ body {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    width: var(--button-width);
+    height: var(--button-height);
+    white-space: nowrap;
 }
 
 .btn:hover {
@@ -272,41 +284,10 @@ body {
     margin-bottom: 3rem;
 }
 
-.about-hero {
-    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
-    background-size: cover;
-    background-position: center;
-    color: white;
-    padding: 6rem 0;
-    text-align: center;
-    margin-bottom: 3rem;
-}
-
-.footer {
-    background: var(--dark-color);
-    color: white;
-    text-align: center;
-    padding: 2rem 0;
-    margin-top: 4rem;
-}
-
 .alert {
     padding: 1rem;
-    margin: 1rem 0;
     border-radius: 5px;
-    border: 1px solid transparent;
-}
-
-.alert-success {
-    background: #d4edda;
-    color: #155724;
-    border-color: #c3e6cb;
-}
-
-.alert-error {
-    background: #f8d7da;
-    color: #721c24;
-    border-color: #f5c6cb;
+    margin-bottom: 1rem;
 }
 
 .alert-warning {
@@ -386,7 +367,9 @@ body {
 
 /* Filter Button Styles - Same format for both buttons */
 .filter-btn, .clear-btn {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: 0.75rem 1.5rem;
     border-radius: 5px;
     font-size: 0.9rem;
@@ -397,11 +380,10 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     flex: 1;
-    min-width: 120px;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    min-width: var(--button-width);
+    width: var(--button-width);
+    height: var(--button-height);
+    white-space: nowrap;
 }
 
 .filter-btn {
@@ -463,6 +445,9 @@ body {
 }
 
 .booking-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background: var(--accent-color);
     color: white;
     border: none;
@@ -471,6 +456,9 @@ body {
     cursor: pointer;
     font-weight: 600;
     transition: all 0.3s ease;
+    width: var(--button-width);
+    height: var(--button-height);
+    white-space: nowrap;
 }
 
 .booking-btn:hover {
@@ -507,6 +495,9 @@ body {
 }
 
 .select-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background: var(--success-color);
     color: white;
     border: none;
@@ -515,6 +506,9 @@ body {
     cursor: pointer;
     font-weight: 600;
     transition: all 0.3s ease;
+    width: var(--button-width);
+    height: var(--button-height);
+    white-space: nowrap;
 }
 
 .select-btn:hover {
@@ -627,7 +621,7 @@ body {
     align-items: center;
     margin-bottom: 1rem;
     padding: 1rem;
-    background: #f8f9fa;
+    background: #f9f9fa;
     border-radius: 5px;
 }
 
@@ -691,13 +685,135 @@ body {
     color: var(--primary-color);
 }
 
+/* FAQ Styles */
+.faq-accordion {
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.faq-item {
+    border-bottom: 1px solid #e0e0e0;
+    background: white;
+}
+
+.faq-item:last-child {
+    border-bottom: none;
+}
+
+.faq-question {
+    padding: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.faq-question:hover {
+    background: #f8f9fa;
+}
+
+.faq-question h3 {
+    flex: 1;
+    margin-right: 1rem;
+}
+
+.faq-toggle {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #c74c3c;
+    transition: transform 0.3s ease;
+}
+
+.faq-answer {
+    padding: 0 1.5rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+}
+
+.faq-item.active .faq-answer {
+    padding: 1.5rem;
+    max-height: 500px;
+}
+
+.faq-item.active .faq-toggle {
+    transform: rotate(45deg);
+}
+
+.faq-item.hidden {
+    display: none;
+}
+
+/* Consistent Button Styling - All buttons have EXACT same fixed width */
+.btn-consistent {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    width: var(--button-width);
+    height: var(--button-height);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-transform: none;
+    letter-spacing: normal;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.btn-consistent:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    opacity: 0.9;
+}
+
+.btn-consistent:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Button Colors Only - Everything else is exactly the same */
+.btn-booking { background: #3498db; }
+.btn-rooms { background: #c74c3c; }
+.btn-services { background: #2ecc71; }
+.btn-payment { background: #f39c12; }
+.btn-general { background: #955996; }
+.btn-contact { background: white; color: #667eea; border: 2px solid #667eea; }
+.btn-call { background: transparent; border: 2px solid white; color: white; }
+
+/* Ensure the button container centers them properly */
+.quick-nav-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* Make sure contact buttons are also same size */
+.contact-buttons .btn-consistent {
+    width: var(--button-width);
+    height: var(--button-height);
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     .nav-container {
         flex-direction: column;
         gap: 1rem;
     }
-
+    
     .nav-links {
         gap: 1rem;
     }
@@ -705,7 +821,7 @@ body {
     .hero-title {
         font-size: 2.5rem;
     }
-
+    
     .container {
         padding: 0 1rem;
     }
@@ -751,11 +867,17 @@ body {
         width: 100%;
         min-width: 100%;
     }
-    
+
     .button-group .filter-btn,
     .button-group .clear-btn {
         flex: 1;
         min-width: auto;
+    }
+
+    /* Adjust button sizes for mobile */
+    :root {
+        --button-width: 120px;
+        --button-height: 40px;
     }
 }
 
@@ -778,8 +900,14 @@ body {
         font-size: 1rem;
     }
 
-    .btn {
+    .btn-consistent {
         padding: 0.6rem 1.5rem;
         font-size: 0.9rem;
+    }
+
+    /* Further adjust button sizes for very small screens */
+    :root {
+        --button-width: 110px;
+        --button-height: 38px;
     }
 }
