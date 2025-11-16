@@ -22,7 +22,7 @@
                                 {{ user.username|first|upper }}
                             </div>
                             <h3 style="margin: 0; color: #2c3e50;">{{ user.username }}</h3>
-                            <p style="color: #666; margin: 0.5rem 0 0 0;">Member since {{ user.date_joined|date:"M Y" }}</p>
+                            <p style="color: #666; margin: 0.5rem 0 0 0;">Member since {{ user.date_joined|date:"d M Y" }}</p>
                         </div>
                         <div style="display: flex; flex-direction: column; gap: 0.5rem;"> 
                             <a href="{% url 'current_bookings' %}" class="btn" style="text-align: left; background: #f8f9fa; color: #666;"> 
@@ -75,13 +75,13 @@
                                             Guests: {{ booking.display_guests }} 
                                         </p>
                                         <p style="margin: 0 0 0.5rem 0; color: #666;"> 
-                                            Stay Dates: {{ booking.check_in|date:"M. d, Y" }} to {{ booking.check_out|date:"M. d, Y" }} 
+                                            Stay Dates: {{ booking.check_in|date:"d M Y" }} to {{ booking.check_out|date:"d M Y" }} 
                                         </p>
                                     </div>
                                 </div>
                                 <div style="display: flex; gap: 1rem; font-size: 0.9rem; color: #666;">
                                     <span>Booking #{{ booking.id }}</span>
-                                    <span>Booking Date: {{ booking.created_at|date:"M. d, Y" }}</span>
+                                    <span>Booking Date: {{ booking.created_at|date:"d M Y" }}</span>
                                 </div>
                             </div>
                             {% endfor %}

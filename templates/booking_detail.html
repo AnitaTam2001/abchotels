@@ -1,119 +1,137 @@
 <!-- templates/booking_detail.html -->
 {% extends 'base.html' %}
-{% load static %}
-{% block content %}
 
-<section style="padding: 8rem 0;">
+{% block content %}
+<section class="hero-section" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+    <div class="container">
+        <h1 class="hero-title">Booking Details</h1>
+        <p class="hero-subtitle">Booking #{{ booking.id }}</p>
+    </div>
+</section>
+
+<section style="padding: 4rem 0;">
     <div class="container">
         <div style="max-width: 800px; margin: 0 auto;">
-            <!-- Header -->
-            <div style="text-align: center; margin-bottom: 3rem;">
-                <h1 style="color: #2c3e50; margin-bottom: 1rem;">Booking Details</h1>
-
-                </div>
-            </div>
-
-            <!-- Booking Information -->
-            <div style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 2rem;">
-                <h2 style="color: #2c3e50; margin-bottom: 1.5rem; border-bottom: 2px solid #f8f9fa; padding-bottom: 0.5rem;">Booking Information</h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
-                    <div>
-                        <h3 style="color: #2c3e50; margin-bottom: 1rem;">Guest Details</h3>
-                        <p><strong>Booking ID:</strong> #{{ booking.id }}</p>
-                        <p><strong>Guest Name:</strong> {{ booking.guest_name }}</p>
-                        <p><strong>Email:</strong> {{ booking.guest_email }}</p>
-                        <p><strong>Phone:</strong> {{ booking.guest_phone }}</p>
-                        <p><strong>Total Guests:</strong> {{ booking.display_guests }} guest{{ booking.display_guests|pluralize }}</p>
-                    </div>
-                    <div>
-                        <h3 style="color: #2c3e50; margin-bottom: 1rem;">Stay Details</h3>
-                        <p><strong>Check-in:</strong> {{ booking.check_in }}</p>
-                        <p><strong>Check-out:</strong> {{ booking.check_out }}</p>
-                        <p><strong>Total Nights:</strong> {{ booking.nights }}</p>
-                        <p><strong>Booking Date:</strong> {{ booking.created_at|date:'M d, Y' }}</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Room Information -->
-            <div style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 2rem;">
-                <h2 style="color: #2c3e50; margin-bottom: 1.5rem; border-bottom: 2px solid #f8f9fa; padding-bottom: 0.5rem;">Room Information</h2>
-                <div style="display: flex; gap: 2rem; align-items: flex-start;">
-                    <div style="flex: 1;">
-                        <div style="width: 100%; height: 200px; border-radius: 8px; overflow: hidden; background: #f8f9fa;">
-                            {% if booking.room.room_type.image %}
-                            <img src="{{ booking.room.room_type.image.url }}" alt="{{ booking.room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                            {% else %}
-                            <img src="{% static 'images/rooms/default.jpg' %}" alt="{{ booking.room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                            {% endif %}
+            <div style="background: white; padding: 3rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+                <h2 style="margin-bottom: 2rem; color: #2c3e50;">Booking Information</h2>
+                
+                <div style="display: grid; gap: 1.5rem;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <strong>Booking ID:</strong>
+                            <p style="margin: 0.5rem 0 0 0;">#{{ booking.id }}</p>
+                        </div>
+                        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <strong>Status:</strong>
+                            <p style="margin: 0.5rem 0 0 0; text-transform: capitalize;">{{ booking.status }}</p>
                         </div>
                     </div>
-                    <div style="flex: 2;">
-                        <h3 style="color: #2c3e50; margin-bottom: 0.5rem;">{{ booking.room.room_type.name }}</h3>
-                        <p style="color: #666; margin-bottom: 1rem;"><strong>City:</strong> {{ booking.room.city.name }}</p>
-                        <p style="color: #666; margin-bottom: 1rem;"><strong>Room Type:</strong> {{ booking.room.room_type.name }}</p>
-                        <p style="color: #666; margin-bottom: 1rem;">{{ booking.room.room_type.description }}</p>
-                        <p><strong>Room Capacity:</strong> {{ booking.room.room_type.capacity }} guest{{ booking.room.room_type.capacity|pluralize }}</p>
+                    
+                    <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                        <strong>Guest Name:</strong>
+                        <p style="margin: 0.5rem 0 0 0;">{{ booking.guest_name }}</p>
+                    </div>
+                    
+                    <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                        <strong>Email:</strong>
+                        <p style="margin: 0.5rem 0 0 0;">{{ booking.guest_email }}</p>
+                    </div>
+                    
+                    <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                        <strong>Hotel:</strong>
+                        <p style="margin: 0.5rem 0 0 0;">ABC {{ booking.room.city.name }} Hotel</p>
+                    </div>
+                    
+                    <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                        <strong>Room Type:</strong>
+                        <p style="margin: 0.5rem 0 0 0;">{{ booking.room.room_type.name }}</p>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <strong>Check-in Date:</strong>
+                            <p style="margin: 0.5rem 0 0 0;">{{ booking.check_in|date:"d M Y" }}</p>
+                        </div>
+                        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <strong>Check-out Date:</strong>
+                            <p style="margin: 0.5rem 0 0 0;">{{ booking.check_out|date:"d M Y" }}</p>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <strong>Number of Nights:</strong>
+                            <p style="margin: 0.5rem 0 0 0;">{{ nights }}</p>
+                        </div>
+                        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <strong>Number of Guests:</strong>
+                            <p style="margin: 0.5rem 0 0 0;">{{ booking.display_guests }}</p>
+                        </div>
+                    </div>
+                    
+                    <div style="padding: 1rem; background: #e8f5e8; border-radius: 8px;">
+                        <strong>Total Amount:</strong>
+                        <p style="margin: 0.5rem 0 0 0; font-size: 1.2rem; font-weight: bold;">${{ booking.total_price }}</p>
+                    </div>
+                    
+                    <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                        <strong>Booking Date:</strong>
+                        <p style="margin: 0.5rem 0 0 0;">{{ booking.created_at|date:"d M Y" }}</p>
                     </div>
                 </div>
             </div>
-
-            <!-- Pricing Breakdown -->
-            <div style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 2rem;">
-                <h2 style="color: #2c3e50; margin-bottom: 1.5rem; border-bottom: 2px solid #f8f9fa; padding-bottom: 0.5rem;">Pricing Breakdown</h2>
-                <div style="display: grid; gap: 1rem;">
-                    <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #f8f9fa;">
-                        <span>Price per night:</span>
-                        <span>${{ booking.room.room_type.price_per_night }}</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #f8f9fa;">
-                        <span>Number of nights:</span>
-                        <span>{{ booking.nights }}</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; font-weight: bold; font-size: 1.2rem; color: #2c3e50;">
-                        <span>Total Amount:</span>
-                        <span>${{ booking.total_price }}</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Status Information -->
-            {% if booking.status == 'confirmed' %}
-            <div style="background: #d1edff; padding: 1.5rem; border-radius: 10px; border: 1px solid #b3d9ff; margin-bottom: 2rem;">
-                <h3 style="color: #004085; margin-bottom: 1rem;">Booking Confirmed</h3>
-                <p style="color: #004085; margin-bottom: 0;">
-                    Your booking has been confirmed! You will receive a confirmation email with all the details. We look forward to hosting you at ABC Hotels.
-                </p>
-            </div>
-            {% endif %}
-
-            <!-- Action Buttons -->
-            <div style="display: flex; gap: 1rem; justify-content: center;">
-                <a href="{% url 'profile' %}" class="btn" style="padding: 0.75rem 1.5rem; background: #3498db; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
-                    Back to Profile
-                </a>
-                <a href="{% url 'room_list' %}" class="btn" style="padding: 0.75rem 1.5rem; background: #674c3c; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
-                    Book Another Room
-                </a>
+            
+            <div style="text-align: center;">
+                <a href="{% url 'profile' %}" class="btn btn-primary">Back to Profile</a>
             </div>
         </div>
     </div>
 </section>
 
 <style>
+.hero-section {
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+    padding: 4rem 0;
+}
+
+.hero-title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
 .btn {
     display: inline-block;
     padding: 0.8rem 1.5rem;
+    background: #3498db;
+    color: white;
     text-decoration: none;
     border-radius: 5px;
-    font-weight: bold;
-    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
     text-align: center;
 }
 
 .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    background: #2980b9;
+    color: white;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: #674c3c;
+}
+
+.btn-primary:hover {
+    background: #c0392b;
 }
 </style>
 {% endblock %}
