@@ -3,197 +3,242 @@
 {% load static %}
 {% block content %}
 <section style="padding: 4rem 0;">
-    <div class="container">
-        <div style="max-width: 600px; margin: 0 auto; background: white; padding: 3rem; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-            <h1 style="text-align: center; margin-bottom: 2rem; color: #2c3e50;">Book Your Stay</h1>
-            
-            <!-- Display messages -->
-            {% if messages %}
-            <div style="margin-bottom: 2rem;">
-                {% for message in messages %}
-                <div style="padding: 1rem; border-radius: 5px; margin-bottom: 1rem; {% if message.tags == 'error' %}background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;{% else %}background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb;{% endif %}">
-                    {{ message }}
-                </div>
-                {% endfor %}
-            </div>
-            {% endif %}
-            
-            <!-- Room Information Card -->
-            <div style="background: #e8f4fd; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
-                <!-- Hotel Name - Bold and Center -->
-                <h2 style="text-align: center; font-weight: bold; margin-bottom: 1.5rem; color: #2c3e50;">
-                    ABC {{ room.city.name }} Hotel
-                </h2>
-                <div style="display: flex; gap: 1.5rem; align-items: flex-start;">
-                    <!-- Image on the left - half size -->
-                    <div style="flex: 1; min-width: 0;">
-                        <div style="width: 100%; height: 150px; border-radius: 8px; overflow: hidden; background: #f8f9fa;">
-                            {% if room.room_type.name == 'Accessible King' %}
-                            <img src="{% static 'images/rooms/accessible_king.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                            {% elif room.room_type.name == 'Junior Suite' %}
-                            <img src="{% static 'images/rooms/junior_suite.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                            {% elif room.room_type.name == 'Pool View King' %}
-                            <img src="{% static 'images/rooms/poolview_king.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                            {% elif room.room_type.name == 'City View Twin' %}
-                            <img src="{% static 'images/rooms/cityview_twin.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                            {% elif room.room_type.name == 'Corner Suite' %}
-                            <img src="{% static 'images/rooms/corner_suite.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                            {% elif room.room_type.name == 'Studio King' %}
-                            <img src="{% static 'images/rooms/studio_king.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                            {% elif room.room_type.name == 'Connecting Family' %}
-                            <img src="{% static 'images/rooms/connecting_family.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                            {% elif room.room_type.name == 'Garden View Queen' %}
-                            <img src="{% static 'images/rooms/garden_queen.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                            {% elif room.room_type.name == 'Penthouse Suite' %}
-                            <img src="{% static 'images/rooms/penthouse_suite.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                            {% else %}
-                            <img src="{% static 'images/rooms/accessible_king.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                            {% endif %}
-                        </div>
-                    </div>
-                    
-                    <!-- Room type details on the right - half size -->
-                    <div style="flex: 1; min-width: 0;">
-                        <h3 style="margin: 0 0 0.5rem 0; color: #2c3e50;">{{ room.room_type.name }}</h3>
-                        <p style="margin: 0 0 1rem 0; color: #666; font-size: 1.1rem;">
-                            <strong style="color: #e74c3c; font-size: 1.3rem;">${{ room.room_type.price_per_night }}</strong> per night
-                        </p>
-                        <p style="margin: 0; color: #666; line-height: 1.5;">{{ room.room_type.description }}</p>
-                    </div>
-                </div>
-            </div>
+<div class="container">
+<div style="max-width: 600px; margin: 0 auto; background: white; padding: 3rem; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+<h1 style="text-align: center; margin-bottom: 2rem; color: #2c3e50;">Book Your Stay</h1>
+<!-- Display messages -->
+{% if messages %}
+<div style="margin-bottom: 2rem;">
+{% for message in messages %}
+<div style="padding: 1rem; border-radius: 5px; margin-bottom: 1rem; {% if message.tags == 'error' %}background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;{% else %}background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb;{% endif %}">
+{{ message }}
+</div>
+{% endfor %}
+</div>
+{% endif %}
+<!-- Room Information Card -->
+<div style="background: #e8f4fd; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
 
-            <!-- Booking Details -->
-            <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
-                <h4 style="margin: 0 0 1rem 0; color: #2c3e50; font-size: 1.35rem; text-align: left;">Booking Details</h4>
-                
-                <!-- Line 1: Guests per room -->
-                <div style="margin-bottom: 1rem;">
-                    <p style="margin: 0; color: #666; font-size: 1.18125rem; line-height: 1.5; text-align: left;">
-                        <strong>Guests per room:</strong> {{ room.room_type.capacity }} guest{{ room.room_type.capacity|pluralize }}
-                    </p>
-                </div>
-                
-                <!-- Line 2: Check-in & Check-out labels -->
-                <div style="display: flex; gap: 2rem; margin-bottom: 0.5rem;">
-                    <div style="flex: 1;">
-                        <p style="margin: 0; color: #666; font-size: 1.18125rem; text-align: left;">
-                            <strong>Check-in:</strong>
-                        </p>
-                    </div>
-                    <div style="flex: 1;">
-                        <p style="margin: 0; color: #666; font-size: 1.18125rem; text-align: left;">
-                            <strong>Check-out:</strong>
-                        </p>
-                    </div>
-                </div>
-                
-                <!-- Line 3: Check-in & Check-out dates -->
-                <div style="display: flex; gap: 2rem;">
-                    <div style="flex: 1;">
-                        <p style="margin: 0; color: #666; font-size: 1.18125rem; text-align: left;">
-                            {% if request.GET.check_in %}
-                            {{ request.GET.check_in }}
-                            {% else %}
-                            {{ today }}
-                            {% endif %}
-                        </p>
-                    </div>
-                    <div style="flex: 1;">
-                        <p style="margin: 0; color: #666; font-size: 1.18125rem; text-align: left;">
-                            {% if request.GET.check_out %}
-                            {{ request.GET.check_out }}
-                            {% else %}
-                            {{ today }}
-                            {% endif %}
-                        </p>
-                    </div>
-                </div>
-            </div>
+<!-- Hotel Name - Bold and Center -->
+<h2 style="text-align: center; font-weight: bold; margin-bottom: 1.5rem; color: #2c3e50;">
+ABC {{ room.city.name }} Hotel
+</h2>
+<div style="display: flex; gap: 1.5rem; align-items: flex-start;">
+<!-- Image on the left - half size -->
+<div style="flex: 1; min-width: 0;">
+<div style="width: 100%; height: 150px; border-radius: 8px; overflow: hidden; background: #f8f9fa;">
+{% if room.room_type.name == 'Accessible King' %}
+<img src="{% static 'images/rooms/accessible_king.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+{% elif room.room_type.name == 'Junior Suite' %}
+<img src="{% static 'images/rooms/junior_suite.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+{% elif room.room_type.name == 'Pool View King' %}
+<img src="{% static 'images/rooms/poolview_king.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+{% elif room.room_type.name == 'City View Twin' %}
+<img src="{% static 'images/rooms/cityview_twin.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+{% elif room.room_type.name == 'Corner Suite' %}
+<img src="{% static 'images/rooms/corner_suite.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+{% elif room.room_type.name == 'Studio King' %}
+<img src="{% static 'images/rooms/studio_king.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+{% elif room.room_type.name == 'Connecting Family' %}
+<img src="{% static 'images/rooms/connecting_family.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+{% elif room.room_type.name == 'Garden View Queen' %}
+<img src="{% static 'images/rooms/garden_queen.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+{% elif room.room_type.name == 'Penthouse Suite' %}
+<img src="{% static 'images/rooms/penthouse_suite.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+{% else %}
+<img src="{% static 'images/rooms/accessible_king.jpg' %}" alt="{{ room.room_type.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+{% endif %}
+</div>
+</div>
+<!-- Room type details on the right - half size -->
+<div style="flex: 1; min-width: 0;">
+<h3 style="margin: 0 0 0.5rem 0; color: #2c3e50;">{{ room.room_type.name }}</h3>
+<p style="margin: 0; color: #666; line-height: 1.5;">{{ room.room_type.description }}</p>
+</div>
+</div>
+</div>
 
-            <form method="post">
-            {% csrf_token %}
-            <div style="display: grid; gap: 1.05rem;">
-            <!-- Form Grid Layout -->
-            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 0.7rem; align-items: center;">
+<!-- Booking Details -->
+<div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; margin-top: 0.75rem;">
+<h4 style="margin: 0 0 1rem 0; color: #2c3e50; font-size: 1.35rem; text-align: left;">Booking Details</h4>
 
-            <!-- Full Name -->
-            <label class="form-label" style="font-weight: bold; color: #2c3e50; margin: 0; text-align: left; font-size: 1.26rem;">Full Name:</label>
-            <input type="text" name="guest_name" required class="form-input" 
-                placeholder="Enter your full name" 
-                value="{% if user.is_authenticated %}{{ user.first_name }} {{ user.last_name }}{% else %}{{ request.POST.guest_name }}{% endif %}" 
-                style="padding: 0.525rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1.26rem; width: 100%; box-sizing: border-box; text-align: left;">
+<!-- Line 1: Total nights -->
+<div style="margin-bottom: 1rem;">
+<p style="margin: 0; color: #666; font-size: 1.18125rem; line-height: 1.5; text-align: left;">
+<strong>Total nights:</strong> 
+<span id="total-nights">
+{% if request.GET.check_in and request.GET.check_out %}
+    {{ total_nights }}
+{% else %}
+    0
+{% endif %}
+</span>
+</p>
+</div>
 
-            <!-- Email Address -->
-            <label class="form-label" style="font-weight: bold; color: #2c3e50; margin: 0; text-align: left; font-size: 1.26rem;">Email Address:</label>
-            <input type="email" name="guest_email" required class="form-input" 
-                placeholder="Enter your email address" 
-                value="{% if user.is_authenticated %}{{ user.email }}{% else %}{{ request.POST.guest_email }}{% endif %}" 
-                style="padding: 0.525rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1.26rem; width: 100%; box-sizing: border-box; text-align: left;">
+<!-- Line 2: Room per night -->
+<div style="margin-bottom: 1rem;">
+<p style="margin: 0; color: #666; font-size: 1.18125rem; line-height: 1.5; text-align: left;">
+<strong>Room per night:</strong> ${{ room.room_type.price_per_night }}
+</p>
+</div>
 
-            <!-- Phone Number -->
-            <label class="form-label" style="font-weight: bold; color: #2c3e50; margin: 0; text-align: left; font-size: 1.26rem;">Phone Number:</label>
-            <input type="tel" name="guest_phone" required class="form-input" 
-                placeholder="Enter your phone number" 
-                value="{% if user.is_authenticated %}{% if user.profile.phone_number %}{{ user.profile.phone_number }}{% endif %}{% else %}{{ request.POST.guest_phone }}{% endif %}" 
-                style="padding: 0.525rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1.26rem; width: 100%; box-sizing: border-box; text-align: left;">
+<!-- Line 3: Guests per room -->
+<div style="margin-bottom: 1rem;">
+<p style="margin: 0; color: #666; font-size: 1.18125rem; line-height: 1.5; text-align: left;">
+<strong>Guests per room:</strong> {{ room.room_type.capacity }} guest{{ room.room_type.capacity|pluralize }}
+</p>
+</div>
 
-            </div>
+<!-- Line 4: Total Amount -->
+<div style="margin-bottom: 1rem;">
+<p style="margin: 0; color: #666; font-size: 1.18125rem; line-height: 1.5; text-align: left;">
+<strong>Total Amount:</strong> <strong style="color: #e74c3c; font-size: 1.3rem;">$<span id="calculated-total-amount">
+{% if request.GET.check_in and request.GET.check_out %}
+    {{ total_amount }}
+{% else %}
+    0.00
+{% endif %}
+</span></strong>
+</p>
+</div>
 
-            <!-- Hidden fields for check-in and check-out dates from URL parameters -->
-            <input type="hidden" name="check_in" value="{{ request.GET.check_in }}">
-            <input type="hidden" name="check_out" value="{{ request.GET.check_out }}">
+<!-- Line 5: Check-in & Check-out labels -->
+<div style="display: flex; gap: 2rem; margin-bottom: 0.5rem;">
+<div style="flex: 1;">
+<p style="margin: 0; color: #666; font-size: 1.18125rem; text-align: left;">
+<strong>Check-in:</strong>
+</p>
+</div>
+<div style="flex: 1;">
+<p style="margin: 0; color: #666; font-size: 1.18125rem; text-align: left;">
+<strong>Check-out:</strong>
+</p>
+</div>
+</div>
 
-            <button type="submit" class="btn" style="width: 100%; padding: 0.7rem; font-size: 1.001rem; background: #674c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                Submit Booking
-            </button>
+<!-- Line 6: Check-in & Check-out dates -->
+<div style="display: flex; gap: 2rem;">
+<div style="flex: 1;">
+<p style="margin: 0; color: #666; font-size: 1.18125rem; text-align: left;">
+{% if request.GET.check_in %}
+{{ request.GET.check_in }}
+{% else %}
+{{ today }}
+{% endif %}
+</p>
+</div>
+<div style="flex: 1;">
+<p style="margin: 0; color: #666; font-size: 1.18125rem; text-align: left;">
+{% if request.GET.check_out %}
+{{ request.GET.check_out }}
+{% else %}
+{{ today }}
+{% endif %}
+</p>
+</div>
+</div>
+</div>
 
-            </div>
-            </form>
+<form method="post">
+{% csrf_token %}
+<div style="display: grid; gap: 1.05rem;">
+<!-- Form Grid Layout -->
+<div style="display: grid; grid-template-columns: 1fr 2fr; gap: 0.7rem; align-items: center;">
 
+<!-- Full Name -->
+<label class="form-label" style="font-weight: bold; color: #2c3e50; margin: 0; text-align: left; font-size: 1.26rem;">Full Name:</label>
+<input type="text" name="guest_name" required class="form-input" placeholder="Enter your full name" value="{% if user.is_authenticated %}{{ user.first_name }} {{ user.last_name }}{% else %}{{ request.POST.guest_name }}{% endif %}" style="padding: 0.525rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1.26rem; width: 100%; box-sizing: border-box; text-align: left;">
 
-        </div>
-    </div>
+<!-- Email Address -->
+<label class="form-label" style="font-weight: bold; color: #2c3e50; margin: 0; text-align: left; font-size: 1.26rem;">Email Address:</label>
+<input type="email" name="guest_email" required class="form-input" placeholder="Enter your email address" value="{% if user.is_authenticated %}{{ user.email }}{% else %}{{ request.POST.guest_email }}{% endif %}" style="padding: 0.525rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1.26rem; width: 100%; box-sizing: border-box; text-align: left;">
+
+<!-- Phone Number -->
+<label class="form-label" style="font-weight: bold; color: #2c3e50; margin: 0; text-align: left; font-size: 1.26rem;">Phone Number:</label>
+<input type="tel" name="guest_phone" required class="form-input" placeholder="Enter your phone number" value="{% if user.is_authenticated %}{% if user.profile.phone_number %}{{ user.profile.phone_number }}{% endif %}{% else %}{{ request.POST.guest_phone }}{% endif %}" style="padding: 0.525rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1.26rem; width: 100%; box-sizing: border-box; text-align: left;">
+
+</div>
+
+<!-- Hidden fields for check-in and check-out dates from URL parameters -->
+<input type="hidden" name="check_in" value="{{ request.GET.check_in }}">
+<input type="hidden" name="check_out" value="{{ request.GET.check_out }}">
+
+<button type="submit" class="btn" style="width: 100%; padding: 0.7rem; font-size: 1.001rem; background: #674c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">
+Submit Booking
+</button>
+
+</div>
+</form>
+
+</div>
 </section>
 
 <style>
 .form-group {
-    display: flex;
-    flex-direction: column;
+display: flex;
+flex-direction: column;
 }
 .form-label {
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-    color: #2c3e50;
+font-weight: bold;
+margin-bottom: 0.5rem;
+color: #2c3e50;
 }
 .form-input {
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-    width: 100%;
-    box-sizing: border-box;
+padding: 0.75rem;
+border: 1px solid #ddd;
+border-radius: 5px;
+font-size: 1rem;
+width: 100%;
+box-sizing: border-box;
 }
 .form-input:focus {
-    outline: none;
-    border-color: #3498db;
-    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+outline: none;
+border-color: #3498db;
+box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
 }
 .btn:hover {
-    background: #c0392b !important;
+background: #c0392b !important;
 }
 </style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Removed date selection JavaScript since dates are now fixed
     console.log('Booking dates fixed from URL parameters');
-    // Validate that dates are present
-    const checkInValue = document.querySelector('input[name="check_in"]').value;
-    const checkOutValue = document.querySelector('input[name="check_out"]').value;
-    if (!checkInValue || !checkOutValue) {
-        console.warn('Missing date parameters in URL');
+    
+    // Function to calculate total nights and amount
+    function calculateTotal() {
+        const checkInValue = document.querySelector('input[name="check_in"]').value;
+        const checkOutValue = document.querySelector('input[name="check_out"]').value;
+        const pricePerNight = {{ room.room_type.price_per_night }};
+        
+        if (checkInValue && checkOutValue) {
+            const checkIn = new Date(checkInValue);
+            const checkOut = new Date(checkOutValue);
+            
+            // Calculate difference in days
+            const timeDiff = checkOut.getTime() - checkIn.getTime();
+            const totalNights = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            
+            if (totalNights > 0) {
+                const totalAmount = totalNights * pricePerNight;
+                
+                // Update display
+                document.getElementById('total-nights').textContent = totalNights;
+                document.getElementById('calculated-total-amount').textContent = totalAmount.toFixed(2);
+            } else {
+                document.getElementById('total-nights').textContent = '0';
+                document.getElementById('calculated-total-amount').textContent = '0.00';
+            }
+        } else {
+            console.warn('Missing date parameters in URL');
+            document.getElementById('total-nights').textContent = '0';
+            document.getElementById('calculated-total-amount').textContent = '0.00';
+        }
     }
+    
+    // Calculate on page load
+    calculateTotal();
 });
 </script>
 {% endblock %}
