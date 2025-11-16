@@ -61,17 +61,17 @@
                         <label class="filter-label">Number of Rooms</label>
                         <select name="rooms" class="filter-select">
                             <option value="">Any Number</option>
-                            <option value="1" {% if selected_rooms == "1" %}selected{% endif %}>1 Rooms</option>
-                            <option value="2" {% if selected_guests == "2" %}selected{% endif %}>2 Rooms</option>
+                            <option value="1" {% if selected_rooms == "1" %}selected{% endif %}>1 Room</option>
+                            <option value="2" {% if selected_rooms == "2" %}selected{% endif %}>2 Rooms</option>
                             <option value="3" {% if selected_rooms == "3" %}selected{% endif %}>3 Rooms</option>
                             <option value="4" {% if selected_rooms == "4" %}selected{% endif %}>4+ Rooms</option>
                         </select>
                     </div>
 
-                    <!-- Buttons on the same line -->
+                    <!-- Buttons on the same line - FIXED -->
                     <div class="filter-group button-group">
-                        <button type="submit" class="filter-btn">Search Hotels</button>
-                        <a href="{% url 'room_list' %}" class="btn clear-btn">Clear</a>
+                        <button type="submit" class="filter-btn-search">Search Hotels</button>
+                        <a href="{% url 'room_list' %}" class="filter-btn-clear">Clear</a>
                     </div>
                 </div>
             </form>
@@ -93,7 +93,7 @@
                         {% if "New York" in city.name %}
                         <img src="{% static 'images/cities/new_york.jpg' %}" alt="ABC New York Hotel">
                         {% elif "London" in city.name %}
-                        <img src="{% static 'images/cities/london.jpg' %}" alt="ABC London Hotel">
+                        <img src="{% static 'images/cities/London.jpg' %}" alt="ABC London Hotel">
                         {% elif "Paris" in city.name %}
                         <img src="{% static 'images/cities/paris.jpg' %}" alt="ABC Paris Hotel">
                         {% elif "Tokyo" in city.name %}
@@ -128,9 +128,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="{% url 'city_detail' city.id %}" class="btn" style="width: 100%; text-align: center; padding: 0.6rem; font-size: 0.9rem;">
-                            View Hotel
-                        </a>
+                        <a href="{% url 'city_detail' city.id %}" class="btn" style="width: 100%; text-align: center; padding: 0.6rem; font-size: 0.9rem;">View Hotel</a>
                     </div>
                 </div>
                 {% endfor %}
@@ -169,12 +167,37 @@
         display: flex;
         gap: 0.5rem;
         min-width: 200px;
+        align-items: stretch;
     }
 
-    .button-group .filter-btn,
-    .button-group .clear-btn {
+    /* FIXED BUTTON STYLES - EXACTLY THE SAME SIZE AND COLOR */
+    .filter-btn-search, .filter-btn-clear {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.75rem 1.5rem;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-decoration: none;
+        text-align: center;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
         flex: 1;
-        padding: 0.75rem 1rem;
+        min-width: 120px;
+        height: 44px;
+        line-height: 1;
+        background: #e74c3c;
+        color: white;
+    }
+
+    .filter-btn-search:hover, .filter-btn-clear:hover {
+        background: #c0392b;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        color: white;
+        text-decoration: none;
     }
 
     .filter-label {
@@ -190,41 +213,6 @@
         border-radius: 5px;
         font-size: 0.9rem;
         width: 100%;
-    }
-
-    .filter-btn {
-        background: #e74c3c;
-        color: white;
-        border: none;
-        padding: 0.75rem 1.5rem;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 0.9rem;
-        transition: background 0.3s;
-    }
-
-    .filter-btn:hover {
-        background: #c0392b;
-    }
-
-    .clear-btn {
-        background: #95a5a6;
-        color: white;
-        padding: 0.75rem 1.5rem;
-        text-decoration: none;
-        border-radius: 5px;
-        border: none;
-        cursor: pointer;
-        font-size: 0.9rem;
-        transition: background 0.3s;
-        text-align: center;
-        display: inline-block;
-    }
-
-    .clear-btn:hover {
-        background: #7f8c8d;
-        color: white;
-        text-decoration: none;
     }
 
     .results-info {
@@ -336,7 +324,7 @@
             grid-template-columns: 1fr;
             gap: 1rem;
         }
-
+        
         .city-image-3col {
             height: 180px;
         }
@@ -352,6 +340,10 @@
         .button-group {
             min-width: 100%;
             flex-direction: row;
+        }
+
+        .filter-btn-search, .filter-btn-clear {
+            min-width: auto;
         }
 
         .hero-title {
@@ -392,10 +384,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const today = new Date();
     const maxDate = new Date();
     maxDate.setFullYear(today.getFullYear() + 1); // One year from today
-    
+
     const todayString = today.toISOString().split('T')[0];
     const maxDateString = maxDate.toISOString().split('T')[0];
-    
+
     const checkInInput = document.querySelector('input[name="check_in"]');
     const checkOutInput = document.querySelector('input[name="check_out"]');
 
@@ -403,13 +395,13 @@ document.addEventListener('DOMContentLoaded', function() {
     if (checkInInput) {
         checkInInput.min = todayString;
         checkInInput.max = maxDateString;
-        
+
         // Add event listener to update check-out min date when check-in changes
         checkInInput.addEventListener('change', function() {
             if (checkOutInput) {
                 checkOutInput.min = this.value;
                 checkOutInput.max = maxDateString;
-                
+
                 // If check-out is before new check-in, clear it
                 if (checkOutInput.value && checkOutInput.value < this.value) {
                     checkOutInput.value = '';
@@ -421,16 +413,16 @@ document.addEventListener('DOMContentLoaded', function() {
     if (checkOutInput) {
         checkOutInput.min = todayString;
         checkOutInput.max = maxDateString;
-        
+
         // Add event listener to update check-in max date when check-out changes
         checkOutInput.addEventListener('change', function() {
             if (checkInInput && this.value) {
                 const maxCheckIn = new Date(this.value);
                 maxCheckIn.setDate(maxCheckIn.getDate() - 1);
                 const maxCheckInString = maxCheckIn.toISOString().split('T')[0];
-                
+
                 checkInInput.max = maxCheckInString;
-                
+
                 // If check-in is after new check-out, clear it
                 if (checkInInput.value && checkInInput.value > this.value) {
                     checkInInput.value = '';
@@ -445,26 +437,25 @@ document.addEventListener('DOMContentLoaded', function() {
         form.addEventListener('submit', function(e) {
             const checkInValue = checkInInput.value;
             const checkOutValue = checkOutInput.value;
-            
+
             if (checkInValue && checkOutValue) {
                 const checkInDate = new Date(checkInValue);
                 const checkOutDate = new Date(checkOutValue);
-                
+
                 // Check if check-out is after check-in
                 if (checkOutDate <= checkInDate) {
                     e.preventDefault();
                     alert('Check-out date must be after check-in date.');
                     return false;
                 }
-                
+
                 // Check if dates are within allowed range
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
                 const maxAllowedDate = new Date();
                 maxAllowedDate.setFullYear(today.getFullYear() + 1);
-                
-                if (checkInDate < today || checkInDate > maxAllowedDate || 
-                    checkOutDate < today || checkOutDate > maxAllowedDate) {
+
+                if (checkInDate < today || checkInDate > maxAllowedDate || checkOutDate < today || checkOutDate > maxAllowedDate) {
                     e.preventDefault();
                     alert('Please select dates within the next year.');
                     return false;

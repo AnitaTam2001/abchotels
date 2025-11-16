@@ -43,8 +43,6 @@ body {
     padding: 0 2.5rem;
 }
 
-
-
 .logo {
     font-size: 1.8rem;
     font-weight: bold;
@@ -343,38 +341,6 @@ body {
     box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-    .nav-container {
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .nav-links {
-        gap: 1rem;
-    }
-
-    .hero-title {
-        font-size: 2.5rem;
-    }
-
-    .container {
-        padding: 0 1rem;
-    }
-
-    .main-content {
-        margin-top: 120px;
-    }
-
-    .room-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .feature-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
 /* Filter and Selection Styles */
 .filter-section {
     background: white;
@@ -418,20 +384,55 @@ body {
     box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
 }
 
-.filter-btn {
-    background: var(--accent-color);
-    color: white;
-    border: none;
-    padding: 0.8rem 1.5rem;
+/* Filter Button Styles - Same format for both buttons */
+.filter-btn, .clear-btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
     border-radius: 5px;
-    cursor: pointer;
+    font-size: 0.9rem;
     font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    border: none;
+    cursor: pointer;
     transition: all 0.3s ease;
+    flex: 1;
+    min-width: 120px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.filter-btn {
+    background: #e74c3c;
+    color: white;
 }
 
 .filter-btn:hover {
     background: #c0392b;
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.clear-btn {
+    background: #95a5a6;
+    color: white;
+}
+
+.clear-btn:hover {
+    background: #7f8c8d;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    text-decoration: none;
+}
+
+/* Button group container */
+.button-group {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    min-width: 200px;
 }
 
 .quick-booking {
@@ -690,8 +691,37 @@ body {
     color: var(--primary-color);
 }
 
-/* Mobile Responsive for City Grid */
+/* Responsive design */
 @media (max-width: 768px) {
+    .nav-container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .nav-links {
+        gap: 1rem;
+    }
+
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .container {
+        padding: 0 1rem;
+    }
+
+    .main-content {
+        margin-top: 120px;
+    }
+
+    .room-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+
     .filter-grid {
         grid-template-columns: 1fr;
     }
@@ -714,6 +744,18 @@ body {
 
     .city-image {
         height: 200px;
+    }
+
+    .button-group {
+        flex-direction: row;
+        width: 100%;
+        min-width: 100%;
+    }
+    
+    .button-group .filter-btn,
+    .button-group .clear-btn {
+        flex: 1;
+        min-width: auto;
     }
 }
 
