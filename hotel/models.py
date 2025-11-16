@@ -1,4 +1,4 @@
-# hote1/models.py
+# hotel/models.py
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils import timezone
@@ -20,23 +20,25 @@ class UserProfile(models.Model):
     )
 
     def __str__(self):
-        return f"{self.user.username} - {self.phone_number}"
+        if self.phone_number:
+            return f"{self.user.username} - {self.phone_number}"
+        return f"{self.user.username} - No phone"
 
     class Meta:
         verbose_name = 'User Profile'
         verbose_name_plural = 'User Profiles'
 
+# FIXED: Use a single signal with proper handling
 @receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
+def manage_user_profile(sender, instance, created, **kwargs):
+    """
+    Handle UserProfile creation and updates.
+    This ensures only one profile exists per user.
+    """
     if created:
-        UserProfile.objects.create(user=instance)
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    if hasattr(instance, 'profile'):
-        instance.profile.save()
-    else:
-        UserProfile.objects.create(user=instance)
+        # Only create if it doesn't exist
+        UserProfile.objects.get_or_create(user=instance)
+    # No else clause needed - the inline in admin handles updates
 
 # Your existing models below
 class City(models.Model):
