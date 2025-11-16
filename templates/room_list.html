@@ -68,10 +68,9 @@
                         </select>
                     </div>
 
-                    <!-- Buttons on the same line - FIXED -->
                     <div class="filter-group button-group">
-                        <button type="submit" class="filter-btn-search">Search Hotels</button>
-                        <a href="{% url 'room_list' %}" class="filter-btn-clear">Clear</a>
+                        <button type="submit" class="btn-consistent btn-rooms">Search Hotels</button>
+                        <a href="{% url 'room_list' %}" class="btn-consistent btn-rooms">Clear</a>
                     </div>
                 </div>
             </form>
@@ -80,8 +79,9 @@
         <!-- Only show cities if no specific city is selected -->
         {% if not selected_city %}
         <!-- Popular Destinations Section -->
-        <div style="margin-top: 3rem;">
+        <div style="margin-top: 3rem;"> 
             <h2 style="text-align: center; margin-bottom: 2rem; color: #2c3e50;">Popular Destinations</h2>
+            
             <div class="city-grid-3col">
                 {% for city in cities|slice:":6" %}
                 <div class="city-card-3col">
@@ -93,7 +93,7 @@
                         {% if "New York" in city.name %}
                         <img src="{% static 'images/cities/new_york.jpg' %}" alt="ABC New York Hotel">
                         {% elif "London" in city.name %}
-                        <img src="{% static 'images/cities/London.jpg' %}" alt="ABC London Hotel">
+                        <img src="{% static 'images/cities/london.jpg' %}" alt="ABC London Hotel">
                         {% elif "Paris" in city.name %}
                         <img src="{% static 'images/cities/paris.jpg' %}" alt="ABC Paris Hotel">
                         {% elif "Tokyo" in city.name %}
@@ -113,7 +113,7 @@
                         <p style="color: #666; margin-bottom: 1rem; line-height: 1.5; font-size: 0.9rem;">{{ city.description|truncatewords:15 }}</p>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                             <div>
-                                <strong style="color: #674c3c; font-size: 1.2rem;">
+                                <strong style="color: #c74c3c; font-size: 1.2rem;">
                                     {% if city.starting_price %}
                                     ${{ city.starting_price }}
                                     {% else %}
@@ -128,7 +128,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="{% url 'city_detail' city.id %}" class="btn" style="width: 100%; text-align: center; padding: 0.6rem; font-size: 0.9rem;">View Hotel</a>
+                        <a href="{% url 'city_detail' city.id %}" class="btn-consistent btn-rooms" style="width: 100%; text-align: center;">View Hotel</a>
                     </div>
                 </div>
                 {% endfor %}
@@ -170,34 +170,51 @@
         align-items: stretch;
     }
 
-    /* FIXED BUTTON STYLES - EXACTLY THE SAME SIZE AND COLOR */
-    .filter-btn-search, .filter-btn-clear {
-        display: flex;
+    /* Consistent Button Styling */
+    .btn-consistent {
+        display: inline-flex;
         align-items: center;
         justify-content: center;
         padding: 0.75rem 1.5rem;
-        border-radius: 5px;
-        font-size: 0.9rem;
-        font-weight: 600;
+        border-radius: 50px;
         text-decoration: none;
+        color: white;
+        font-weight: 600;
         text-align: center;
+        transition: all 0.3s ease;
         border: none;
         cursor: pointer;
-        transition: all 0.3s ease;
-        flex: 1;
-        min-width: 120px;
+        font-size: 0.9rem;
+        width: 130px;
         height: 44px;
-        line-height: 1;
-        background: #e74c3c;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-transform: none;
+        letter-spacing: normal;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        line-height: 1.2;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .btn-consistent:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        opacity: 0.9;
+        text-decoration: none;
         color: white;
     }
 
-    .filter-btn-search:hover, .filter-btn-clear:hover {
-        background: #c0392b;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        color: white;
-        text-decoration: none;
+    .btn-consistent:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    /* Button Colors - All Red */
+    .btn-rooms { 
+        background: #c74c3c; 
+    }
+    .btn-rooms:hover { 
+        background: #a63c2e; 
     }
 
     .filter-label {
@@ -274,25 +291,6 @@
         font-weight: 600;
     }
 
-    .btn {
-        display: inline-block;
-        background: #3498db;
-        color: white;
-        padding: 0.8rem 1.5rem;
-        text-decoration: none;
-        border-radius: 5px;
-        border: none;
-        cursor: pointer;
-        transition: background 0.3s;
-        text-align: center;
-    }
-
-    .btn:hover {
-        background: #2980b9;
-        color: white;
-        text-decoration: none;
-    }
-
     .hero-section {
         background-size: cover;
         background-position: center;
@@ -324,7 +322,7 @@
             grid-template-columns: 1fr;
             gap: 1rem;
         }
-        
+
         .city-image-3col {
             height: 180px;
         }
@@ -342,7 +340,7 @@
             flex-direction: row;
         }
 
-        .filter-btn-search, .filter-btn-clear {
+        .btn-consistent {
             min-width: auto;
         }
 
@@ -384,10 +382,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const today = new Date();
     const maxDate = new Date();
     maxDate.setFullYear(today.getFullYear() + 1); // One year from today
-
     const todayString = today.toISOString().split('T')[0];
     const maxDateString = maxDate.toISOString().split('T')[0];
-
     const checkInInput = document.querySelector('input[name="check_in"]');
     const checkOutInput = document.querySelector('input[name="check_out"]');
 
@@ -455,7 +451,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const maxAllowedDate = new Date();
                 maxAllowedDate.setFullYear(today.getFullYear() + 1);
 
-                if (checkInDate < today || checkInDate > maxAllowedDate || checkOutDate < today || checkOutDate > maxAllowedDate) {
+                if (checkInDate < today || checkInDate > maxAllowedDate || checkOutDate > maxAllowedDate) {
                     e.preventDefault();
                     alert('Please select dates within the next year.');
                     return false;
