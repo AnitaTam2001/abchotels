@@ -1,8 +1,9 @@
 <!-- templates/faq.html -->
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-<section class="hero-section" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1551632811-561732d1e306?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWd1fHx8fGVufDBB-fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');">
+<section class="hero-section" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1551632811-561732d1e306?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');">
     <div class="container">
         <h1 class="hero-title">Frequently Asked Questions</h1>
         <p class="hero-subtitle">Find answers to common questions about your stay</p>
@@ -11,16 +12,16 @@
 
 <section style="padding: 4rem 0;">
     <div class="container">
-        <div style="max-width: 10000px; margin: 0 auto;">
+        <div style="max-width: 1000px; margin: 0 auto;">
             <!-- Quick Navigation -->
             <div style="background: #f8f9fa; padding: 2rem; border-radius: 100px; margin-bottom: 3rem;">
                 <h3 style="text-align: center; margin-bottom: 1.5rem;">Quick Navigation</h3>
                 <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
-                    <a href="#booking" class="btn" style="background: #3498db;">Booking</a>
-                    <a href="#rooms" class="btn" style="background: #c74c3c;">Rooms</a>
-                    <a href="#services" class="btn" style="background: #2ecC71;">Services</a>
-                    <a href="#payment" class="btn" style="background: #f39c12;">Payments</a>
-                    <a href="#general" class="btn" style="background: #95596;">General</a>
+                    <a href="#booking" class="btn btn-booking">Booking</a>
+                    <a href="#rooms" class="btn btn-rooms">Rooms</a>
+                    <a href="#services" class="btn btn-services">Services</a>
+                    <a href="#payment" class="btn btn-payment">Payments</a>
+                    <a href="#general" class="btn btn-general">General</a>
                 </div>
             </div>
 
@@ -352,12 +353,10 @@
             <!-- Still Have Questions -->
             <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 3rem; border-radius: 15px; text-align: center;">
                 <h2 style="margin-bottom: 1rem;">Still Have Questions?</h2>
-                <p style="margin-bottom: 2rem; font-size: 1.1rem;">
-                    Can't find the answer you're looking for? Please contact our friendly team.
-                </p>
+                <p style="margin-bottom: 2rem; font-size: 1.1rem;">Can't find the answer you're looking for? Please contact our friendly team.</p>
                 <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                    <a href="{% url 'contact' %}" class="btn" style="background: white; color: #667eea;">Contact Us</a>
-                    <a href="tel:+15551234567" class="btn" style="background: transparent; border: 2px solid white;">Call Now</a>
+                    <a href="/contact/" class="btn btn-contact">Contact Us</a>
+                    <a href="tel:+15551234567" class="btn btn-call">Call Now</a>
                 </div>
             </div>
         </div>
@@ -425,16 +424,56 @@
 .faq-item.hidden {
     display: none;
 }
+
+/* Consistent Button Styling - All buttons have same styling except colors */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    min-width: 100px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-transform: none;
+    letter-spacing: normal;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    opacity: 0.9;
+}
+
+.btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Button Colors Only - Everything else is the same */
+.btn-booking { background: #3498db; }
+.btn-rooms { background: #c74c3c; }
+.btn-services { background: #2ecc71; }
+.btn-payment { background: #f39c12; }
+.btn-general { background: #955996; }
+.btn-contact { background: white; color: #667eea; }
+.btn-call { background: transparent; border: 2px solid white; }
 </style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // FAQ Accordion functionality
     const faqItems = document.querySelectorAll('.faq-item');
-    
+
     faqItems.forEach(item => {
         const question = item.querySelector('.faq-question');
-        
+
         question.addEventListener('click', function() {
             // Close all other items
             faqItems.forEach(otherItem => {
@@ -442,7 +481,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     otherItem.classList.remove('active');
                 }
             });
-            
+
             // Toggle current item
             item.classList.toggle('active');
         });
@@ -450,15 +489,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // FAQ Search functionality
     const searchInput = document.getElementById('faqSearch');
-    
+
     searchInput.addEventListener('input', function() {
         const searchTerm = this.value.toLowerCase();
         const faqItems = document.querySelectorAll('.faq-item');
-        
+
         faqItems.forEach(item => {
             const question = item.querySelector('h3').textContent.toLowerCase();
             const answer = item.querySelector('.faq-answer p').textContent.toLowerCase();
-            
+
             if (question.includes(searchTerm) || answer.includes(searchTerm)) {
                 item.classList.remove('hidden');
             } else {
