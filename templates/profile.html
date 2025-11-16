@@ -25,18 +25,16 @@
                             <p style="color: #666; margin: 0.5rem 0 0 0;">Member since {{ user.date_joined|date:"d M Y" }}</p>
                         </div>
                         <div style="display: flex; flex-direction: column; gap: 0.5rem;"> 
-                            <a href="{% url 'current_bookings' %}" class="btn" style="text-align: left; background: #f8f9fa; color: #666;"> 
-                                Current Bookings 
-                            </a>
-                            <a href="{% url 'profile' %}" class="btn" style="text-align: left; background: #f8f9fa; color: #666;"> 
-                                All Bookings 
-                            </a>
-                            <a href="#" class="btn" style="text-align: left; background: #f8f9fa; color: #666;"> 
-                                Account Settings 
-                            </a>
-                            <a href="{% url 'logout' %}" class="btn" style="text-align: left; background: #f8f9fa; color: #674c3c;"> 
-                                Logout 
-                            </a>
+                        <a href="{% url 'current_bookings' %}" class="btn" style="text-align: left; background: #f8f9fa; color: #666;"> 
+                            Current Bookings 
+                        </a>
+                        <a href="{% url 'profile' %}" class="btn" style="text-align: left; background: #f8f9fa; color: #666;"> 
+                            All Bookings 
+                        </a>
+                        <a href="{% url 'account_settings' %}" class="btn" style="text-align: left; background: #f8f9fa; color: #666;"> 
+                            Account Settings 
+                        </a>
+
                         </div>
                     </div>
                 </div>

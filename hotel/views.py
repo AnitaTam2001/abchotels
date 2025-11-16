@@ -410,3 +410,8 @@ def current_bookings(request):
         'show_all': False  # Flag to indicate showing current bookings only
     }
     return render(request, 'profile.html', context)
+
+@login_required
+def account_settings(request):
+    """View for user account settings"""
+    return render(request, 'account_settings.html')
