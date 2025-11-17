@@ -10,8 +10,20 @@ from .models import City, Department, RoomType, Room, Booking, FAQ, JobListing, 
 # USER PROFILE INLINE ADMIN
 # ================================
 
+class UserProfileInlineForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['phone_number']
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['phone_number'].widget.attrs.update({
+            'style': 'width: 450px;',  # 1.5 times the default width
+        })
+
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
+    form = UserProfileInlineForm
     can_delete = False
     verbose_name_plural = 'Profile'
     fields = ['phone_number']
