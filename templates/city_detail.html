@@ -3,9 +3,9 @@
 {% load static %}
 
 {% block content %}
+
 <section style="padding: 2rem 0;">
     <div class="container">
-
         <!-- City Header with Photo -->
         <div style="position: relative; margin-bottom: 3rem;">
             <div style="height: 400px; overflow: hidden; border-radius: 15px;">
@@ -116,15 +116,12 @@
                         </select>
                     </div>
 
-                    <!-- Buttons - Updated to match room_list.html -->
-                    <div class="filter-group button-group" style="display: flex; flex-direction: column; flex: 1; min-width: 200px;">
-                        <div style="display: flex; gap: 0.5rem; margin-top: 1.5rem;">
-                            <button type="submit" class="filter-btn" style="background: #e74c3c; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 5px; cursor: pointer; font-size: 0.9rem; transition: background 0.3s; flex: 1;">
-                                Search Rooms
-                            </button>
-                            <a href="{% url 'city_detail' city.id %}" class="btn clear-btn" style="background: #95a5a6; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 5px; border: none; cursor: pointer; font-size: 0.9rem; transition: background 0.3s; text-align: center; display: inline-block; flex: 1;">
-                                Clear Filters
-                            </a>
+                    <!-- Buttons - Search Rooms and Clear inline together -->
+                    <div class="filter-group" style="display: flex; flex-direction: column; min-width: 140px; margin-top: 0;">
+                        <label class="filter-label" style="font-weight: bold; margin-bottom: 0.5rem; color: #2C3e50; font-size: 0.9rem; opacity: 0;">Actions</label>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem; align-items: center;">    
+                            <button type="submit" class="btn-consistent btn-booking">Search Rooms</button>
+                            <a href="{% url 'city_detail' city.id %}" class="btn-consistent btn-booking">Clear</a>
                         </div>
                     </div>
                 </div>
@@ -171,7 +168,7 @@
                         <p style="color: #666; margin-bottom: 1rem; line-height: 1.6;">{{ room_type.description }}</p>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                             <div>
-                                <strong style="color: #674c3c; font-size: 1.3rem;">${{ room_type.price_per_night }}</strong>
+                                <strong style="color: #3498db; font-size: 1.3rem;">{{ room_type.price_per_night }}</strong>
                                 <span style="color: #666;">/night</span>
                             </div>
                             <div style="color: #666; text-align: right;">
@@ -179,9 +176,9 @@
                                 {% if selected_guests %}
                                 {% with selected_guests_int=selected_guests|add:"0" %}
                                 {% if room_type.capacity >= selected_guests_int %}
-                                <span style="color: #27ae60; font-size: 0.9rem;">suitable for {{ selected_guests }} guest{{ selected_guests|pluralize }}</span>
+                                <span style="color: #27ae60; font-size: 0.9rem;">✓ suitable for {{ selected_guests }} guest{{ selected_guests|pluralize }}</span>
                                 {% else %}
-                                <span style="color: #674c3c; font-size: 0.9rem;">Maximum {{ room_type.capacity }} guest{{ room_type.capacity|pluralize }}</span>
+                                <span style="color: #3498db; font-size: 0.9rem;">Maximum {{ room_type.capacity }} guest{{ room_type.capacity|pluralize }}</span>
                                 {% endif %}
                                 {% endwith %}
                                 {% endif %}
@@ -189,11 +186,11 @@
                         </div>
                         <!-- CHANGED: This is where we pass the date parameters to booking URL -->
                         {% if available_room_id %}
-                        <a href="{% url 'booking_form' available_room_id %}?check_in={{ selected_check_in }}&check_out={{ selected_check_out }}&guests={{ selected_guests }}&rooms={{ selected_rooms }}" class="btn" style="width: 100%; text-align: center; background: #e74c3c; color: white; padding: 12px; border-radius: 6px; text-decoration: none; display: block;">
+                        <a href="{% url 'booking_form' available_room_id %}?check_in={{ selected_check_in }}&check_out={{ selected_check_out }}&guests={{ selected_guests }}&rooms={{ selected_rooms }}" class="btn-consistent btn-booking" style="width: 100%; text-align: center;">
                             Reserve Now
                         </a>
                         {% else %}
-                        <button class="btn" style="width: 100%; text-align: center; background: #95a5a6; color: white; padding: 12px; border-radius: 6px; text-decoration: none; display: block; border: none; cursor: not-allowed;" disabled>
+                        <button class="btn-consistent" style="width: 100%; text-align: center; background: #95a5a6; cursor: not-allowed;" disabled>
                             No Rooms Available
                         </button>
                         {% endif %}
@@ -216,18 +213,53 @@
         </div>
     </div>
 </section>
+
 <style>
-.btn {
-    transition: background-color 0.3s ease;
-}
-.btn:hover {
-    background-color: #2980b9 !important;
-}
-.filter-btn:hover {
-    background-color: #c0392b !important;
-}
-.clear-btn:hover {
-    background-color: #7f8c8d !important;
-}
+    /* Consistent Button Styling - Same as room_list.html */
+    .btn-consistent {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.75rem 1.5rem;
+        border-radius: 50px;
+        text-decoration: none;
+        color: white;
+        font-weight: 600;
+        text-align: center;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        font-size: 0.9rem;
+        width: 130px;
+        height: 44px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-transform: none;
+        letter-spacing: normal;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        line-height: 1.2;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .btn-consistent:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        opacity: 0.9;
+        text-decoration: none;
+        color: white;
+    }
+
+    .btn-consistent:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    /* Button Colors - All Blue */
+    .btn-booking { 
+        background: #3498db; 
+    }
+    .btn-booking:hover { 
+        background: #2980b9; 
+    }
 </style>
 {% endblock %}

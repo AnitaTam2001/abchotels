@@ -69,8 +69,8 @@
                     </div>
 
                     <div class="filter-group button-group">
-                        <button type="submit" class="btn-consistent btn-rooms">Search Hotels</button>
-                        <a href="{% url 'room_list' %}" class="btn-consistent btn-rooms">Clear</a>
+                        <button type="submit" class="btn-consistent btn-booking">Search Hotels</button>
+                        <a href="{% url 'room_list' %}" class="btn-consistent btn-booking">Clear</a>
                     </div>
                 </div>
             </form>
@@ -113,7 +113,7 @@
                         <p style="color: #666; margin-bottom: 1rem; line-height: 1.5; font-size: 0.9rem;">{{ city.description|truncatewords:15 }}</p>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                             <div>
-                                <strong style="color: #c74c3c; font-size: 1.2rem;">
+                                <strong style="color: #3498db; font-size: 1.2rem;">
                                     {% if city.starting_price %}
                                     ${{ city.starting_price }}
                                     {% else %}
@@ -128,7 +128,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="{% url 'city_detail' city.id %}" class="btn-consistent btn-rooms" style="width: 100%; text-align: center;">View Hotel</a>
+                        <a href="{% url 'city_detail' city.id %}" class="btn-consistent btn-booking" style="width: 100%; text-align: center;">View Hotel</a>
                     </div>
                 </div>
                 {% endfor %}
@@ -209,12 +209,12 @@
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
-    /* Button Colors - All Red */
-    .btn-rooms { 
-        background: #c74c3c; 
+    /* Button Colors - All Blue */
+    .btn-booking { 
+        background: #3498db; 
     }
-    .btn-rooms:hover { 
-        background: #a63c2e; 
+    .btn-booking:hover { 
+        background: #2980b9; 
     }
 
     .filter-label {
