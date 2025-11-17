@@ -219,10 +219,11 @@ def room_detail(request, room_id):
 
 def booking_form(request, room_id):
     room = get_object_or_404(Room, id=room_id, is_available=True)
-    
+
     check_in = request.GET.get('check_in')
     check_out = request.GET.get('check_out')
-    
+    selected_guests = request.GET.get('guests', '')  # Get guests from URL params
+
     if request.method == 'POST':
         form = BookingForm(request.POST)
         if form.is_valid():
@@ -230,7 +231,7 @@ def booking_form(request, room_id):
                 booking = form.save(commit=False)
                 booking.room = room
                 booking.save()
-                
+
                 messages.success(request, f'Booking confirmed! Total price: ${booking.total_price}')
                 return redirect('booking_confirmation', booking_id=booking.id)
             except Exception as e:
@@ -240,18 +241,44 @@ def booking_form(request, room_id):
                 for error in errors:
                     messages.error(request, f'{field}: {error}')
     else:
+        # Pre-populate form with data from URL parameters
         initial_data = {}
         if check_in:
             initial_data['check_in'] = check_in
         if check_out:
             initial_data['check_out'] = check_out
-        
+        if selected_guests:
+            try:
+                initial_data['total_guests'] = int(selected_guests)
+            except ValueError:
+                # If guests is not a valid number, use room capacity as fallback
+                initial_data['total_guests'] = room.room_type.capacity
+        else:
+            # Default to room capacity if no guests specified
+            initial_data['total_guests'] = room.room_type.capacity
+
         form = BookingForm(initial=initial_data)
-    
+
+    # Calculate total nights and amount for display
+    total_nights = 0
+    total_amount = 0
+    if check_in and check_out:
+        try:
+            from datetime import datetime
+            check_in_date = datetime.strptime(check_in, '%Y-%m-%d').date()
+            check_out_date = datetime.strptime(check_out, '%Y-%m-%d').date()
+            total_nights = (check_out_date - check_in_date).days
+            total_amount = total_nights * room.room_type.price_per_night
+        except ValueError:
+            pass
+
     context = {
         'room': room,
         'form': form,
         'today': timezone.now().date(),
+        'total_nights': total_nights,
+        'total_amount': total_amount,
+        'selected_guests': selected_guests,
     }
     return render(request, 'booking_form.html', context)
 
