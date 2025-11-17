@@ -1,13 +1,39 @@
 # hotel/admin.py
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from django.utils.html import format_html
 from django import forms
 from .models import City, Department, RoomType, Room, Booking, FAQ, JobListing, JobApplication, UserProfile
 
 # ================================
-# USER PROFILE ADMIN
+# USER PROFILE INLINE ADMIN
+# ================================
+
+class UserProfileInline(admin.StackedInline):
+    model = UserProfile
+    can_delete = False
+    verbose_name_plural = 'Profile'
+    fields = ['phone_number']
+    extra = 1
+
+# ================================
+# CUSTOM USER ADMIN
+# ================================
+
+class UserAdmin(BaseUserAdmin):
+    inlines = [UserProfileInline]
+    list_display = ['username', 'email', 'first_name', 'last_name', 'get_phone_number', 'is_staff', 'is_active']
+    list_filter = ['is_staff', 'is_active', 'groups']
+    
+    def get_phone_number(self, obj):
+        if hasattr(obj, 'profile') and obj.profile.phone_number:
+            return obj.profile.phone_number
+        return "No phone"
+    get_phone_number.short_description = 'Phone Number'
+
+# ================================
+# USER PROFILE ADMIN (Standalone)
 # ================================
 
 class UserProfileAdminForm(forms.ModelForm):
@@ -160,9 +186,9 @@ class UserProfileAdmin(admin.ModelAdmin):
         return "No user associated"
     user_important_dates.short_description = 'Important Dates'
 
-# ---
+# ================================
 # EXISTING HOTEL MODELS ADMIN
-# ---
+# ================================
 
 class CityAdminForm(forms.ModelForm):
     class Meta:
@@ -333,9 +359,13 @@ class JobApplicationAdmin(admin.ModelAdmin):
         return str(obj.job)
     job_display.short_description = 'Job'
 
-# ---
-# REGISTRATION - CLEANED UP VERSION
-# ---
+# ================================
+# REGISTRATION - UPDATED VERSION
+# ================================
+
+# Unregister the default User admin and register our custom one
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
 
 # Register all hotel models in the desired order
 admin.site.register(City, CityAdmin)
