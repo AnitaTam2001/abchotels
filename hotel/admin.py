@@ -14,7 +14,7 @@ class UserProfileAdminForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = '__all__'
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Make user field 2 times the default width
@@ -28,19 +28,18 @@ class UserProfileAdminForm(forms.ModelForm):
 
 class UserProfileAdmin(admin.ModelAdmin):
     form = UserProfileAdminForm
-    list_display = ['user', 'phone_number', 'user_email', 'user_first_name', 'user_last_name', 'user_is_staff', 'user_is_active']
+    list_display = ['user', 'phone_number', 'user_email', 'user_first_name',
+                   'user_last_name', 'user_is_staff', 'user_is_active']
     list_filter = ['user__is_staff', 'user__is_active']
-    search_fields = ['user__username', 'user__email', 'phone_number', 'user__first_name', 'user__last_name']
-    readonly_fields = ['user_info', 'user_permissions_display', 'user_important_dates']
+    search_fields = ['user__username', 'user__email', 'phone_number',
+                    'user__first_name', 'user__last_name']
+    readonly_fields = ['user_info', 'user_permissions_display',
+                      'user_important_dates']
     list_per_page = 25
     
     fieldsets = (
-        (None, {
-            'fields': ('user', 'phone_number')
-        }),
         ('User Information', {
-            'fields': ('user_info',),
-            'classes': ('collapse',),
+            'fields': ('user', 'phone_number', 'user_info')
         }),
         ('Permissions', {
             'fields': ('user_permissions_display',),
@@ -51,44 +50,44 @@ class UserProfileAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
         }),
     )
-    
+
     def user_email(self, obj):
         return obj.user.email
     user_email.short_description = 'Email'
     user_email.admin_order_field = 'user__email'
-    
+
     def user_first_name(self, obj):
         return obj.user.first_name
     user_first_name.short_description = 'First Name'
     user_first_name.admin_order_field = 'user__first_name'
-    
+
     def user_last_name(self, obj):
         return obj.user.last_name
     user_last_name.short_description = 'Last Name'
     user_last_name.admin_order_field = 'user__last_name'
-    
+
     def user_is_staff(self, obj):
         return obj.user.is_staff
     user_is_staff.short_description = 'Staff'
     user_is_staff.boolean = True
     user_is_staff.admin_order_field = 'user__is_staff'
-    
+
     def user_is_active(self, obj):
         return obj.user.is_active
     user_is_active.short_description = 'Active'
     user_is_active.boolean = True
     user_is_active.admin_order_field = 'user__is_active'
-    
+
     def user_info(self, obj):
         if obj.user:
             return format_html(
                 """
                 <div style="padding: 10px; background: #f8f9fa; border-radius: 5px;">
-                    <strong>Username:</strong> {}<br>
-                    <strong>Email:</strong> {}<br>
-                    <strong>Full Name:</strong> {} {}<br>
-                    <strong>Staff:</strong> {} | <strong>Active:</strong> {}<br>
-                    <strong>Superuser:</strong> {}
+                <strong>Username:</strong> {}<br>
+                <strong>Email:</strong> {}<br>
+                <strong>Full Name:</strong> {} {}<br>
+                <strong>Staff:</strong> {} | <strong>Active:</strong> {}<br>
+                <strong>Superuser:</strong> {}
                 </div>
                 """,
                 obj.user.username,
@@ -101,12 +100,12 @@ class UserProfileAdmin(admin.ModelAdmin):
             )
         return "No user associated"
     user_info.short_description = 'User Details'
-    
+
     def user_permissions_display(self, obj):
         if obj.user:
             groups = obj.user.groups.all()
             permissions = obj.user.user_permissions.all()
-            
+
             groups_html = ""
             if groups:
                 groups_html = "<strong>Groups:</strong><ul style='margin: 5px 0;'>"
@@ -115,7 +114,7 @@ class UserProfileAdmin(admin.ModelAdmin):
                 groups_html += "</ul>"
             else:
                 groups_html = "<strong>Groups:</strong> None<br>"
-            
+
             permissions_html = ""
             if permissions:
                 permissions_html = "<strong>Permissions:</strong><ul style='margin: 5px 0;'>"
@@ -126,15 +125,15 @@ class UserProfileAdmin(admin.ModelAdmin):
                 permissions_html += "</ul>"
             else:
                 permissions_html = "<strong>Permissions:</strong> None<br>"
-            
+
             return format_html(
                 """
                 <div style="padding: 10px; background: #f8f9fa; border-radius: 5px;">
-                    <strong>Staff Status:</strong> {}<br>
-                    <strong>Superuser Status:</strong> {}<br>
-                    <strong>Active Status:</strong> {}<br>
-                    {}
-                    {}
+                <strong>Staff Status:</strong> {}<br>
+                <strong>Superuser Status:</strong> {}<br>
+                <strong>Active Status:</strong> {}<br>
+                {}
+                {}
                 </div>
                 """,
                 "Yes" if obj.user.is_staff else "No",
@@ -145,14 +144,14 @@ class UserProfileAdmin(admin.ModelAdmin):
             )
         return "No user associated"
     user_permissions_display.short_description = 'Permissions Information'
-    
+
     def user_important_dates(self, obj):
         if obj.user:
             return format_html(
                 """
                 <div style="padding: 10px; background: #f8f9fa; border-radius: 5px;">
-                    <strong>Date Joined:</strong> {}<br>
-                    <strong>Last Login:</strong> {}<br>
+                <strong>Date Joined:</strong> {}<br>
+                <strong>Last Login:</strong> {}<br>
                 </div>
                 """,
                 obj.user.date_joined.strftime("%d %b %Y %H:%M:%S"),
@@ -169,7 +168,7 @@ class CityAdminForm(forms.ModelForm):
     class Meta:
         model = City
         fields = '__all__'
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['name'].widget.attrs.update({'style': 'width: 80%; font-size: 14px;'})
@@ -183,13 +182,13 @@ class CityAdmin(admin.ModelAdmin):
     search_fields = ['name']
     readonly_fields = ['image_preview_large']
     list_per_page = 20
-    
+
     def image_preview(self, obj):
         if obj.image:
             return format_html('<img src="{}" style="max-height: 50px; max-width: 50px; border-radius: 4px;" />', obj.image.url)
         return "No image"
     image_preview.short_description = 'Preview'
-    
+
     def image_preview_large(self, obj):
         if obj.image:
             return format_html('<img src="{}" style="max-height: 200px; border-radius: 8px;" />', obj.image.url)
@@ -205,7 +204,7 @@ class RoomTypeAdminForm(forms.ModelForm):
     class Meta:
         model = RoomType
         fields = '__all__'
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['name'].widget.attrs.update({'style': 'width: 80%; font-size: 14px;'})
@@ -220,13 +219,13 @@ class RoomTypeAdmin(admin.ModelAdmin):
     search_fields = ['name']
     readonly_fields = ['image_preview_large']
     list_per_page = 20
-    
+
     def image_preview(self, obj):
         if obj.image:
             return format_html('<img src="{}" style="max-height: 50px; max-width: 50px; border-radius: 4px;" />', obj.image.url)
         return "No image"
     image_preview.short_description = 'Preview'
-    
+
     def image_preview_large(self, obj):
         if obj.image:
             return format_html('<img src="{}" style="max-height: 200px; border-radius: 8px;" />', obj.image.url)
@@ -237,7 +236,7 @@ class RoomAdminForm(forms.ModelForm):
     class Meta:
         model = Room
         fields = '__all__'
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['city'].widget.attrs.update({'style': 'width: 300px;'})
@@ -252,34 +251,34 @@ class RoomAdmin(admin.ModelAdmin):
     readonly_fields = ['room_image_preview_large', 'room_specific_image_preview_large']
     list_per_page = 20
     list_select_related = ['city', 'room_type']
-    
+
     def price_per_night(self, obj):
         return f"${obj.room_type.price_per_night}"
     price_per_night.short_description = 'Price/Night'
-    
+
     def capacity(self, obj):
         return obj.room_type.capacity
     capacity.short_description = 'Capacity'
     capacity.admin_order_field = 'room_type__capacity'
-    
+
     def room_image_preview(self, obj):
         if obj.room_type.image:
             return format_html('<img src="{}" style="max-height: 50px; max-width: 50px; border-radius: 4px;" />', obj.room_type.image.url)
         return "No image"
     room_image_preview.short_description = 'Room Type Image'
-    
+
     def room_image_preview_large(self, obj):
         if obj.room_type.image:
             return format_html('<img src="{}" style="max-height: 200px; border-radius: 8px;" />', obj.room_type.image.url)
         return "No image"
     room_image_preview_large.short_description = 'Room Type Image Preview'
-    
+
     def room_specific_image_preview(self, obj):
         if obj.image:
             return format_html('<img src="{}" style="max-height: 50px; max-width: 50px; border-radius: 4px;" />', obj.image.url)
         return "No specific image"
     room_specific_image_preview.short_description = 'Room Specific Image'
-    
+
     def room_specific_image_preview_large(self, obj):
         if obj.image:
             return format_html('<img src="{}" style="max-height: 200px; border-radius: 8px;" />', obj.image.url)
@@ -287,17 +286,19 @@ class RoomAdmin(admin.ModelAdmin):
     room_specific_image_preview_large.short_description = 'Room Specific Image Preview'
 
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ['id', 'guest_name', 'room_display', 'total_guests', 'check_in', 'check_out', 'status', 'total_price_display', 'created_at']
+    list_display = ['id', 'guest_name', 'room_display', 'total_guests',
+                   'check_in', 'check_out', 'status', 'total_price_display', 'created_at']
     list_filter = ['status', 'check_in', 'check_out', 'created_at']
-    search_fields = ['guest_name', 'guest_email', 'room__city__name', 'room__room_type__name']
+    search_fields = ['guest_name', 'guest_email', 'room__city__name',
+                    'room__room_type__name']
     readonly_fields = ['created_at', 'updated_at', 'total_price_display']
     list_per_page = 20
     date_hierarchy = 'created_at'
-    
+
     def room_display(self, obj):
         return str(obj.room)
     room_display.short_description = 'Room'
-    
+
     def total_price_display(self, obj):
         return f"${obj.total_price}"
     total_price_display.short_description = 'Total Price'
@@ -327,35 +328,25 @@ class JobApplicationAdmin(admin.ModelAdmin):
     date_hierarchy = 'applied_date'
     list_per_page = 20
     list_select_related = ['job']
-    
+
     def job_display(self, obj):
         return str(obj.job)
     job_display.short_description = 'Job'
 
 # ---
-# REGISTRATION - FINAL VERSION
+# REGISTRATION - CLEANED UP VERSION
 # ---
-# NOTE: We DON'T register a custom UserAdmin with inline anymore
-# This prevents the conflict between signals and admin inlines
 
-# Create a proxy model to move UserProfile under Authentication section
-class UserProfileProxy(UserProfile):
-    class Meta:
-        proxy = True
-        verbose_name = 'User Profile'
-        verbose_name_plural = 'User Profiles'
-        app_label = 'auth'  # This makes it appear under Authentication
-
-# Register the proxy model with the same admin class
-@admin.register(UserProfileProxy)
-class UserProfileProxyAdmin(UserProfileAdmin):
-    pass
-
-# Register all hotel models
+# Register all hotel models in the desired order
 admin.site.register(City, CityAdmin)
 admin.site.register(Department, DepartmentAdmin)
 admin.site.register(RoomType, RoomTypeAdmin)
 admin.site.register(Room, RoomAdmin)
+
+# Register UserProfile under Rooms section
+admin.site.register(UserProfile, UserProfileAdmin)
+
+# Continue with other models
 admin.site.register(Booking, BookingAdmin)
 admin.site.register(FAQ, FAQAdmin)
 admin.site.register(JobListing, JobListingAdmin)
