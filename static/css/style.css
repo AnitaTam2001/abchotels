@@ -6,7 +6,7 @@
     --light-color: #ecf0f1;
     --dark-color: #34495e;
     --success-color: #27ae60;
-    --warning-color: #f39c12;
+    --warning-color: #739c12;
     --danger-color: #c74c3c;
     --button-width: 130px;
     --button-height: 44px;
@@ -117,7 +117,8 @@ body {
 }
 
 .hero-section {
-    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+    url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
     background-size: cover;
     background-position: center;
     color: white;
@@ -275,7 +276,8 @@ body {
 }
 
 .contact-hero {
-    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1497366811353-6870744d04b2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+    url('https://images.unsplash.com/photo-1497366811353-6870744d040b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
     background-size: cover;
     background-position: center;
     color: white;
@@ -293,7 +295,7 @@ body {
 .alert-warning {
     background: #fff3cd;
     color: #856404;
-    border-color: #ffeaa7;
+    border-color: #ffeaaf;
 }
 
 .form-group {
@@ -790,7 +792,7 @@ body {
 .btn-booking { background: #3498db; }
 .btn-booking:hover { background: #2980b9; }
 
-.btn-rooms { background: #e74c3c; }
+.btn-rooms { background: #674c3c; }
 .btn-rooms:hover { background: #c0392b; }
 
 .btn-services { background: #2ecc71; }
@@ -802,34 +804,27 @@ body {
 .btn-general { background: #955996; }
 .btn-general:hover { background: #7d3c98; }
 
-.btn-contact { 
-    background: white; 
-    color: #667eea; 
-    border: 2px solid #667eea; 
-}
-.btn-contact:hover { 
-    background: #667eea; 
-    color: white; 
+.btn-contact {
+    background: white;
+    color: #667eea;
+    border: 2px solid #667eea;
 }
 
-.btn-call { 
-    background: transparent; 
-    border: 2px solid white; 
-    color: white; 
-}
-.btn-call:hover { 
-    background: white; 
-    color: #667eea; 
+.btn-contact:hover {
+    background: #667eea;
+    color: white;
 }
 
-/* Button Colors Only - Everything else is exactly the same */
-.btn-booking { background: #3498db; }
-.btn-rooms { background: #c74c3c; }
-.btn-services { background: #2ecc71; }
-.btn-payment { background: #f39c12; }
-.btn-general { background: #955996; }
-.btn-contact { background: white; color: #667eea; border: 2px solid #667eea; }
-.btn-call { background: transparent; border: 2px solid white; color: white; }
+.btn-call {
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+}
+
+.btn-call:hover {
+    background: white;
+    color: #667eea;
+}
 
 /* Ensure the button container centers them properly */
 .quick-nav-container {
@@ -851,7 +846,7 @@ body {
         flex-direction: column;
         gap: 1rem;
     }
-    
+
     .nav-links {
         gap: 1rem;
     }
@@ -859,7 +854,7 @@ body {
     .hero-title {
         font-size: 2.5rem;
     }
-    
+
     .container {
         padding: 0 1rem;
     }
@@ -948,4 +943,59 @@ body {
         --button-width: 110px;
         --button-height: 38px;
     }
+}
+
+/* Consistent container styling */
+.hero-section, .about-hero, .rooms-hero {
+    padding: 4rem 0;
+    background: #f8f9fa;
+}
+
+.hero-section .container,
+.about-hero .container,
+.rooms-hero .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    text-align: center;
+}
+
+.rooms-section .container,
+.about-content .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Standard container styles */
+.standard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.page-hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 4rem 0;
+    text-align: center;
+}
+
+.page-hero .standard-container {
+    padding: 2rem;
+}
+
+.page-content {
+    padding: 3rem 0;
+}
+
+.page-title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.page-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
 }

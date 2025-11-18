@@ -12,7 +12,7 @@
     </div>
 </section>
 
-<section style="padding: 2rem 0;">
+<section style="padding: 4rem 0;">
     <div class="container">
         <!-- Filter Section - All on one line -->
         <div class="filter-section">
@@ -79,9 +79,9 @@
         <!-- Only show cities if no specific city is selected -->
         {% if not selected_city %}
         <!-- Popular Destinations Section -->
-        <div style="margin-top: 3rem;"> 
+        <div style="margin-top: 3rem;">
             <h2 style="text-align: center; margin-bottom: 2rem; color: #2c3e50;">Popular Destinations</h2>
-            
+
             <div class="city-grid-3col">
                 {% for city in cities|slice:":6" %}
                 <div class="city-card-3col">
@@ -139,241 +139,241 @@
 </section>
 
 <style>
-    /* Filter Section Styles */
-    .filter-section {
-        background: white;
-        padding: 2rem;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        margin-bottom: 2rem;
-    }
+/* Filter Section Styles */
+.filter-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
 
-    /* Single Line Filter Grid */
-    .filter-grid-single-line {
-        display: flex;
-        gap: 1rem;
-        align-items: end;
-        flex-wrap: wrap;
-    }
+/* Single Line Filter Grid */
+.filter-grid-single-line {
+    display: flex;
+    gap: 1rem;
+    align-items: end;
+    flex-wrap: wrap;
+}
 
-    .filter-group {
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-        min-width: 120px;
-    }
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 120px;
+}
 
-    .button-group {
-        display: flex;
-        gap: 0.5rem;
-        min-width: 200px;
-        align-items: stretch;
-    }
+.button-group {
+    display: flex;
+    gap: 0.5rem;
+    min-width: 200px;
+    align-items: stretch;
+}
 
-    /* Consistent Button Styling */
-    .btn-consistent {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0.75rem 1.5rem;
-        border-radius: 50px;
-        text-decoration: none;
-        color: white;
-        font-weight: 600;
-        text-align: center;
-        transition: all 0.3s ease;
-        border: none;
-        cursor: pointer;
-        font-size: 0.9rem;
-        width: 130px;
-        height: 44px;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        text-transform: none;
-        letter-spacing: normal;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        line-height: 1.2;
-        white-space: nowrap;
-        overflow: hidden;
-    }
+/* Consistent Button Styling */
+.btn-consistent {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    width: 130px;
+    height: 44px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-transform: none;
+    letter-spacing: normal;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+}
 
-    .btn-consistent:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        opacity: 0.9;
-        text-decoration: none;
-        color: white;
-    }
+.btn-consistent:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    opacity: 0.9;
+    text-decoration: none;
+    color: white;
+}
 
-    .btn-consistent:active {
-        transform: translateY(0);
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
+.btn-consistent:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
 
-    /* Button Colors - All Blue */
-    .btn-booking { 
-        background: #3498db; 
-    }
-    .btn-booking:hover { 
-        background: #2980b9; 
-    }
+/* Button Colors - All Blue */
+.btn-booking {
+    background: #3498db;
+}
+.btn-booking:hover {
+    background: #2980b9;
+}
 
-    .filter-label {
-        font-weight: bold;
-        margin-bottom: 0.5rem;
-        color: #2c3e50;
-        font-size: 0.9rem;
-    }
+.filter-label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+    font-size: 0.9rem;
+}
 
-    .filter-select, .filter-input {
-        padding: 0.75rem;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 0.9rem;
-        width: 100%;
-    }
+.filter-select, .filter-input {
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    width: 100%;
+}
 
-    .results-info {
-        background: #e8f4fd;
-        padding: 1rem;
-        border-radius: 8px;
-        margin-bottom: 2rem;
-        color: #2c3e50;
-    }
+.results-info {
+    background: #e8f4fd;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    color: #2c3e50;
+}
 
-    /* 3 Columns City Grid Styles */
+/* 3 Columns City Grid Styles */
+.city-grid-3col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.city-card-3col {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #f0f0f0;
+}
+
+.city-card-3col:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.city-image-3col {
+    width: 100%;
+    height: 200px;
+    background: #f8f9fa;
+    overflow: hidden;
+}
+
+.city-image-3col img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.city-card-3col:hover .city-image-3col img {
+    transform: scale(1.05);
+}
+
+.city-content-3col {
+    padding: 1.2rem;
+}
+
+.city-title-3col {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.hero-section {
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+    padding: 4rem 0;
+}
+
+.hero-title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+/* Mobile Responsive for 3 Columns */
+@media (max-width: 1024px) {
     .city-grid-3col {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1.5rem;
-        margin-top: 2rem;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.2rem;
     }
+}
 
-    .city-card-3col {
-        background: white;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border: 1px solid #f0f0f0;
+@media (max-width: 768px) {
+    .city-grid-3col {
+        grid-template-columns: 1fr;
+        gap: 1rem;
     }
-
-    .city-card-3col:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    }
-
+    
     .city-image-3col {
-        width: 100%;
-        height: 200px;
-        background: #f8f9fa;
-        overflow: hidden;
+        height: 180px;
     }
-
-    .city-image-3col img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.3s ease;
+    
+    .filter-grid-single-line {
+        flex-direction: column;
     }
-
-    .city-card-3col:hover .city-image-3col img {
-        transform: scale(1.05);
+    
+    .filter-group {
+        min-width: 100%;
     }
-
-    .city-content-3col {
-        padding: 1.2rem;
+    
+    .button-group {
+        min-width: 100%;
+        flex-direction: row;
     }
-
-    .city-title-3col {
-        font-size: 1.1rem;
-        margin-bottom: 0.5rem;
-        color: #2c3e50;
-        font-weight: 600;
+    
+    .btn-consistent {
+        min-width: auto;
     }
-
-    .hero-section {
-        background-size: cover;
-        background-position: center;
-        color: white;
-        text-align: center;
-        padding: 4rem 0;
-    }
-
+    
     .hero-title {
-        font-size: 3rem;
-        margin-bottom: 1rem;
+        font-size: 2.5rem;
     }
+}
 
-    .hero-subtitle {
-        font-size: 1.2rem;
-        opacity: 0.9;
+@media (max-width: 480px) {
+    .city-grid-3col {
+        grid-template-columns: 1fr;
     }
-
-    /* Mobile Responsive for 3 Columns */
-    @media (max-width: 1024px) {
-        .city-grid-3col {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.2rem;
-        }
+    
+    .city-content-3col {
+        padding: 1rem;
     }
-
-    @media (max-width: 768px) {
-        .city-grid-3col {
-            grid-template-columns: 1fr;
-            gap: 1rem;
-        }
-
-        .city-image-3col {
-            height: 180px;
-        }
-
-        .filter-grid-single-line {
-            flex-direction: column;
-        }
-
-        .filter-group {
-            min-width: 100%;
-        }
-
-        .button-group {
-            min-width: 100%;
-            flex-direction: row;
-        }
-
-        .btn-consistent {
-            min-width: auto;
-        }
-
-        .hero-title {
-            font-size: 2.5rem;
-        }
+    
+    .filter-grid-single-line {
+        flex-direction: column;
     }
-
-    @media (max-width: 480px) {
-        .city-grid-3col {
-            grid-template-columns: 1fr;
-        }
-
-        .city-content-3col {
-            padding: 1rem;
-        }
-
-        .filter-grid-single-line {
-            flex-direction: column;
-        }
-
-        .filter-group {
-            min-width: 100%;
-        }
-
-        .hero-title {
-            font-size: 2rem;
-        }
-
-        .hero-section {
-            padding: 3rem 0;
-        }
+    
+    .filter-group {
+        min-width: 100%;
     }
+    
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-section {
+        padding: 3rem 0;
+    }
+}
 </style>
 
 <script>
@@ -400,7 +400,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // If check-out is before new check-in, clear it
                 if (checkOutInput.value && checkOutInput.value < this.value) {
-                    checkOutInput.value = '';
+                    checkOutInput.value = "";
                 }
             }
         });
@@ -421,7 +421,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // If check-in is after new check-out, clear it
                 if (checkInInput.value && checkInInput.value > this.value) {
-                    checkInInput.value = '';
+                    checkInInput.value = "";
                 }
             }
         });

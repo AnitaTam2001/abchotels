@@ -38,19 +38,19 @@
             <h2 style="margin-bottom: 3rem;">What Sets Us Apart</h2>
             <div class="feature-grid">
                 <div class="feature-card">
-                    <h3>🏆 Award-Winning Service</h3>
+                    <h3>Award-Winning Service</h3>
                     <p>Consistently recognized for exceptional service and guest satisfaction</p>
                 </div>
                 <div class="feature-card">
-                    <h3>🌍 Global Standards</h3>
+                    <h3>Global Standards</h3>
                     <p>International quality standards and best practices in hospitality</p>
                 </div>
                 <div class="feature-card">
-                    <h3>🌱 Sustainable Practices</h3>
+                    <h3>Sustainable Practices</h3>
                     <p>Environmentally conscious operations and green initiatives</p>
                 </div>
                 <div class="feature-card">
-                    <h3>⭐ 5-Star Amenities</h3>
+                    <h3>5-Star Amenities</h3>
                     <p>World-class facilities and personalized services for every guest</p>
                 </div>
             </div>
@@ -70,14 +70,12 @@
                     <h3 style="margin-bottom: 0.5rem; color: #2c3e50;">Swimming Pool</h3>
                     <p style="color: #666; line-height: 1.6;">Stunning infinity pool with panoramic views and premium lounge areas</p>
                 </div>
-                
                 <!-- Facility 2 -->
                 <div style="text-align: center;">
                     <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" alt="Fine Dining Restaurant" style="width: 100%; height: 250px; object-fit: cover; border-radius: 10px; margin-bottom: 1rem;">
                     <h3 style="margin-bottom: 0.5rem; color: #2c3e50;">Fine Dining</h3>
                     <p style="color: #666; line-height: 1.6;">Award-winning restaurants offering international cuisine and local delicacies</p>
                 </div>
-                
                 <!-- Facility 3 -->
                 <div style="text-align: center;">
                     <img src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" alt="Luxury Spa" style="width: 100%; height: 250px; object-fit: cover; border-radius: 10px; margin-bottom: 1rem;">
@@ -90,13 +88,40 @@
 </section>
 
 <style>
+/* Feature Grid Styles */
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.feature-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.feature-card h3 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.feature-card p {
+    color: #666;
+    line-height: 1.6;
+}
+
 /* Mobile Responsive Styles */
 @media (max-width: 768px) {
     .container > div:nth-child(3) {
         grid-template-columns: 1fr !important;
         gap: 2rem !important;
     }
-    
+
     /* Make facilities section single column on mobile */
     .container > div:last-child > div {
         grid-template-columns: 1fr !important;
@@ -105,6 +130,11 @@
     
     .container > div:last-child > div > div img {
         height: 200px !important;
+    }
+
+    .feature-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
 }
 </style>
