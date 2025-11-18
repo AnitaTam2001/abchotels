@@ -2,7 +2,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<section class="hero-section">
+<section class="hero-section" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1584132967334-10e028bd69f7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80'); background-size: cover; background-position: center;">
     <div class="container">
         <h1 class="hero-title">About Us</h1>
         <p class="hero-subtitle">Two Decades of Excellence in Hospitality</p>
@@ -19,7 +19,7 @@
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 4rem;">
             <div>
-                <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Hotel Lobby" style="width: 100%; border-radius: 10px;">
+                <img src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Hotel Lobby" style="width: 100%; border-radius: 10px;">
             </div>
             <div>
                 <h2 style="margin-bottom: 1rem; color: #2c3e50;">Our Story</h2>
@@ -30,6 +30,7 @@
         </div>
     </div>
 </section>
+
 
 <!-- What Sets Us Apart Section - Matching home.html structure -->
 <section style="background: #f8f9fa; padding: 4rem 0;">
@@ -88,12 +89,12 @@
 </section>
 
 <style>
-/* Feature Grid Styles */
+/* Feature Grid Styles - Changed to 4 columns */
 .feature-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 2rem;
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
@@ -121,21 +122,21 @@
         grid-template-columns: 1fr !important;
         gap: 2rem !important;
     }
-
-    /* Make facilities section single column on mobile */
-    .container > div:last-child > div {
-        grid-template-columns: 1fr !important;
-        gap: 2rem !important;
-    }
     
-    .container > div:last-child > div > div img {
-        height: 200px !important;
-    }
-
     .feature-grid {
         grid-template-columns: 1fr;
         gap: 1.5rem;
     }
+}
+
+/* Make facilities section single column on mobile */
+.contentainer > div:last-child > div {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+}
+
+.container > div:last-child > div > div img {
+    height: 200px !important;
 }
 </style>
 {% endblock %}
