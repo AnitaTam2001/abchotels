@@ -129,7 +129,7 @@
       <!-- Benefits Section -->
       <div style="margin-top: 4rem; padding-top: 3rem; border-top: 2px solid #f0f0f0;">
         <h2 style="text-align: center; margin-bottom: 2rem;">Employee Benefits</h2>
-        <div class="benefits-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;">
+        <div class="benefits-grid">
           <div class="feature-card">
             <h3>Health Insurance</h3>
             <p>Comprehensive medical, dental, and vision coverage for you and your family</p>
@@ -292,6 +292,13 @@
   background: white;
 }
 
+/* Benefits Section - Responsive Grid */
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
 .feature-card {
   background: white;
   padding: 2rem;
@@ -391,6 +398,14 @@
   font-weight: 600;
 }
 
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .benefits-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
 @media (max-width: 768px) {
   .benefits-grid {
     grid-template-columns: 1fr;
@@ -408,6 +423,10 @@
   
   .filter-buttons-group {
     gap: 0.5rem;
+  }
+  
+  .feature-card {
+    padding: 1.5rem;
   }
   
   .job-header {
@@ -432,6 +451,28 @@
     flex-direction: column;
     gap: 0.5rem;
     align-items: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+  
+  .feature-card {
+    padding: 1rem;
+  }
+  
+  .feature-card h3 {
+    font-size: 1.1rem;
+  }
+  
+  .feature-card p {
+    font-size: 0.9rem;
   }
 }
 </style>

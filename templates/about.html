@@ -3,28 +3,27 @@
 
 {% block content %}
 <section class="hero-section" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1584132967334-10e028bd69f7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80'); background-size: cover; background-position: center;">
-    <div class="container" style="height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-        <h1 class="hero-title" style="margin-top: 4rem;">About Us</h1>
-        <p class="hero-subtitle">Two Decades of Excellence in Hospitality</p>
+    <div class="container" style="height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center;">
+        <h1 class="hero-title" style="font-size: 3.5rem; margin-bottom: 1rem;">About Us</h1>
+        <p class="hero-subtitle" style="font-size: 1.5rem;">Two Decades of Excellence in Hospitality</p>
     </div>
 </section>
 
 <section style="padding: 4rem 0;">
     <div class="container">
         <div style="text-align: center; margin-bottom: 4rem;">
-            <p style="font-size: 1.2rem; line-height: 1.8; color: #666;">
+            <p style="font-size: 1.2rem; line-height: 1.8; color: #666; max-width: 800px; margin: 0 auto;">
                 Welcome to ABC Hotels, where luxury meets comfort. For over 20 years, we have been providing exceptional hospitality experiences to travelers from around the world. Our commitment to excellence has made us a preferred choice for discerning travelers.
             </p>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 4rem;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 4rem; align-items: center;">
             <div>
                 <img src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Hotel Lobby" style="width: 100%; border-radius: 10px;">
-
             </div>
             <div>
-                <h2 style="margin-bottom: 1rem; color: #2c3e50;">Our Story</h2>
-                <p style="line-height: 1.8; color: #666;">
+                <h2 style="margin-bottom: 1rem; color: #2c3e50; font-size: 2.5rem;">Our Story</h2>
+                <p style="line-height: 1.8; color: #666; font-size: 1.1rem;">
                     Founded in 2003, ABC Hotels began as a single property with a vision to redefine luxury hospitality. Today, we operate multiple properties across prime locations, each maintaining our signature standards of service and comfort.
                 </p>
             </div>
@@ -32,28 +31,28 @@
     </div>
 </section>
 
-<!-- What Sets Us Apart Section - Matching home.html structure -->
+<!-- What Sets Us Apart Section -->
 <section style="background: #f8f9fa; padding: 4rem 0;">
     <div class="container">
         <div style="text-align: center;">
-            <h2 style="margin-bottom: 3rem;">What Sets Us Apart</h2>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>Award-Winning Service</h3>
-                    <p>Consistently recognized for exceptional service and guest satisfaction</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Global Standards</h3>
-                    <p>International quality standards and best practices in hospitality</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Sustainable Practices</h3>
-                    <p>Environmentally conscious operations and green initiatives</p>
-                </div>
-                <div class="feature-card">
-                    <h3>5-Star Amenities</h3>
-                    <p>World-class facilities and personalized services for every guest</p>
-                </div>
+            <h2 style="margin-bottom: 3rem; color: #2c3e50; font-size: 2.5rem;">What Sets Us Apart</h2>
+        </div>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3>Award-Winning Service</h3>
+                <p>Consistently recognized for exceptional service and guest satisfaction</p>
+            </div>
+            <div class="feature-card">
+                <h3>Global Standards</h3>
+                <p>International quality standards and best practices in hospitality</p>
+            </div>
+            <div class="feature-card">
+                <h3>Sustainable Practices</h3>
+                <p>Environmentally conscious operations and green initiatives</p>
+            </div>
+            <div class="feature-card">
+                <h3>5-Star Amenities</h3>
+                <p>World-class facilities and personalized services for every guest</p>
             </div>
         </div>
     </div>
@@ -63,23 +62,23 @@
     <div class="container">
         <!-- Our Facilities Section with 3 columns -->
         <div style="margin-bottom: 4rem;">
-            <h2 style="text-align: center; margin-bottom: 3rem;">Our Facilities</h2>
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;">
+            <h2 style="text-align: center; margin-bottom: 3rem; color: #2c3e50; font-size: 2.5rem;">Our Facilities</h2>
+            <div class="facilities-grid">
                 <!-- Facility 1 -->
-                <div style="text-align: center;">
-                    <img src="https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" alt="Swimming Pool" style="width: 100%; height: 250px; object-fit: cover; border-radius: 10px; margin-bottom: 1rem;">
+                <div class="facility-card">
+                    <img src="https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" alt="Swimming Pool" class="facility-image">
                     <h3 style="margin-bottom: 0.5rem; color: #2c3e50;">Swimming Pool</h3>
                     <p style="color: #666; line-height: 1.6;">Stunning infinity pool with panoramic views and premium lounge areas</p>
                 </div>
                 <!-- Facility 2 -->
-                <div style="text-align: center;">
-                    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" alt="Fine Dining Restaurant" style="width: 100%; height: 250px; object-fit: cover; border-radius: 10px; margin-bottom: 1rem;">
+                <div class="facility-card">
+                    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" alt="Fine Dining Restaurant" class="facility-image">
                     <h3 style="margin-bottom: 0.5rem; color: #2c3e50;">Fine Dining</h3>
                     <p style="color: #666; line-height: 1.6;">Award-winning restaurants offering international cuisine and local delicacies</p>
                 </div>
                 <!-- Facility 3 -->
-                <div style="text-align: center;">
-                    <img src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" alt="Luxury Spa" style="width: 100%; height: 250px; object-fit: cover; border-radius: 10px; margin-bottom: 1rem;">
+                <div class="facility-card">
+                    <img src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" alt="Luxury Spa" class="facility-image">
                     <h3 style="margin-bottom: 0.5rem; color: #2c3e50;">Wellness Spa</h3>
                     <p style="color: #666; line-height: 1.6;">Premium spa treatments and wellness therapies for complete relaxation</p>
                 </div>
@@ -89,54 +88,148 @@
 </section>
 
 <style>
-/* Feature Grid Styles - Changed to 4 columns */
-.feature-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.feature-card {
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.feature-card h3 {
-    color: #2c3e50;
-    margin-bottom: 1rem;
-}
-
-.feature-card p {
-    color: #666;
-    line-height: 1.6;
-}
-
-/* Mobile Responsive Styles */
-@media (max-width: 768px) {
-    .container > div:nth-child(3) {
-        grid-template-columns: 1fr !important;
-        gap: 2rem !important;
-    }
-    
+    /* Feature Grid Styles - 4 columns */
     .feature-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
     }
-}
 
-/* Make facilities section single column on mobile */
-.contentainer > div:last-child > div {
-    grid-template-columns: 1fr !important;
-    gap: 2rem !important;
-}
+    .feature-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
 
-.container > div:last-child > div > div img {
-    height: 200px !important;
-}
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+
+    .feature-card h3 {
+        color: #2c3e50;
+        margin-bottom: 1rem;
+        font-size: 1.4rem;
+    }
+
+    .feature-card p {
+        color: #666;
+        line-height: 1.6;
+    }
+
+    /* Facilities Grid Styles - 3 columns */
+    .facilities-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .facility-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .facility-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+
+    .facility-image {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+    }
+
+    .facility-card h3 {
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+        font-size: 1.4rem;
+    }
+
+    .facility-card p {
+        color: #666;
+        line-height: 1.6;
+    }
+
+    /* Mobile Responsive Styles */
+    @media (max-width: 1024px) {
+        .feature-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+        
+        .facilities-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2.5rem !important;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem !important;
+        }
+        
+        .container > div:nth-child(3) {
+            grid-template-columns: 1fr !important;
+            gap: 2rem !important;
+        }
+        
+        .feature-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        
+        .facilities-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        
+        .feature-card {
+            padding: 1.5rem;
+        }
+        
+        .facility-card {
+            padding: 1.2rem;
+        }
+        
+        .facility-image {
+            height: 200px !important;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .hero-title {
+            font-size: 2rem !important;
+        }
+        
+        section {
+            padding: 2rem 0 !important;
+        }
+        
+        .feature-card {
+            padding: 1.2rem;
+        }
+        
+        .facility-card {
+            padding: 1rem;
+        }
+    }
 </style>
 {% endblock %}
