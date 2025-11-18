@@ -4,7 +4,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from django.utils.html import format_html
 from django import forms
-from .models import City, Department, RoomType, Room, Booking, FAQ, JobListing, JobApplication, UserProfile
+from .models import City, Department, RoomType, Room, Booking, FAQ, JobListing, JobApplication, UserProfile, ContactSubmission
 
 # ================================
 # USER PROFILE INLINE ADMIN
@@ -14,11 +14,11 @@ class UserProfileInlineForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ['phone_number']
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['phone_number'].widget.attrs.update({
-            'style': 'width: 450px;',  # 1.5 times the default width
+            'style': 'width: 450px;', # 1.5 times the default width
         })
 
 class UserProfileInline(admin.StackedInline):
@@ -35,9 +35,10 @@ class UserProfileInline(admin.StackedInline):
 
 class UserAdmin(BaseUserAdmin):
     inlines = [UserProfileInline]
-    list_display = ['username', 'email', 'first_name', 'last_name', 'get_phone_number', 'is_staff', 'is_active']
+    list_display = ['username', 'email', 'first_name', 'last_name',
+    'get_phone_number', 'is_staff', 'is_active']
     list_filter = ['is_staff', 'is_active', 'groups']
-    
+
     def get_phone_number(self, obj):
         if hasattr(obj, 'profile') and obj.profile.phone_number:
             return obj.profile.phone_number
@@ -57,7 +58,7 @@ class UserProfileAdminForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         # Make user field 2 times the default width
         self.fields['user'].widget.attrs.update({
-            'style': 'width: 600px;',  # 2 times the default user field width
+            'style': 'width: 600px;', # 2 times the default user field width
         })
         # Keep phone_number at normal width
         self.fields['phone_number'].widget.attrs.update({
@@ -67,17 +68,21 @@ class UserProfileAdminForm(forms.ModelForm):
 class UserProfileAdmin(admin.ModelAdmin):
     form = UserProfileAdminForm
     list_display = ['user', 'phone_number', 'user_email', 'user_first_name',
-                   'user_last_name', 'user_is_staff', 'user_is_active']
+    'user_last_name', 'user_is_staff', 'user_is_active']
     list_filter = ['user__is_staff', 'user__is_active']
     search_fields = ['user__username', 'user__email', 'phone_number',
-                    'user__first_name', 'user__last_name']
+    'user__first_name', 'user__last_name']
     readonly_fields = ['user_info', 'user_permissions_display',
-                      'user_important_dates']
+    'user_important_dates']
     list_per_page = 25
-    
+
     fieldsets = (
+        (None, {
+            'fields': ('user', 'phone_number')
+        }),
         ('User Information', {
-            'fields': ('user', 'phone_number', 'user_info')
+            'fields': ('user_info',),
+            'classes': ('collapse',),
         }),
         ('Permissions', {
             'fields': ('user_permissions_display',),
@@ -156,8 +161,8 @@ class UserProfileAdmin(admin.ModelAdmin):
             permissions_html = ""
             if permissions:
                 permissions_html = "<strong>Permissions:</strong><ul style='margin: 5px 0;'>"
-                for perm in permissions[:10]:  # Show first 10 permissions
-                    permissions_html += f"<li>{perm.name}</li>"
+                for perm in permissions[:10]: # Show first 10 permissions
+                    permissions_html += f"<li>{perm.name}</li>" 
                 if len(permissions) > 10:
                     permissions_html += f"<li>... and {len(permissions) - 10} more</li>"
                 permissions_html += "</ul>"
@@ -165,8 +170,8 @@ class UserProfileAdmin(admin.ModelAdmin):
                 permissions_html = "<strong>Permissions:</strong> None<br>"
 
             return format_html(
-                """
-                <div style="padding: 10px; background: #f8f9fa; border-radius: 5px;">
+                """ 
+                <div style="padding: 10px; background: #f8f9fa; border-radius: 5px;"> 
                 <strong>Staff Status:</strong> {}<br>
                 <strong>Superuser Status:</strong> {}<br>
                 <strong>Active Status:</strong> {}<br>
@@ -186,8 +191,8 @@ class UserProfileAdmin(admin.ModelAdmin):
     def user_important_dates(self, obj):
         if obj.user:
             return format_html(
-                """
-                <div style="padding: 10px; background: #f8f9fa; border-radius: 5px;">
+                """ 
+                <div style="padding: 10px; background: #f8f9fa; border-radius: 5px;"> 
                 <strong>Date Joined:</strong> {}<br>
                 <strong>Last Login:</strong> {}<br>
                 </div>
@@ -197,6 +202,32 @@ class UserProfileAdmin(admin.ModelAdmin):
             )
         return "No user associated"
     user_important_dates.short_description = 'Important Dates'
+
+# ================================
+# CONTACT SUBMISSION ADMIN
+# ================================
+
+class ContactSubmissionAdmin(admin.ModelAdmin):
+    list_display = ['name', 'email', 'subject', 'submitted_at', 'is_processed']
+    list_filter = ['is_processed', 'submitted_at']
+    search_fields = ['name', 'email', 'subject', 'message']
+    readonly_fields = ['submitted_at']
+    list_editable = ['is_processed']
+    list_per_page = 20
+    date_hierarchy = 'submitted_at'
+    
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'email', 'subject', 'message')
+        }),
+        ('Status', {
+            'fields': ('is_processed', 'processed_at', 'notes')
+        }),
+        ('Metadata', {
+            'fields': ('submitted_at',),
+            'classes': ('collapse',),
+        }),
+    )
 
 # ================================
 # EXISTING HOTEL MODELS ADMIN
@@ -282,7 +313,8 @@ class RoomAdminForm(forms.ModelForm):
 
 class RoomAdmin(admin.ModelAdmin):
     form = RoomAdminForm
-    list_display = ['id', 'city', 'room_type', 'price_per_night', 'capacity', 'is_available', 'room_image_preview', 'room_specific_image_preview']
+    list_display = ['id', 'city', 'room_type', 'price_per_night', 'capacity',
+    'is_available', 'room_image_preview', 'room_specific_image_preview']
     list_display_links = ['id', 'city']
     list_filter = ['room_type', 'is_available', 'city']
     search_fields = ['city__name', 'room_type__name']
@@ -325,10 +357,11 @@ class RoomAdmin(admin.ModelAdmin):
 
 class BookingAdmin(admin.ModelAdmin):
     list_display = ['id', 'guest_name', 'room_display', 'total_guests',
-                   'check_in', 'check_out', 'status', 'total_price_display', 'created_at']
+    'check_in', 'check_out', 'status', 'total_price_display',
+    'created_at']
     list_filter = ['status', 'check_in', 'check_out', 'created_at']
     search_fields = ['guest_name', 'guest_email', 'room__city__name',
-                    'room__room_type__name']
+    'room__room_type__name']
     readonly_fields = ['created_at', 'updated_at', 'total_price_display']
     list_per_page = 20
     date_hierarchy = 'created_at'
@@ -349,8 +382,10 @@ class FAQAdmin(admin.ModelAdmin):
     list_per_page = 20
 
 class JobListingAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'department', 'job_type', 'experience_level', 'is_active', 'posted_date']
-    list_filter = ['department', 'job_type', 'experience_level', 'is_active', 'posted_date']
+    list_display = ['id', 'title', 'department', 'job_type', 'experience_level',
+    'is_active', 'posted_date']
+    list_filter = ['department', 'job_type', 'experience_level', 'is_active',
+    'posted_date']
     list_editable = ['is_active']
     list_per_page = 20
     search_fields = ['title', 'description']
@@ -358,7 +393,8 @@ class JobListingAdmin(admin.ModelAdmin):
     list_select_related = ['department']
 
 class JobApplicationAdmin(admin.ModelAdmin):
-    list_display = ['id', 'first_name', 'last_name', 'job_display', 'status', 'applied_date']
+    list_display = ['id', 'first_name', 'last_name', 'job_display', 'status',
+    'applied_date']
     list_filter = ['status', 'job', 'applied_date']
     list_editable = ['status']
     search_fields = ['first_name', 'last_name', 'email']
@@ -387,6 +423,9 @@ admin.site.register(Room, RoomAdmin)
 
 # Register UserProfile under Rooms section
 admin.site.register(UserProfile, UserProfileAdmin)
+
+# Register ContactSubmission
+admin.site.register(ContactSubmission, ContactSubmissionAdmin)
 
 # Continue with other models
 admin.site.register(Booking, BookingAdmin)

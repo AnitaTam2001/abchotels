@@ -40,6 +40,25 @@ def manage_user_profile(sender, instance, created, **kwargs):
         UserProfile.objects.get_or_create(user=instance)
     # No else clause needed - the inline in admin handles updates
 
+# NEW: Contact Submission Model
+class ContactSubmission(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    subject = models.CharField(max_length=200, default='General Inquiry')
+    message = models.TextField()
+    submitted_at = models.DateTimeField(auto_now_add=True)
+    is_processed = models.BooleanField(default=False)
+    processed_at = models.DateTimeField(null=True, blank=True)
+    notes = models.TextField(blank=True, help_text="Internal notes about this submission")
+    
+    def __str__(self):
+        return f"{self.name} - {self.subject} - {self.submitted_at.strftime('%Y-%m-%d')}"
+    
+    class Meta:
+        ordering = ['-submitted_at']
+        verbose_name = 'Contact Submission'
+        verbose_name_plural = 'Contact Submissions'
+
 # Your existing models below
 class City(models.Model):
     name = models.CharField(max_length=100)
@@ -212,8 +231,7 @@ class JobApplication(models.Model):
     phone = models.CharField(max_length=20)
     resume = models.FileField(upload_to='resumes/')
     cover_letter = models.TextField(blank=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES,
-    default='applied')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='applied')
     applied_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

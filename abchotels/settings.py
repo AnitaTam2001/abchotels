@@ -6,6 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-your-secret-key-here-change-in-production'
 
+
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -57,23 +58,6 @@ DATABASES = {
     }
 }
 
-# REMOVED: AUTH_USER_MODEL = 'hotel.CustomUser'
-
-# AUTH_PASSWORD_VALIDATORS = [
-#     {
-#       'NAME': 'django.contrib.auth.password_validation.#UserAttributeSimilarityValidator',
-#    },
-#    {
-#        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-#    },
-#    {
-#        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-#    },
-#    {
-#        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-#    },
-#]
-
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
@@ -94,7 +78,19 @@ LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'home'
 LOGIN_URL = 'login'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 os.makedirs(STATIC_ROOT, exist_ok=True)
 os.makedirs(MEDIA_ROOT, exist_ok=True)
+
+# Add to your settings.py - Email Configuration section
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'anitatam2001@gmail.com'
+EMAIL_HOST_PASSWORD = 'tblhlhspicfhotwb'  # Your email password or app-specific password
+DEFAULT_FROM_EMAIL = 'ABC Hotels <anitatam2001@gmail.com>'
+SERVER_EMAIL = 'ABC Hotels <anitatam2001@gmail.com>'
+
+# For testing - use console backend to see if emails are being generated
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
