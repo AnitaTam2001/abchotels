@@ -11,6 +11,7 @@ urlpatterns = [
     path('why-work-with-us/', views.why_work_with_us, name='why_work_with_us'),
     path('jobs/<int:job_id>/', views.job_detail, name='job_detail'),
     path('jobs/<int:job_id>/apply/', views.job_application, name='job_application'),
+    path('test-email/', views.test_email, name='test_email'),
 
     # Authentication
     path('register/', views.register, name='register'),

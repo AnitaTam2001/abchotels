@@ -9,11 +9,13 @@ from django.utils import timezone
 from django.urls import reverse
 from django.http import HttpResponse, Http404
 from datetime import datetime, date
-from .models import City, RoomType, Room, Booking, FAQ, JobListing, ContactSubmission  # ADDED ContactSubmission
+from .models import City, RoomType, Room, Booking, FAQ, JobListing, ContactSubmission
 from django.contrib.admin.views.decorators import staff_member_required
 from .forms import BookingForm, CustomUserCreationForm, ContactForm
 from django.core.mail import send_mail, BadHeaderError
 from django.conf import settings
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 def register(request):
     if request.method == 'POST':
@@ -28,7 +30,7 @@ def register(request):
                     messages.error(request, f'{field}: {error}')
     else:
         form = CustomUserCreationForm()
-
+    
     return render(request, 'registration/register.html', {'form': form})
 
 def user_login(request):
@@ -286,9 +288,51 @@ def booking_form(request, room_id):
 
 def booking_confirmation(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
+    
+    # Calculate number of nights
+    nights = (booking.check_out - booking.check_in).days
+    
+    # Send confirmation email
+    email_sent = False
+    email_error = None
+    
+    try:
+        subject = f'ABC Hotels - Booking Confirmation #{booking.id}'
+        
+        # Render HTML email template
+        html_message = render_to_string('emails/send_confirmation.html', {
+            'booking': booking,
+            'nights': nights
+        })
+        
+        # Create plain text version
+        plain_message = strip_tags(html_message)
+        
+        # Send email
+        send_mail(
+            subject=subject,
+            message=plain_message,
+            from_email='ABC Hotels <anitatam2001@gmail.com>',
+            recipient_list=[booking.guest_email],
+            html_message=html_message,
+            fail_silently=False,
+        )
+        
+        email_sent = True
+        print(f"✅ Confirmation email sent to {booking.guest_email} for booking #{booking.id}")
+        
+    except Exception as e:
+        # Log the error
+        email_error = str(e)
+        print(f"❌ Failed to send confirmation email for booking #{booking.id}: {email_error}")
+    
     context = {
         'booking': booking,
+        'nights': nights,
+        'email_sent': email_sent,
+        'email_error': email_error,
     }
+    
     return render(request, 'booking_confirmation.html', context)
 
 @login_required
@@ -330,12 +374,12 @@ def contact(request):
         email = request.POST.get('email')
         subject = request.POST.get('subject', 'General Inquiry')
         message = request.POST.get('message')
-        
+
         # Validate required fields
         if not name or not email or not message:
             messages.error(request, 'Please fill in all required fields.')
             return render(request, 'contact.html')
-        
+
         try:
             # Save to database first (this will always work)
             submission = ContactSubmission.objects.create(
@@ -344,12 +388,11 @@ def contact(request):
                 subject=subject,
                 message=message
             )
-            
             # Try to send emails (but don't fail the whole process if email fails)
             email_sent = False
             try:
                 # Email to hotel (you)
-                hotel_subject = f'📧 New Contact Form: {subject}'
+                hotel_subject = f'New Contact Form: {subject}'
                 hotel_message = f"""
 New contact form submission from ABC Hotels website:
 
@@ -360,11 +403,9 @@ Subject: {subject}
 Message:
 {message}
 
----
 This email was sent from your website contact form at {timezone.now().strftime("%Y-%m-%d %H:%M:%S")}
 Submission ID: {submission.id}
 """
-                
                 send_mail(
                     subject=hotel_subject,
                     message=hotel_message.strip(),
@@ -372,7 +413,7 @@ Submission ID: {submission.id}
                     recipient_list=[settings.EMAIL_HOST_USER],
                     fail_silently=False,
                 )
-                
+
                 # Auto-reply to user
                 user_subject = 'Thank you for contacting ABC Hotels'
                 user_message = f"""
@@ -390,11 +431,10 @@ We look forward to assisting you with your hotel needs.
 
 Best regards,
 ABC Hotels Team
-📞 +1 (555) 123-4567
++1 (555) 123-4567
 📍 123 Luxury Avenue, Hospitality District
-🌐 www.abchotels.com
+www.abchotels.com
 """
-                
                 send_mail(
                     subject=user_subject,
                     message=user_message.strip(),
@@ -402,25 +442,20 @@ ABC Hotels Team
                     recipient_list=[email],
                     fail_silently=False,
                 )
-                
                 email_sent = True
-                print(f"✅ Emails sent successfully for submission {submission.id}")
-                
+                print(f"🔍 Emails sent successfully for submission {submission.id}")
             except Exception as e:
-                print(f"⚠️ Email failed but submission saved (ID: {submission.id}): {e}")
+                print(f"▲ Email failed but submission saved (ID: {submission.id}): {e}")
                 # Continue anyway since the submission is saved to database
-            
+
             if email_sent:
                 messages.success(request, 'Thank you for your message! We have sent you a confirmation email and will get back to you soon.')
             else:
                 messages.success(request, 'Thank you for your message! We have received your inquiry and will get back to you soon. (Email confirmation may be delayed)')
-            
+
         except Exception as e:
-            messages.error(request, 'Sorry, there was an error processing your message. Please try again.')
+            messages.error(request, 'There was an error sending your message. Please try again.')
             print(f"❌ Contact form error: {e}")
-        
-        return redirect('contact')
-    
     return render(request, 'contact.html')
 
 def faq(request):
@@ -446,11 +481,9 @@ def job_detail(request, job_id):
 
 def job_application(request, job_id):
     job = get_object_or_404(JobListing, id=job_id, is_active=True)
-
     if request.method == 'POST':
         messages.success(request, 'Application submitted successfully!')
         return redirect('careers')
-
     context = {
         'job': job,
     }
@@ -471,7 +504,6 @@ def dashboard(request):
         bookings = Booking.objects.filter(guest_email=request.user.email)
     else:
         bookings = []
-
     context = {
         'bookings': bookings,
     }
@@ -483,7 +515,6 @@ def room_admin(request):
     cities = City.objects.all()
     room_types = RoomType.objects.all()
     available_rooms = rooms.filter(is_available=True)
-
     context = {
         'rooms': rooms,
         'cities': cities,
@@ -527,3 +558,17 @@ def current_bookings(request):
 def account_settings(request):
     """View for user account settings"""
     return render(request, 'account_settings.html')
+
+# Test email function - you can remove this after testing
+def test_email(request):
+    try:
+        send_mail(
+            subject='Test Email from ABC Hotels',
+            message='This is a test email from your Django application.',
+            from_email='ABC Hotels <anitatam2001@gmail.com>',
+            recipient_list=['anitatam2001@yahoo.com.hk'],
+            fail_silently=False,
+        )
+        return HttpResponse("Test email sent successfully!")
+    except Exception as e:
+        return HttpResponse(f"Failed to send test email: {str(e)}")

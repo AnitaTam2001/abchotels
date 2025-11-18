@@ -78,19 +78,15 @@ LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'home'
 LOGIN_URL = 'login'
 
-
 os.makedirs(STATIC_ROOT, exist_ok=True)
 os.makedirs(MEDIA_ROOT, exist_ok=True)
 
-# Add to your settings.py - Email Configuration section
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# In your existing settings.py - keep these email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'anitatam2001@gmail.com'
-EMAIL_HOST_PASSWORD = 'tblhlhspicfhotwb'  # Your email password or app-specific password
+EMAIL_HOST_PASSWORD = 'cfemkkdeljjaufrn'  # Your app-specific password
 DEFAULT_FROM_EMAIL = 'ABC Hotels <anitatam2001@gmail.com>'
 SERVER_EMAIL = 'ABC Hotels <anitatam2001@gmail.com>'
-
-# For testing - use console backend to see if emails are being generated
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

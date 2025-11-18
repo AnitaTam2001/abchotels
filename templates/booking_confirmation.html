@@ -2,9 +2,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<section class="hero-section" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
-    <div class="container">
-        <h1 class="hero-title">Booking Confirmed!</h1>
+<section class="hero-section" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'); background-size: cover; background-position: center;">
+    <div class="container" style="height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <h1 class="hero-title" style="margin-top: 4rem;">Booking Confirmed!</h1>
         <p class="hero-subtitle">Thank you for choosing ABC Hotels</p>
     </div>
 </section>
@@ -13,61 +13,68 @@
     <div class="container">
         <div style="max-width: 800px; margin: 0 auto; background: white; padding: 3rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
             <h2 style="text-align: center; margin-bottom: 2rem; color: #2c3e50;">Booking Details</h2>
-            
-            <div style="display: grid; gap: 1.5rem;">
-                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+
+            <div style="display: grid; gap: 1.5rem;"> 
+                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;"> 
                     <strong>Booking ID:</strong>
                     <span>#{{ booking.id }}</span>
                 </div>
-                
-                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+
+                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;"> 
                     <strong>Guest Name:</strong>
                     <span>{{ booking.guest_name }}</span>
                 </div>
-                
-                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+
+                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;"> 
                     <strong>Hotel:</strong>
                     <span>ABC {{ booking.room.city.name }} Hotel</span>
                 </div>
-                
-                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+
+                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;"> 
                     <strong>Room Type:</strong>
                     <span>{{ booking.room.room_type.name }}</span>
                 </div>
-                
-                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+
+                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;"> 
                     <strong>Check-in:</strong>
                     <span>{{ booking.check_in|date:"d M Y" }}</span>
                 </div>
-                
-                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+
+                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;"> 
                     <strong>Check-out:</strong>
                     <span>{{ booking.check_out|date:"d M Y" }}</span>
                 </div>
-                
-                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+
+                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;"> 
                     <strong>Number of Nights:</strong>
-                    <span>{{ booking.nights }}</span>
+                    <span>{{ nights }}</span>
                 </div>
-                
-                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+
+                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;"> 
                     <strong>Total Guests:</strong>
                     <span>{{ booking.display_guests }}</span>
                 </div>
-                
+
                 <div style="display: flex; justify-content: space-between; padding: 1rem; background: #e8f5e8; border-radius: 8px; font-weight: bold;">
                     <strong>Total Amount:</strong>
                     <span>${{ booking.total_price }}</span>
                 </div>
             </div>
-            
+
             <div style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #e0e0e0;">
                 <p style="color: #666; margin-bottom: 2rem;">
-                    A confirmation email has been sent to {{ booking.guest_email }}
+                    {% if email_sent %}
+                        ✅ A confirmation email has been sent to <strong>{{ booking.guest_email }}</strong>
+                    {% elif email_error %}
+                        ⚠️ Your booking is confirmed! However, we encountered an issue sending the confirmation email. 
+                        Please save your booking ID: <strong>#{{ booking.id }}</strong>
+                    {% else %}
+                        Your booking has been confirmed successfully!
+                    {% endif %}
                 </p>
                 <div style="display: flex; gap: 1rem; justify-content: center;">
-                    <a href="{% url 'profile' %}" class="btn btn-primary">View My Bookings</a>
-                    <a href="{% url 'room_list' %}" class="btn" style="background: #3498db;">Book Another Room</a>
+                    <a href="{% url 'profile' %}" class="btn-consistent btn-booking">View My Bookings</a>
+                    <a href="{% url 'room_list' %}" class="btn-consistent btn-booking">Book Another Room</a>
                 </div>
             </div>
         </div>
@@ -93,31 +100,30 @@
     opacity: 0.9;
 }
 
-.btn {
-    display: inline-block;
-    padding: 0.8rem 1.5rem;
-    background: #3498db;
-    color: white;
+.btn-consistent {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
     text-decoration: none;
-    border-radius: 5px;
+    color: white;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.3s ease;
     border: none;
     cursor: pointer;
-    transition: background 0.3s;
-    text-align: center;
+    font-size: 0.9rem;
+    background: #3498db;
 }
 
-.btn:hover {
-    background: #2980b9;
-    color: white;
+.btn-consistent:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    opacity: 0.9;
     text-decoration: none;
-}
-
-.btn-primary {
-    background: #674c3c;
-}
-
-.btn-primary:hover {
-    background: #c0392b;
+    color: white;
+    background: #2980b9;
 }
 </style>
 {% endblock %}

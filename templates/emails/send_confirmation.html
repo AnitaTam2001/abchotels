@@ -1,0 +1,159 @@
+<!-- templates/emails/send_confirmation.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            line-height: 1.6; 
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+        }
+        .header { 
+            background: linear-gradient(135deg, #3498db, #2c3e50); 
+            color: white; 
+            padding: 30px 20px; 
+            text-align: center; 
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .header h2 {
+            margin: 10px 0 0 0;
+            font-size: 20px;
+            font-weight: 300;
+        }
+        .content { 
+            padding: 30px; 
+        }
+        .booking-details { 
+            background: #f8f9fa; 
+            padding: 20px; 
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+            margin: 20px 0;
+        }
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .detail-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .detail-label {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .detail-value {
+            color: #666;
+        }
+        .total-amount {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #27ae60;
+            margin: 20px 0;
+        }
+        .footer { 
+            background: #2c3e50; 
+            color: white; 
+            padding: 20px; 
+            text-align: center;
+            font-size: 14px;
+        }
+        .thank-you {
+            font-size: 18px;
+            color: #3498db;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ABC Hotels</h1>
+            <h2>Booking Confirmation</h2>
+        </div>
+        
+        <div class="content">
+            <p>Dear <strong>{{ booking.guest_name }}</strong>,</p>
+            
+            <div class="thank-you">
+                Thank you for choosing ABC Hotels! Your booking has been confirmed.
+            </div>
+            
+            <div class="booking-details">
+                <h3 style="margin-top: 0; color: #2c3e50;">Booking Information</h3>
+                
+                <div class="detail-item">
+                    <span class="detail-label">Booking ID:</span>
+                    <span class="detail-value">#{{ booking.id }}</span>
+                </div>
+                
+                <div class="detail-item">
+                    <span class="detail-label">Hotel:</span>
+                    <span class="detail-value">ABC {{ booking.room.city.name }} Hotel</span>
+                </div>
+                
+                <div class="detail-item">
+                    <span class="detail-label">Room Type:</span>
+                    <span class="detail-value">{{ booking.room.room_type.name }}</span>
+                </div>
+                
+                <div class="detail-item">
+                    <span class="detail-label">Check-in:</span>
+                    <span class="detail-value">{{ booking.check_in|date:"F d, Y" }}</span>
+                </div>
+                
+                <div class="detail-item">
+                    <span class="detail-label">Check-out:</span>
+                    <span class="detail-value">{{ booking.check_out|date:"F d, Y" }}</span>
+                </div>
+                
+                <div class="detail-item">
+                    <span class="detail-label">Number of Nights:</span>
+                    <span class="detail-value">{{ nights }}</span>
+                </div>
+                
+                <div class="detail-item">
+                    <span class="detail-label">Number of Guests:</span>
+                    <span class="detail-value">{{ booking.display_guests }}</span>
+                </div>
+            </div>
+            
+            <div class="total-amount">
+                Total Amount: ${{ booking.total_price }}
+            </div>
+            
+            <p>We look forward to welcoming you and ensuring you have a comfortable and memorable stay!</p>
+            
+            <p>If you have any questions or need to modify your booking, please contact our customer service team.</p>
+        </div>
+        
+        <div class="footer">
+            <p><strong>ABC Hotels</strong></p>
+            <p>Customer Service: +1-800-ABC-STAY (1-800-222-7829)</p>
+            <p>Email: anitatam2001@gmail.com</p>
+            <p>© 2025 ABC Hotels. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
