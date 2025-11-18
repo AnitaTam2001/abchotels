@@ -2,128 +2,168 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<section class="contact-hero">
-    <div class="container">
-        <h1 class="hero-title">Contact Us</h1>
-        <p class="hero-subtitle">We're Here to Help You Plan Your Perfect Stay</p>
-    </div>
+<section class="hero-section" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80'); background-size: cover; background-position: center;">
+  <div class="container">
+    <h1 class="hero-title" style="margin-top: 4rem;">Contact Us</h1>
+    <p class="hero-subtitle">We're Here to Help You Plan Your Perfect Stay</p>
+  </div>
 </section>
 
 <!-- MESSAGES DISPLAY -->
 <section style="padding: 1rem 0;">
-    <div class="container">
-        {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
+  <div class="container">
+    {% if messages %}
+    <div class="messages">
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endfor %}
     </div>
+    {% endif %}
+  </div>
 </section>
 
 <section style="padding: 2rem 0;">
-    <div class="container">
-        <div style="max-width: 1000px; margin: 0 auto;">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;">
-                <div>
-                    <h2 style="margin-bottom: 2rem;">Get In Touch</h2>
+  <div class="container">
+    <div style="max-width: 1000px; margin: 0 auto;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;">
+        <div>
+          <h2 style="margin-bottom: 2rem;">Get In Touch</h2>
 
-                    <div style="margin-bottom: 2rem;"> 
-                        <h3 style="color: #2c3e50; margin-bottom: 1rem;">Address</h3>
-                        <p style="color: #666;"> 
-                            123 Luxury Avenue<br>
-                            Hospitality District<br>
-                            City, State 12345<br>
-                            United States
-                        </p>
-                    </div>
+          <div style="margin-bottom: 2rem;"> 
+            <h3 style="color: #2c3e50; margin-bottom: 1rem;">Address</h3>
+            <p style="color: #666;"> 
+              123 Luxury Avenue<br>
+              Hospitality District<br>
+              City, State 12345<br>
+              United States
+            </p>
+          </div>
 
-                    <div style="margin-bottom: 2rem;"> 
-                        <h3 style="color: #2c3e50; margin-bottom: 1rem;">Phone</h3>
-                        <p style="color: #666;"> 
-                            Main: +1 (555) 123-4567<br>
-                            Reservations: +1 (555) 123-4568
-                        </p>
-                    </div>
+          <div style="margin-bottom: 2rem;"> 
+            <h3 style="color: #2c3e50; margin-bottom: 1rem;">Phone</h3>
+            <p style="color: #666;"> 
+              Main: +1 (555) 123-4567<br>
+              Reservations: +1 (555) 123-4568
+            </p>
+          </div>
 
-                    <div style="margin-bottom: 2rem;"> 
-                        <h3 style="color: #2c3e50; margin-bottom: 1rem;">Email</h3>
-                        <p style="color: #666;"> 
-                            General: anitatam2001@gmail.com<br>
-                            Reservations: reservations@abchotels.com<br>
-                            Support: support@abchotels.com
-                        </p>
-                    </div>
+          <div style="margin-bottom: 2rem;">
+            <h3 style="color: #2C3e50; margin-bottom: 1rem;">Email</h3>
+            <p style="color: #666;">
+              General: anitatam2001@gmail.com<br>
+              Reservations: reservations@abchotels.com<br>
+              Support: support@abchotels.com
+            </p>
+          </div>
 
-                    <div style="margin-bottom: 2rem;"> 
-                        <h3 style="color: #2c3e50; margin-bottom: 1rem;">Business Hours</h3>
-                        <p style="color: #666;">
-                            Front Desk: 24/7<br>
-                            Reservations: 6:00 AM - 12:00 AM<br>
-                            Restaurant: 7:00 AM - 11:00 PM
-                        </p>
-                    </div>
-                </div>
-
-                <div>
-                    <h2 style="margin-bottom: 2rem;">Send Us a Message</h2>
-                    <form method="post" style="display: grid; gap: 1.5rem;">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label class="form-label">Your Name</label>
-                            <input type="text" name="name" class="form-input" placeholder="Enter your full name" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Your Email</label>
-                            <input type="email" name="email" class="form-input" placeholder="Enter your email address" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Subject</label>
-                            <input type="text" name="subject" class="form-input" placeholder="Enter message subject" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Message</label>
-                            <textarea rows="5" name="message" class="form-input" placeholder="Enter your message" required></textarea>
-                        </div>
-
-                        <button type="submit" class="btn" style="width: 100%;">Send Message</button>
-                    </form>
-                </div>
-            </div>
-
-            <div style="margin-top: 4rem;">
-                <h2 style="text-align: center; margin-bottom: 2rem;">Find Us</h2>
-                <div style="background: #f8f9fa; padding: 2rem; border-radius: 10px; text-align: center;">
-                    <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Hotel Location" style="width: 100%; height: 300px; object-fit: cover; border-radius: 8px;">
-                    <p style="margin-top: 1rem; color: #666;">
-                        Located in the heart of the city, easily accessible from major transportation hubs
-                    </p>
-                </div>
-            </div>
+          <div style="margin-bottom: 2rem;">
+            <h3 style="color: #2C3e50; margin-bottom: 1rem;">Business Hours</h3>
+            <p style="color: #666;">
+              Front Desk: 24/7<br>
+              Reservations: 6:00 AM - 12:00 AM<br>
+              Restaurant: 7:00 AM - 11:00 PM
+            </p>
+          </div>
         </div>
+
+        <div>
+          <h2 style="margin-bottom: 2rem;">Send Us a Message</h2>
+          <form method="post" style="display: grid; gap: 1.5rem;">
+            {% csrf_token %}
+            <div class="form-group">
+              <label class="form-label">Your Name</label>
+              <input type="text" name="name" class="form-input" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Your Email</label>
+              <input type="email" name="email" class="form-input" placeholder="Enter your email address" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Subject</label>
+              <input type="text" name="subject" class="form-input" placeholder="Enter message subject" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Message</label>
+              <textarea rows="5" name="message" class="form-input" placeholder="Enter your message" required></textarea>
+            </div>
+
+            <button type="submit" class="btn-hero" style="width: 100%;">Send Message</button>
+          </form>
+        </div>
+      </div>
+
+      <div style="margin-top: 4rem;">
+        <h2 style="text-align: center; margin-bottom: 2rem;">Find Us</h2>
+        <div style="background: #f8f9fa; padding: 2rem; border-radius: 10px; text-align: center;">
+          <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Hotel Location" style="width: 100%; height: 300px; object-fit: cover; border-radius: 8px;">
+          <p style="margin-top: 1rem; color: #666;">
+            Located in the heart of the city, easily accessible from major transportation hubs
+          </p>
+        </div>
+      </div>
     </div>
+  </div>
 </section>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Add any JavaScript functionality needed for the page
-    console.log('Contact page loaded');
-    
-    // Auto-dismiss alerts after 5 seconds
-    setTimeout(function() {
-        const alerts = document.querySelectorAll('.alert');
-        alerts.forEach(function(alert) {
-            const bsAlert = new bootstrap.Alert(alert);
-            bsAlert.close();
-        });
-    }, 5000);
+  // Add any JavaScript functionality needed for the page
+  console.log('Contact page loaded');
+  
+  // Auto-dismiss alerts after 5 seconds
+  setTimeout(function() {
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(function(alert) {
+      const bsAlert = new bootstrap.Alert(alert);
+      bsAlert.close();
+    });
+  }, 5000);
 });
 </script>
+
+<style>
+.btn-hero {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-transform: none;
+    letter-spacing: normal;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    background: #3498db; /* Blue color */
+}
+
+.btn-hero:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    opacity: 0.9;
+    background: #2980b9; /* Darker blue on hover */
+    text-decoration: none;
+    color: white;
+}
+
+.btn-hero:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+</style>
 {% endblock %}
