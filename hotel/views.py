@@ -621,7 +621,7 @@ def account_settings(request):
     """View for user account settings"""
     return render(request, 'account_settings.html')
 
-# Test email function - you can remove this after testing
+# Test email function
 def test_email(request):
     try:
         send_mail(
