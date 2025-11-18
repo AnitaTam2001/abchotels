@@ -292,44 +292,106 @@ def booking_confirmation(request, booking_id):
     # Calculate number of nights
     nights = (booking.check_out - booking.check_in).days
     
-    # Send confirmation email
-    email_sent = False
+    # Send confirmation email to guest AND notification to company
+    guest_email_sent = False
+    company_email_sent = False
     email_error = None
     
     try:
-        subject = f'ABC Hotels - Booking Confirmation #{booking.id}'
-        
-        # Render HTML email template
-        html_message = render_to_string('emails/send_confirmation.html', {
-            'booking': booking,
-            'nights': nights
-        })
-        
-        # Create plain text version
-        plain_message = strip_tags(html_message)
-        
-        # Send email
-        send_mail(
-            subject=subject,
-            message=plain_message,
-            from_email='ABC Hotels <anitatam2001@gmail.com>',
-            recipient_list=[booking.guest_email],
-            html_message=html_message,
-            fail_silently=False,
-        )
-        
-        email_sent = True
-        print(f"✅ Confirmation email sent to {booking.guest_email} for booking #{booking.id}")
-        
+        # 1. Send confirmation email to GUEST
+        if hasattr(settings, 'EMAIL_HOST_USER') and settings.EMAIL_HOST_USER:
+            guest_subject = f'ABC Hotels - Booking Confirmation #{booking.id}'
+            
+            # Render HTML email template for guest
+            guest_html_message = render_to_string('emails/send_confirmation.html', {
+                'booking': booking,
+                'nights': nights
+            })
+            
+            # Create plain text version for guest
+            guest_plain_message = strip_tags(guest_html_message)
+            
+            # Send email to GUEST
+            send_mail(
+                subject=guest_subject,
+                message=guest_plain_message,
+                from_email='ABC Hotels <anitatam2001@gmail.com>',
+                recipient_list=[booking.guest_email],
+                html_message=guest_html_message,
+                fail_silently=False,
+            )
+            
+            guest_email_sent = True
+            print(f"✅ Confirmation email sent to GUEST: {booking.guest_email} for booking #{booking.id}")
+            
+            # 2. Send notification email to COMPANY/HOTEL STAFF
+            company_subject = f'📋 New Booking Received - #{booking.id} - ABC {booking.room.city.name} Hotel'
+            
+            # Create notification message for company
+            company_message = f"""
+NEW BOOKING NOTIFICATION - ABC Hotels
+
+Booking Details:
+───────────────
+• Booking ID: #{booking.id}
+• Guest Name: {booking.guest_name}
+• Guest Email: {booking.guest_email}
+• Guest Phone: {booking.guest_phone}
+• Hotel: ABC {booking.room.city.name} Hotel
+• Room Type: {booking.room.room_type.name}
+• Check-in: {booking.check_in}
+• Check-out: {booking.check_out}
+• Number of Nights: {nights}
+• Number of Guests: {booking.display_guests}
+• Total Amount: ${booking.total_price}
+
+Booking Timeline:
+───────────────
+• Booking Created: {booking.created_at}
+• Check-in Date: {booking.check_in}
+• Check-out Date: {booking.check_out}
+
+Room Details:
+─────────────
+• Room ID: {booking.room.id}
+• Room Type: {booking.room.room_type.name}
+• Room Capacity: {booking.room.room_type.capacity} guests
+• Price per Night: ${booking.room.room_type.price_per_night}
+
+Please prepare the room and ensure everything is ready for the guest's arrival.
+
+---
+ABC Hotels Management System
+{timezone.now().strftime("%Y-%m-%d %H:%M:%S")}
+"""
+            
+            # Send email to COMPANY
+            send_mail(
+                subject=company_subject,
+                message=company_message.strip(),
+                from_email='ABC Hotels Booking System <anitatam2001@gmail.com>',
+                recipient_list=['anitatam2001@gmail.com'],  # Send to company email
+                html_message=None,
+                fail_silently=False,
+            )
+            
+            company_email_sent = True
+            print(f"✅ Notification email sent to COMPANY for booking #{booking.id}")
+            
+        else:
+            email_error = "Email configuration not set up"
+            print("⚠️ Email configuration not set up - skipping email sending")
+            
     except Exception as e:
         # Log the error
         email_error = str(e)
-        print(f"❌ Failed to send confirmation email for booking #{booking.id}: {email_error}")
+        print(f"❌ Failed to send emails for booking #{booking.id}: {email_error}")
     
     context = {
         'booking': booking,
         'nights': nights,
-        'email_sent': email_sent,
+        'guest_email_sent': guest_email_sent,
+        'company_email_sent': company_email_sent,
         'email_error': email_error,
     }
     

@@ -61,21 +61,25 @@
                 </div>
             </div>
 
-            <div style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #e0e0e0;">
-                <p style="color: #666; margin-bottom: 2rem;">
-                    {% if email_sent %}
-                        ✅ A confirmation email has been sent to <strong>{{ booking.guest_email }}</strong>
-                    {% elif email_error %}
-                        ⚠️ Your booking is confirmed! However, we encountered an issue sending the confirmation email. 
-                        Please save your booking ID: <strong>#{{ booking.id }}</strong>
-                    {% else %}
-                        Your booking has been confirmed successfully!
-                    {% endif %}
-                </p>
-                <div style="display: flex; gap: 1rem; justify-content: center;">
-                    <a href="{% url 'profile' %}" class="btn-consistent btn-booking">View My Bookings</a>
-                    <a href="{% url 'room_list' %}" class="btn-consistent btn-booking">Book Another Room</a>
-                </div>
+        <!-- In booking_confirmation.html - update the email status section -->
+        <div style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #e0e0e0;">
+            <p style="color: #666; margin-bottom: 2rem;">
+                {% if guest_email_sent %}
+                    ✅ A confirmation email has been sent to <strong>{{ booking.guest_email }}</strong>
+                {% elif email_error %}
+                    ⚠️ Your booking is confirmed! However, we encountered an issue sending the confirmation email. 
+                    Please save your booking ID: <strong>#{{ booking.id }}</strong>
+                {% else %}
+                    Your booking has been confirmed successfully!
+                {% endif %}
+                
+                {% if company_email_sent %}
+                    <br>✅ Our team has been notified and will prepare for your stay.
+                {% endif %}
+            </p>
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+                <a href="{% url 'profile' %}" class="btn-consistent btn-booking">View My Bookings</a>
+                <a href="{% url 'room_list' %}" class="btn-consistent btn-booking">Book Another Room</a>
             </div>
         </div>
     </div>
