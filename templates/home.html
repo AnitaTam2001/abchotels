@@ -2,9 +2,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<section class="hero-section" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80'); background-size: cover; background-position: center;"> <!-- Removed the negative margin -->
+<section class="hero-section" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80'); background-size: cover; background-position: center;">
     <div class="container">
-        <h1 class="hero-title">Welcome to ABC Hotels</h1>
+        <h1 class="hero-title" style="margin-top: 4rem;">Welcome to ABC Hotels</h1>
         <p class="hero-subtitle">Experience Luxury and Comfort Like Never Before</p>
         <a href="{% url 'room_list' %}" class="btn-hero btn-booking">Book Your Stay</a>
     </div>
