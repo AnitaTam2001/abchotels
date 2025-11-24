@@ -3,9 +3,9 @@
 
 {% block content %}
 <section class="hero-section" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1584132967334-10e028bd69f7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80'); background-size: cover; background-position: center;">
-    <div class="container" style="height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center;">
-        <h1 class="hero-title" style="font-size: 3.5rem; margin-bottom: 1rem;">About Us</h1>
-        <p class="hero-subtitle" style="font-size: 1.5rem;">Two Decades of Excellence in Hospitality</p>
+    <div class="container" >
+        <h1 class="hero-title" style="margin-top: 4rem;">About Us</h1>
+        <p class="hero-subtitle">Two Decades of Excellence in Hospitality</p>
     </div>
 </section>
 
@@ -175,22 +175,14 @@
             grid-template-columns: repeat(2, 1fr);
             gap: 1.5rem;
         }
-    }
-
-    @media (max-width: 768px) {
-        .hero-title {
-            font-size: 2.5rem !important;
-        }
-        
-        .hero-subtitle {
-            font-size: 1.2rem !important;
-        }
         
         .container > div:nth-child(3) {
             grid-template-columns: 1fr !important;
             gap: 2rem !important;
         }
-        
+    }
+
+    @media (max-width: 768px) {
         .feature-grid {
             grid-template-columns: 1fr;
             gap: 1.5rem;
@@ -215,10 +207,6 @@
     }
 
     @media (max-width: 480px) {
-        .hero-title {
-            font-size: 2rem !important;
-        }
-        
         section {
             padding: 2rem 0 !important;
         }
