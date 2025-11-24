@@ -19,23 +19,23 @@
                     <!-- Personal Information -->
                     <div style="padding: 1.5rem; background: #f8f9fa; border-radius: 8px;"> 
                         <h3 style="color: #2c3e50; margin-bottom: 1rem;">Personal Information</h3>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;"> 
-                            <div> 
+                        <div class="personal-info-grid">
+                            <div class="info-item"> 
                                 <strong>Username:</strong>
-                                <p style="margin: 0.5rem 0 0 0;">{{ user.username }}</p>
+                                <p>{{ user.username }}</p>
                             </div>
-                            <div> 
+                            <div class="info-item email-item"> 
                                 <strong>Email:</strong>
-                                <p style="margin: 0.5rem 0 0 0;">{{ user.email }}</p>
+                                <p class="email-text">{{ user.email }}</p>
                             </div>
-                        </div>
-                        <div style="margin-top: 1rem;">
-                            <strong>First Name:</strong>
-                            <p style="margin: 0.5rem 0 0 0;">{{ user.first_name }}</p>
-                        </div>
-                        <div style="margin-top: 1rem;">
-                            <strong>Last Name:</strong>
-                            <p style="margin: 0.5rem 0 0 0;">{{ user.last_name }}</p>
+                            <div class="info-item"> 
+                                <strong>First Name:</strong>
+                                <p>{{ user.first_name }}</p>
+                            </div>
+                            <div class="info-item"> 
+                                <strong>Last Name:</strong>
+                                <p>{{ user.last_name }}</p>
+                            </div>
                         </div>
                     </div>
 
@@ -96,6 +96,40 @@
         opacity: 0.9;
     }
 
+    /* Personal Information Grid */
+    .personal-info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    .info-item {
+        margin-bottom: 0;
+    }
+
+    .info-item strong {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: #2c3e50;
+    }
+
+    .info-item p {
+        margin: 0;
+        color: #666;
+        word-break: break-word;
+    }
+
+    /* Email specific styling */
+    .email-item {
+        grid-column: span 1;
+    }
+
+    .email-text {
+        word-break: break-all;
+        font-size: 0.95rem;
+        line-height: 1.4;
+    }
+
     /* Perfectly centered button text with 1.7x width scaling */
     .btn-account {
         display: inline-flex;
@@ -139,6 +173,20 @@
 
     /* Mobile Responsive Styles */
     @media (max-width: 768px) {
+        .personal-info-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .email-item {
+            grid-column: span 1;
+        }
+
+        .email-text {
+            font-size: 0.9rem;
+            line-height: 1.3;
+        }
+
         .btn-account {
             padding: 0.8rem 2rem;
             min-width: 180px;
@@ -156,6 +204,23 @@
     }
 
     @media (max-width: 480px) {
+        .personal-info-grid {
+            gap: 1rem;
+        }
+
+        .email-text {
+            font-size: 0.85rem;
+            line-height: 1.2;
+        }
+
+        .info-item strong {
+            font-size: 0.9rem;
+        }
+
+        .info-item p {
+            font-size: 0.85rem;
+        }
+
         .btn-account {
             padding: 0.8rem 1.5rem;
             min-width: 160px;
@@ -169,6 +234,23 @@
         
         .hero-title {
             font-size: 2rem !important;
+        }
+    }
+
+    /* Extra small devices */
+    @media (max-width: 360px) {
+        .email-text {
+            font-size: 0.8rem;
+            word-break: break-all;
+            hyphens: auto;
+        }
+        
+        .info-item strong {
+            font-size: 0.85rem;
+        }
+        
+        .info-item p {
+            font-size: 0.8rem;
         }
     }
 </style>
