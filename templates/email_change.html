@@ -2,33 +2,33 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<section class="hero-section" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1566073771259-6a85060999451xlib-rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
-<div class="container" style="padding-top: 5rem;"> 
-<h1 class="hero-title">Update Email</h1>
-<p class="hero-subtitle">Change your email address</p>
-</div>
+<section class="hero-section" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+    <div class="container" style="padding-top: 5rem;"> 
+        <h1 class="hero-title">Update Email</h1>
+        <p class="hero-subtitle">Change your email address</p>
+    </div>
 </section>
 
 <section style="padding: 4rem 0;"> 
-<div class="container">
-<div style="max-width: 600px; margin: 0 auto; background: white; padding: 3rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
-<form method="post">
-{% csrf_token %}
-<div style="margin-bottom: 2rem;"> 
-<label style="display: block; margin-bottom: 0.5rem; color: #2c3e50; font-weight: 600;">Current Email</label>
-<input type="email" value="{{ user.email }}" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px;" readonly>
-</div>
-<div style="margin-bottom: 2rem;"> 
-<label style="display: block; margin-bottom: 0.5rem; color: #2c3e50; font-weight: 600;">New Email</label>
-<input type="email" name="email" required style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px;"> 
-</div>
-<div style="display: flex; gap: 1rem; justify-content: center;"> 
-<button type="submit" class="btn-hero" style="background: #3498db; width: 156px;">Update Email</button>
-<a href="{% url 'account_settings' %}" class="btn-hero" style="background: #3498db; width: 156px;">Cancel</a>
-</div>
-</form>
-</div>
-</div>
+    <div class="container">
+        <div style="max-width: 600px; margin: 0 auto; background: white; padding: 3rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+            <form method="post">
+                {% csrf_token %}
+                <div style="margin-bottom: 2rem;"> 
+                    <label style="display: block; margin-bottom: 0.5rem; color: #2c3e50; font-weight: 600;">Current Email</label>
+                    <input type="email" value="{{ user.email }}" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px;" readonly>
+                </div>
+                <div style="margin-bottom: 2rem;"> 
+                    <label style="display: block; margin-bottom: 0.5rem; color: #2c3e50; font-weight: 600;">New Email</label>
+                    <input type="email" name="email" required style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px;"> 
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: center;"> 
+                    <button type="submit" class="btn-hero" style="background: #3498db; width: 156px;">Update Email</button>
+                    <a href="{% url 'account_settings' %}" class="btn-hero" style="background: #3498db; width: 156px;">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
 </section>
 
 <style>

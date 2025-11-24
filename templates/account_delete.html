@@ -1,0 +1,165 @@
+<!-- templates/account_delete.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="hero-section" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+    <div class="container" style="padding-top: 5rem;"> 
+        <h1 class="hero-title">Delete Account</h1>
+        <p class="hero-subtitle">Permanently delete your ABC Hotels account</p>
+    </div>
+</section>
+
+<section style="padding: 4rem 0;"> 
+    <div class="container">
+        <div style="max-width: 600px; margin: 0 auto; background: white; padding: 3rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); text-align: center;">
+            <div style="font-size: 4rem; margin-bottom: 2rem;">⚠️</div>
+            <h2 style="color: #e74c3c; margin-bottom: 1rem;">Warning: Account Deletion</h2>
+            <p style="color: #666; line-height: 1.6; margin-bottom: 1.5rem;">
+                You are about to permanently delete your ABC Hotels account. This action cannot be undone.
+            </p>
+            
+            <div style="background: #f8d7da; color: #721c24; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; text-align: left;">
+                <h4 style="margin-top: 0; color: #721c24;">What will be deleted:</h4>
+                <ul style="margin-bottom: 0;">
+                    <li>Your personal profile information</li>
+                    <li>Booking history and preferences</li>
+                    <li>Account settings and preferences</li>
+                    <li>All associated data with your account</li>
+                </ul>
+            </div>
+
+            <form method="post" style="margin-bottom: 2rem;">
+                {% csrf_token %}
+                <div style="margin-bottom: 1.5rem; text-align: left;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: #2c3e50; font-weight: 600;">
+                        Type "DELETE" to confirm account deletion:
+                    </label>
+                    <input type="text" name="confirmation" required 
+                           style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px;"
+                           placeholder="Type DELETE here">
+                </div>
+                
+                <div style="display: flex; gap: 1rem; justify-content: center;">
+                    <button type="submit" class="btn-hero" style="background: #e74c3c; width: 156px;">
+                        Delete Account
+                    </button>
+                    <a href="{% url 'account_settings' %}" class="btn-hero" style="background: #3498db; width: 156px;">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+
+            <p style="color: #999; font-size: 0.9rem; margin-top: 2rem;">
+                If you have any questions, please contact our support team before proceeding.
+            </p>
+        </div>
+    </div>
+</section>
+
+<style>
+.hero-section {
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+    padding: 4rem 0;
+}
+
+.hero-title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+.btn-hero {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    height: 44px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-transform: none;
+    letter-spacing: normal;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 156px;
+}
+
+.btn-hero:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    opacity: 0.9;
+    text-decoration: none;
+    color: white;
+}
+
+.btn-hero[style*="background: #e74c3c"]:hover {
+    background: #c0392b !important;
+}
+
+.btn-hero[style*="background: #3498db"]:hover {
+    background: #2980b9 !important;
+}
+
+.btn-hero:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem !important;
+    }
+    
+    .container > div {
+        padding: 2rem !important;
+    }
+    
+    .btn-hero {
+        width: 128px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 2rem !important;
+    }
+    
+    .container > div {
+        padding: 1.5rem !important;
+    }
+    
+    .btn-hero {
+        width: 112px;
+        font-size: 0.8rem;
+        padding: 0.6rem 1rem;
+    }
+    
+    .button-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .btn-hero {
+        width: 100%;
+        max-width: 160px;
+    }
+}
+</style>
+{% endblock %}

@@ -20,8 +20,6 @@ from django.contrib.auth import update_session_auth_hash
 from django.core.exceptions import ValidationError
 
 
-
-
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -664,14 +662,21 @@ def email_change(request):
     
     return render(request, 'email_change.html')
 
+
 @login_required
 def account_delete(request):
     if request.method == 'POST':
-        # Confirm deletion
-        if request.POST.get('confirm_delete') == 'yes':
+        confirmation = request.POST.get('confirmation', '')
+        
+        if confirmation == 'DELETE':
+            # Delete the user account
             user = request.user
             user.delete()
-            messages.success(request, 'Your account has been deleted successfully.')
+            
+            messages.success(request, 'Your account has been permanently deleted.')
             return redirect('home')
+        else:
+            messages.error(request, 'Please type "DELETE" to confirm account deletion.')
     
     return render(request, 'account_delete.html')
+
