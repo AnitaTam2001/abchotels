@@ -43,9 +43,9 @@
                     <div style="padding: 1.5rem; background: #f8f9fa; border-radius: 8px;">
                         <h3 style="color: #2c3e50; margin-bottom: 1rem;">Account Actions</h3>
                         <div style="display: grid; gap: 1rem; justify-items: center;">
-                            <a href="#" class="btn btn-account" style="background: #3498db;">Change Password</a>
-                            <a href="#" class="btn btn-account" style="background: #95a5a6;">Update Email</a>
-                            <a href="#" class="btn btn-account" style="background: #e74c3c;">Delete Account</a>
+                            <a href="{% url 'password_change' %}" class="btn btn-account" style="background: #3498db;">Change Password</a>
+                            <a href="{% url 'email_change' %}" class="btn btn-account" style="background: #95a5a6;">Update Email</a>
+                            <a href="{% url 'account_delete' %}" class="btn btn-account" style="background: #e74c3c;">Delete Account</a>
                         </div>
                     </div>
 
@@ -130,20 +130,18 @@
         line-height: 1.4;
     }
 
-    /* Perfectly centered button text with 1.7x width scaling */
+    /* Account Action Buttons */
     .btn-account {
         display: inline-flex;
         align-items: center;
         justify-content: center;
         padding: 0.8rem 2.55rem; /* 1.7x wider */
-        background: #3498db;
         color: white;
         text-decoration: none;
         border-radius: 5px;
         border: none;
         cursor: pointer;
-        transition: all 0.3s;
-        text-align: center;
+        transition: all 0.3s ease;
         min-width: 212px; /* Original approx 125px * 1.7 = 212px */
         font-weight: 600;
         font-size: 1rem;
@@ -155,6 +153,7 @@
         max-width: 300px; /* Maximum width for larger screens */
     }
 
+    /* Clickable buttons hover effects */
     .btn-account:hover {
         transform: translateY(-2px);
         box-shadow: 0 4px 8px rgba(0,0,0,0.2);
@@ -163,6 +162,7 @@
         text-decoration: none;
     }
 
+    /* Back to Profile button */
     .btn-primary {
         background: #e74c3c;
     }

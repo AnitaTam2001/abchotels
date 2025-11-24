@@ -16,6 +16,11 @@ from django.core.mail import send_mail, BadHeaderError
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from django.contrib.auth import update_session_auth_hash
+from django.core.exceptions import ValidationError
+
+
+
 
 def register(request):
     if request.method == 'POST':
@@ -634,3 +639,39 @@ def test_email(request):
         return HttpResponse("Test email sent successfully!")
     except Exception as e:
         return HttpResponse(f"Failed to send test email: {str(e)}")
+    
+@login_required
+def email_change(request):
+    if request.method == 'POST':
+        new_email = request.POST.get('email')
+        if new_email:
+            try:
+                # Validate email format
+                from django.core.validators import validate_email
+                validate_email(new_email)
+                
+                # Check if email is already in use
+                from django.contrib.auth.models import User
+                if User.objects.filter(email=new_email).exclude(id=request.user.id).exists():
+                    messages.error(request, 'This email is already in use.')
+                else:
+                    request.user.email = new_email
+                    request.user.save()
+                    messages.success(request, 'Email updated successfully!')
+                    return redirect('account_settings')
+            except ValidationError:
+                messages.error(request, 'Please enter a valid email address.')
+    
+    return render(request, 'email_change.html')
+
+@login_required
+def account_delete(request):
+    if request.method == 'POST':
+        # Confirm deletion
+        if request.POST.get('confirm_delete') == 'yes':
+            user = request.user
+            user.delete()
+            messages.success(request, 'Your account has been deleted successfully.')
+            return redirect('home')
+    
+    return render(request, 'account_delete.html')

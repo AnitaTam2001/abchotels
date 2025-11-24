@@ -1,5 +1,6 @@
-# hote1/urls.py
+# hotel/urls.py
 from django.urls import path
+from django.contrib.auth import views as auth_views
 from . import views
 
 urlpatterns = [
@@ -17,6 +18,15 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('login/', views.user_login, name='login'),
     path('logout/', views.user_logout, name='logout'),
+    
+    # Password Change (Django built-in)
+    path('password-change/', auth_views.PasswordChangeView.as_view(
+        template_name='registration/password_change.html',
+        success_url='/password-change/done/'
+    ), name='password_change'),
+    path('password-change/done/', auth_views.PasswordChangeDoneView.as_view(
+        template_name='registration/password_change_done.html'
+    ), name='password_change_done'),
 
     # Rooms and bookings
     path('rooms/', views.room_list, name='room_list'),
@@ -32,7 +42,11 @@ urlpatterns = [
     path('profile/current-bookings/', views.current_bookings, name='current_bookings'),
     path('bookings/', views.booking_list, name='booking_list'),
     path('bookings/<int:booking_id>/', views.booking_detail, name='booking_detail'),
-    path('account-settings/', views.account_settings, name='account_settings'),  # NEW LINE
+    path('account-settings/', views.account_settings, name='account_settings'),
+    
+    # New Account Management URLs
+    path('email-change/', views.email_change, name='email_change'),
+    path('account-delete/', views.account_delete, name='account_delete'),
 
     # Admin
     path('room-admin/', views.room_admin, name='room_admin'),
