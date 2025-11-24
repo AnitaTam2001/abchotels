@@ -14,43 +14,43 @@
         <div style="max-width: 800px; margin: 0 auto; background: white; padding: 3rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
             <h2 style="text-align: center; margin-bottom: 2rem; color: #2c3e50;">Booking Details</h2>
 
-            <div style="display: grid; gap: 1.5rem;"> 
-                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;"> 
+            <div style="display: grid; gap: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
                     <strong>Booking ID:</strong>
                     <span>#{{ booking.id }}</span>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;"> 
+                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
                     <strong>Guest Name:</strong>
                     <span>{{ booking.guest_name }}</span>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;"> 
+                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
                     <strong>Hotel:</strong>
                     <span>ABC {{ booking.room.city.name }} Hotel</span>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;"> 
+                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
                     <strong>Room Type:</strong>
                     <span>{{ booking.room.room_type.name }}</span>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;"> 
+                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
                     <strong>Check-in:</strong>
                     <span>{{ booking.check_in|date:"d M Y" }}</span>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;"> 
+                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
                     <strong>Check-out:</strong>
                     <span>{{ booking.check_out|date:"d M Y" }}</span>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;"> 
+                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
                     <strong>Number of Nights:</strong>
                     <span>{{ nights }}</span>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;"> 
+                <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
                     <strong>Total Guests:</strong>
                     <span>{{ booking.display_guests }}</span>
                 </div>
@@ -61,73 +61,131 @@
                 </div>
             </div>
 
-        <!-- In booking_confirmation.html - update the email status section -->
-        <div style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #e0e0e0;">
-            <p style="color: #666; margin-bottom: 2rem;">
-                {% if guest_email_sent %}
-                    ✅ A confirmation email has been sent to <strong>{{ booking.guest_email }}</strong>
-                {% elif email_error %}
-                    ⚠️ Your booking is confirmed! However, we encountered an issue sending the confirmation email. 
-                    Please save your booking ID: <strong>#{{ booking.id }}</strong>
-                {% else %}
-                    Your booking has been confirmed successfully!
-                {% endif %}
-                
-                {% if company_email_sent %}
-                    <br>✅ Our team has been notified and will prepare for your stay.
-                {% endif %}
-            </p>
-            <div style="display: flex; gap: 1rem; justify-content: center;">
-                <a href="{% url 'profile' %}" class="btn-consistent btn-booking">View My Bookings</a>
-                <a href="{% url 'room_list' %}" class="btn-consistent btn-booking">Book Another Room</a>
+            <!-- Email status section -->
+            <div style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #e0e0e0;">
+                <p style="color: #666; margin-bottom: 2rem;">
+                    {% if guest_email_sent %}
+                        A confirmation email has been sent to <strong>{{ booking.guest_email }}</strong>
+                    {% elif email_error %}
+                        Your booking is confirmed! However, we encountered an issue sending the confirmation email.
+                        Please save your booking ID: <strong>#{{ booking.id }}</strong>
+                    {% else %}
+                        Your booking has been confirmed successfully!
+                    {% endif %}
+                    {% if company_email_sent %}
+                        <br>Our team has been notified and will prepare for your stay.
+                    {% endif %}
+                </p>
+                <div style="display: flex; gap: 1rem; justify-content: center;">
+                    <a href="{% url 'profile' %}" class="btn-consistent">View My Bookings</a>
+                    <a href="{% url 'room_list' %}" class="btn-consistent">Book Another Room</a>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
 <style>
-.hero-section {
-    background-size: cover;
-    background-position: center;
-    color: white;
-    text-align: center;
-    padding: 4rem 0;
-}
+    .hero-section {
+        background-size: cover;
+        background-position: center;
+        color: white;
+        text-align: center;
+        padding: 4rem 0;
+    }
 
-.hero-title {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-}
+    .hero-title {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
 
-.hero-subtitle {
-    font-size: 1.2rem;
-    opacity: 0.9;
-}
+    .hero-subtitle {
+        font-size: 1.2rem;
+        opacity: 0.9;
+    }
 
-.btn-consistent {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.75rem 1.5rem;
-    border-radius: 50px;
-    text-decoration: none;
-    color: white;
-    font-weight: 600;
-    text-align: center;
-    transition: all 0.3s ease;
-    border: none;
-    cursor: pointer;
-    font-size: 0.9rem;
-    background: #3498db;
-}
+    .btn-consistent {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.75rem 2.8rem; /* 2.0rem * 1.4 = 2.8rem */
+        border-radius: 50px;
+        text-decoration: none;
+        color: white;
+        font-weight: 600;
+        text-align: center;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        background: #3498db;
+        min-width: 273px; /* 195px * 1.4 = 273px */
+        height: 62px; /* 44px * 1.4 = 62px */
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-transform: none;
+        letter-spacing: normal;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        line-height: 1.2;
+        white-space: nowrap;
+        overflow: hidden;
+    }
 
-.btn-consistent:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    opacity: 0.9;
-    text-decoration: none;
-    color: white;
-    background: #2980b9;
-}
+    .btn-consistent:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        opacity: 0.9;
+        text-decoration: none;
+        color: white;
+        background: #2980b9;
+    }
+
+    /* Mobile Responsive Styles */
+    @media (max-width: 1024px) {
+        .btn-consistent {
+            padding: 0.75rem 2.1rem;
+            min-width: 200px;
+            height: 54px;
+            font-size: 0.95rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .btn-consistent {
+            padding: 0.75rem 1.8rem;
+            min-width: 180px;
+            height: 50px;
+            font-size: 0.9rem;
+        }
+        
+        .container > div {
+            padding: 2rem !important;
+        }
+        
+        .hero-title {
+            font-size: 2.5rem !important;
+        }
+        
+        .btn-container {
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .btn-consistent {
+            padding: 0.75rem 1.5rem;
+            min-width: 160px;
+            height: 46px;
+            font-size: 0.85rem;
+        }
+        
+        .container > div {
+            padding: 1.5rem !important;
+        }
+        
+        .hero-title {
+            font-size: 2rem !important;
+        }
+    }
 </style>
 {% endblock %}
