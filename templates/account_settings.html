@@ -3,49 +3,49 @@
 
 {% block content %}
 <section class="hero-section" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
-    <div class="container" style="padding-top: 5rem;">
+    <div class="container" style="padding-top: 5rem;"> 
         <h1 class="hero-title">Account Settings</h1>
         <p class="hero-subtitle">Manage your account preferences</p>
     </div>
 </section>
 
-<section style="padding: 4rem 0;">
+<section style="padding: 4rem 0;"> 
     <div class="container">
-        <div style="max-width: 800px; margin: 0 auto;">
+        <div style="max-width: 800px; margin: 0 auto;"> 
             <div style="background: white; padding: 3rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
                 <h2 style="margin-bottom: 2rem; color: #2c3e50;">Account Information</h2>
-                
-                <div style="display: grid; gap: 2rem;">
+
+                <div style="display: grid; gap: 2rem;"> 
                     <!-- Personal Information -->
-                    <div style="padding: 1.5rem; background: #f8f9fa; border-radius: 8px;">
+                    <div style="padding: 1.5rem; background: #f8f9fa; border-radius: 8px;"> 
                         <h3 style="color: #2c3e50; margin-bottom: 1rem;">Personal Information</h3>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                            <div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;"> 
+                            <div> 
                                 <strong>Username:</strong>
                                 <p style="margin: 0.5rem 0 0 0;">{{ user.username }}</p>
                             </div>
-                            <div>
+                            <div> 
                                 <strong>Email:</strong>
                                 <p style="margin: 0.5rem 0 0 0;">{{ user.email }}</p>
                             </div>
-                            <div>
-                                <strong>First Name:</strong>
-                                <p style="margin: 0.5rem 0 0 0;">{{ user.first_name }}</p>
-                            </div>
-                            <div>
-                                <strong>Last Name:</strong>
-                                <p style="margin: 0.5rem 0 0 0;">{{ user.last_name }}</p>
-                            </div>
+                        </div>
+                        <div style="margin-top: 1rem;">
+                            <strong>First Name:</strong>
+                            <p style="margin: 0.5rem 0 0 0;">{{ user.first_name }}</p>
+                        </div>
+                        <div style="margin-top: 1rem;">
+                            <strong>Last Name:</strong>
+                            <p style="margin: 0.5rem 0 0 0;">{{ user.last_name }}</p>
                         </div>
                     </div>
 
                     <!-- Account Actions -->
                     <div style="padding: 1.5rem; background: #f8f9fa; border-radius: 8px;">
                         <h3 style="color: #2c3e50; margin-bottom: 1rem;">Account Actions</h3>
-                        <div style="display: grid; gap: 1rem;">
-                            <a href="#" class="btn" style="background: #3498db;">Change Password</a>
-                            <a href="#" class="btn" style="background: #95a5a6;">Update Email</a>
-                            <a href="#" class="btn" style="background: #e74c3c;">Delete Account</a>
+                        <div style="display: grid; gap: 1rem; justify-items: center;">
+                            <a href="#" class="btn btn-account" style="background: #3498db;">Change Password</a>
+                            <a href="#" class="btn btn-account" style="background: #95a5a6;">Update Email</a>
+                            <a href="#" class="btn btn-account" style="background: #e74c3c;">Delete Account</a>
                         </div>
                     </div>
 
@@ -67,10 +67,10 @@
                             </label>
                         </div>
                     </div>
-                </div>
 
-                <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e0e0e0;">
-                    <a href="{% url 'profile' %}" class="btn btn-primary">Back to Profile</a>
+                    <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e0e0e0;">
+                        <a href="{% url 'profile' %}" class="btn btn-primary btn-account">Back to Profile</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -78,49 +78,98 @@
 </section>
 
 <style>
-.hero-section {
-    background-size: cover;
-    background-position: center;
-    color: white;
-    text-align: center;
-    padding: 4rem 0;
-}
+    .hero-section {
+        background-size: cover;
+        background-position: center;
+        color: white;
+        text-align: center;
+        padding: 4rem 0;
+    }
 
-.hero-title {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-}
+    .hero-title {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
 
-.hero-subtitle {
-    font-size: 1.2rem;
-    opacity: 0.9;
-}
+    .hero-subtitle {
+        font-size: 1.2rem;
+        opacity: 0.9;
+    }
 
-.btn {
-    display: inline-block;
-    padding: 0.8rem 1.5rem;
-    background: #3498db;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    transition: background 0.3s;
-    text-align: center;
-}
+    /* Perfectly centered button text with 1.7x width scaling */
+    .btn-account {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.8rem 2.55rem; /* 1.7x wider */
+        background: #3498db;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-align: center;
+        min-width: 212px; /* Original approx 125px * 1.7 = 212px */
+        font-weight: 600;
+        font-size: 1rem;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.2;
+        white-space: nowrap;
+        overflow: hidden;
+        width: 100%; /* Make buttons take full available width */
+        max-width: 300px; /* Maximum width for larger screens */
+    }
 
-.btn:hover {
-    background: #2980b9;
-    color: white;
-    text-decoration: none;
-}
+    .btn-account:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        opacity: 0.9;
+        color: white;
+        text-decoration: none;
+    }
 
-.btn-primary {
-    background: #674c3c;
-}
+    .btn-primary {
+        background: #e74c3c;
+    }
 
-.btn-primary:hover {
-    background: #c0392b;
-}
+    .btn-primary:hover {
+        background: #c0392b;
+    }
+
+    /* Mobile Responsive Styles */
+    @media (max-width: 768px) {
+        .btn-account {
+            padding: 0.8rem 2rem;
+            min-width: 180px;
+            font-size: 0.95rem;
+            max-width: 250px;
+        }
+        
+        .container > div {
+            padding: 2rem !important;
+        }
+        
+        .hero-title {
+            font-size: 2.5rem !important;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .btn-account {
+            padding: 0.8rem 1.5rem;
+            min-width: 160px;
+            font-size: 0.9rem;
+            max-width: 220px;
+        }
+        
+        .container > div {
+            padding: 1.5rem !important;
+        }
+        
+        .hero-title {
+            font-size: 2rem !important;
+        }
+    }
 </style>
 {% endblock %}
